@@ -2,6 +2,7 @@ package d.tonyandfriends.thirdtimesthecharm;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,10 +11,18 @@ import android.widget.Toast;
 import com.hitomi.cmlibrary.CircleMenu;
 import com.hitomi.cmlibrary.OnMenuSelectedListener;
 
+
+
 public class MenuActivity extends AppCompatActivity {
 
-    String menuNames[] = {"Scan"};
+    public static final int SCAN = 0;
+    public static final int LOGOUT = 1;
+
+    String menuNames[] = {"Scan", "Logout"};
     CircleMenu circleMenu;
+
+    // To handle delays.
+    Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +35,36 @@ public class MenuActivity extends AppCompatActivity {
         circleMenu = (CircleMenu)findViewById(R.id.circleMenu);
         circleMenu.setMainMenu(Color.parseColor("#ADADAD"), R.drawable.openmenu, R.drawable.closemenu)
                 .addSubMenu(Color.parseColor("#2F37FF"), R.mipmap.barcode)
+                .addSubMenu(Color.parseColor("#7E0B16"), R.drawable.logout)
 
                 .setOnMenuSelectedListener(new OnMenuSelectedListener() {
                     @Override
                     public void onMenuSelected(int i) {
                         Toast.makeText(getApplicationContext(), "You Selected: " + menuNames[i], Toast.LENGTH_SHORT).show();
+
+                        //
+                        switch(i)
+                        {
+                            case SCAN:
+                                // Wait 1 second before starting the scanner to complete menu animation.
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        startActivity(new Intent(MenuActivity.this, ScannerStartActivity.class));
+                                    }
+                                }, 1000);
+                                break;
+
+                            case LOGOUT:
+                                // Wait 1 second  to complete menu animation.
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        startActivity(new Intent(MenuActivity.this   , ProfileActivity.class));
+                                    }
+                                }, 1000);
+                                break;
+                        }
                     }
                 });
 
