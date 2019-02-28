@@ -6,7 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MenuActivity">
 
+    <com.hitomi.cmlibrary.CircleMenu
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/circleMenu"
+        />
 
+    <!--
     <ImageButton
         android:id="@+id/settingsicon"
         android:layout_width="200dp"
@@ -34,5 +40,6 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></ImageButton>
+        -->
 
 </android.support.constraint.ConstraintLayout>
