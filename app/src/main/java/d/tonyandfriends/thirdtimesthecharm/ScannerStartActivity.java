@@ -1,10 +1,13 @@
 package d.tonyandfriends.thirdtimesthecharm;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -15,6 +18,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.Barcode.UrlBookmark;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +26,7 @@ import java.util.List;
  * Main activity demonstrating how to pass extra parameters to an activity that
  * reads barcodes.
  */
-public class ScannerStartActivity extends Activity implements View.OnClickListener {
+public class ScannerStartActivity extends Activity implements View.OnClickListener, DataTransporter  {
 
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton autoFocus;
@@ -32,6 +36,8 @@ public class ScannerStartActivity extends Activity implements View.OnClickListen
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
+    Spider spidey =new Spider();
+    String myName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,21 @@ public class ScannerStartActivity extends Activity implements View.OnClickListen
         }
 
     }
+     @Override
+     // This is our Adapter implementation
+     // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
+    public void onProcessDone(String result) {
+        myName = "";
+        //The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
+        if(result.compareTo("Sorry we couldn't find that item")!=0) {
+            for (int i = 12; i < result.length(); i++) {
+                myName += result.charAt(i);
+            }
+        }
+        else myName = result;
+       statusMessage.setText(myName);
+       spidey.cancel(true); // May not be needed, someday I may even test it
+    }
 
     /**
      * Called when an activity you launched exits, giving you the requestCode
@@ -89,8 +110,11 @@ public class ScannerStartActivity extends Activity implements View.OnClickListen
      * @see #createPendingResult
      * @see #setResult(int)
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @SuppressLint("NewApi")
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        String poop = "";
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
@@ -126,6 +150,8 @@ public class ScannerStartActivity extends Activity implements View.OnClickListen
                             break;
                         case Barcode.PRODUCT:
                             Log.i(TAG, barcode.rawValue);
+                            // Get the ID, only thing we are concerned with as far as I'm concerned
+                            poop = barcode.rawValue;
                             break;
                         case Barcode.SMS:
                             Log.i(TAG, barcode.sms.message);
@@ -152,10 +178,23 @@ public class ScannerStartActivity extends Activity implements View.OnClickListen
                             Log.i(TAG, barcode.rawValue);
                             break;
                     }
-                    statusMessage.setText(R.string.barcode_success);
-                    statusMessage.setText(barcode.displayValue);
+                    //For Jsoup or Async classes there are three Array fields <1,2,3>
+                    //Field one will be for data we want to pass, field 2 is unimporant as far as I know, keep it void. Field 3 is our return data
+                    String [] container = new String[1]; // Here we are passing String, so we need a String Array
+                    container[0] = poop; // one day I may make this a legit name, we assign our ID we get from barcode into our Array
+                    try { // Async threads can only run once, so if we want multiple scans we need new objects. This may not be the best way, but it works for now
+                        spidey = spidey.getClass().newInstance();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    spidey.myVessel = this; // Assign the our instance to Spider
+                    spidey.execute(container); // Jesus take the wheel
+
                     //Log.d(TAG, "Barcode read: " + barcode.displayValue);
                 } else {
+                    // IDK if these are ever even used, I've tried to get them to work, but nothing happens
                     statusMessage.setText(R.string.barcode_failure);
                     Log.d(TAG, "No barcode captured, intent data is null");
                 }
@@ -168,5 +207,6 @@ public class ScannerStartActivity extends Activity implements View.OnClickListen
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
 
 }
