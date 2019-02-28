@@ -35,12 +35,21 @@ class Spider extends AsyncTask<String,Void,String>
             // For a site with only one table this works, We will need the actual table names for sites with more than 1 table per page
             Elements elements  =  dic.select("table");
             Elements rows = elements.select("tr");
+            Log.d("mySite", URL + code);
+            Log.d("mySize", String.valueOf(rows.size()));
             if(rows.size() < 3) // Check how big the table is, if its size 2 then There is no valid Scan in their DB
             {
                 description = "Sorry we couldn't find that item";
             }
             else { // Otherwise the second row gives us the Name
+
                 description = rows.get(2).text();
+                Log.d("mydesc", description);
+                int i =2;
+                while(!description.contains("Description"))
+                {
+                    description = rows.get(++i).text();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
