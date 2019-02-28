@@ -15,8 +15,8 @@ import com.hitomi.cmlibrary.OnMenuSelectedListener;
 
 public class MenuActivity extends AppCompatActivity {
 
-    public static final int SCAN = 0;
-    public static final int LOGOUT = 1;
+    public static final int MENU_SCAN = 0;
+    public static final int MENU_LOGOUT = 1;
 
     String menuNames[] = {"Scan", "Logout"};
     CircleMenu circleMenu;
@@ -33,34 +33,38 @@ public class MenuActivity extends AppCompatActivity {
 
 
         circleMenu = (CircleMenu)findViewById(R.id.circleMenu);
-        circleMenu.setMainMenu(Color.parseColor("#ADADAD"), R.drawable.openmenu, R.drawable.closemenu)
+        circleMenu.setMainMenu(Color.parseColor("#ADADAD"), R.drawable.openmenu,
+                R.drawable.closemenu)
                 .addSubMenu(Color.parseColor("#2F37FF"), R.mipmap.barcode)
                 .addSubMenu(Color.parseColor("#7E0B16"), R.drawable.logout)
 
                 .setOnMenuSelectedListener(new OnMenuSelectedListener() {
                     @Override
                     public void onMenuSelected(int i) {
-                        Toast.makeText(getApplicationContext(), "You Selected: " + menuNames[i], Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "You Selected: " +
+                                menuNames[i], Toast.LENGTH_SHORT).show();
 
                         //
                         switch(i)
                         {
-                            case SCAN:
-                                // Wait 1 second before starting the scanner to complete menu animation.
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        startActivity(new Intent(MenuActivity.this, ScannerStartActivity.class));
-                                    }
-                                }, 1000);
-                                break;
-
-                            case LOGOUT:
+                            case MENU_SCAN:
                                 // Wait 1 second  to complete menu animation.
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        startActivity(new Intent(MenuActivity.this   , ProfileActivity.class));
+                                        startActivity(new Intent(MenuActivity.this,
+                                                ScannerStartActivity.class));
+                                    }
+                                }, 1000);
+                                break;
+
+                            case MENU_LOGOUT:
+                                // Wait 1 second  to complete menu animation.
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        startActivity(new Intent(MenuActivity.this,
+                                                ProfileActivity.class));
                                     }
                                 }, 1000);
                                 break;
