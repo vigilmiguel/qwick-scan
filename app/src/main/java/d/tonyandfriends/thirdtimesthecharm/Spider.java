@@ -1,4 +1,5 @@
 package d.tonyandfriends.thirdtimesthecharm;
+import android.media.audiofx.AudioEffect;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -49,6 +50,13 @@ class Spider extends AsyncTask<String,Void,String>
                 while(!description.contains("Description"))
                 {
                     description = rows.get(++i).text();
+
+                }
+                String temp = rows.get(++i).text();
+                if(temp.contains("Size"))
+                {
+                    temp = temp.substring(11);
+                    description += "" + temp;
                 }
             }
         } catch (IOException e) {
