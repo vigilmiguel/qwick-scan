@@ -26,7 +26,7 @@ import java.util.List;
  * Main activity demonstrating how to pass extra parameters to an activity that
  * reads barcodes.
  */
-public class ScannerStartActivity extends Activity implements View.OnClickListener, DataTransporter  {
+public class ScannerStartActivity extends Activity implements DataTransporter  {
 
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton autoFocus;
@@ -36,7 +36,7 @@ public class ScannerStartActivity extends Activity implements View.OnClickListen
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
-    Spider spidey =new Spider();
+    Spider spidey = new Spider();
     String myName = "";
 
     @Override
@@ -45,33 +45,11 @@ public class ScannerStartActivity extends Activity implements View.OnClickListen
         setContentView(R.layout.activity_scanner_start);
 
         statusMessage = (TextView)findViewById(R.id.status_message);
-        contactname = (TextView)findViewById(R.id.contact_name);
-        contacttitle = (TextView)findViewById(R.id.contact_title);
-        contactorganization = (TextView)findViewById(R.id.contact_organization);
 
-        autoFocus = (CompoundButton) findViewById(R.id.auto_focus);
-        useFlash = (CompoundButton) findViewById(R.id.use_flash);
-
-        findViewById(R.id.read_barcode).setOnClickListener(this);
+        Intent intent = new Intent(this, BarcodeCaptureActivity.class);
+        startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
 
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param v The view that was clicked.
-     */
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.read_barcode) {
-            // launch barcode activity.
-            Intent intent = new Intent(this, BarcodeCaptureActivity.class);
-            intent.putExtra(BarcodeCaptureActivity.AutoFocus, autoFocus.isChecked());
-            intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
-
-            startActivityForResult(intent, RC_BARCODE_CAPTURE);
-        }
-
-    }
      @Override
      // This is our Adapter implementation
      // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
