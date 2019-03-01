@@ -23,6 +23,38 @@
           }
         },
         {
+          "client_id": "970846969532-r44v3mu93kkur333ncibamkpadtof3cf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "d.tonyandfriends.thirdtimesthecharm",
+            "certificate_hash": "d1dac51b21c1c7997970939d0c7552564fdf56f7"
+          }
+        },
+        {
+          "client_id": "970846969532-qtthvn28u7f06iop3ro8ghiq17n5f1dg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "d.tonyandfriends.thirdtimesthecharm",
+            "certificate_hash": "02b62c655b69f2717f1b0cfe818fdaa4b2e70bce"
+          }
+        },
+        {
+          "client_id": "970846969532-95lf6df0o0k4kl9lv2qee1ah2opja8dj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "d.tonyandfriends.thirdtimesthecharm",
+            "certificate_hash": "2ac8fc591325b8af8acc0acc375cff2b1c46c447"
+          }
+        },
+        {
+          "client_id": "970846969532-ji8d1da23f76s5qnf25gmdclhpbpq2iv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "d.tonyandfriends.thirdtimesthecharm",
+            "certificate_hash": "51c5a721acf466cadd25f32aff0b566284eb7155"
+          }
+        },
+        {
           "client_id": "970846969532-lqb3jcf2g3e46madqhubqjh4a9umoa2e.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -40,7 +72,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "970846969532-lqb3jcf2g3e46madqhubqjh4a9umoa2e.apps.googleusercontent.com",
+              "client_id": "970846969532-kt5iofogdhf1vog34f5q402r9knsh4l1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
