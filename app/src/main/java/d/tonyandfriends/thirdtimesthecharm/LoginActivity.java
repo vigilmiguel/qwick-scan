@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
         // we will change profile page to our actual Scanner page
         if (mAuth.getCurrentUser() != null) {
             finish();
-            startActivity(new Intent(this, ProfileActivity.class));
+            startActivity(new Intent(this, MenuActivity.class));
         }
     }
 
