@@ -60,6 +60,7 @@
 
     <Button
         android:id="@+id/register_button"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingTop="0dp"
