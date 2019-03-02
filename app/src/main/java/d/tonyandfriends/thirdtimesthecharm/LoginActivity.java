@@ -3,6 +3,7 @@ package d.tonyandfriends.thirdtimesthecharm;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -56,11 +57,12 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity {
 
     // Create variables for the email and password text boxes.
-    private EditText emailText;
-    private EditText passwordText;
+    private EditText signInEmailText;
+    private EditText signInPasswordText;
 
     // Create a variable for the sign in button.
-    private Button signInButton;
+    Button signInButton;
+    Button registerButton;
 
     //a constant for detecting the login intent result
     private static final int RC_SIGN_IN = 234;
@@ -80,13 +82,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //first we intialized the FirebaseAuth objectsign_in_button
+        //first we intialized the FirebaseAuth object
         mAuth = FirebaseAuth.getInstance();
 
         // Set the text and button variables to the desired objects defined in activity_login.xml
-        emailText = findViewById(R.id.email_text);
-        passwordText = findViewById(R.id.password_text);
+        signInEmailText = findViewById(R.id.sign_in_email_text);
+        signInPasswordText = findViewById(R.id.sign_in_password_text);
         signInButton = findViewById(R.id.sign_in_button);
+        registerButton = findViewById(R.id.register_now_button);
 
         // Whenever the sign in button is pressed...
         signInButton.setOnClickListener(new OnClickListener() {
@@ -94,6 +97,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Start sign in process.
                 signIn();
+            }
+        });
+
+        // If the register button is pressed...
+        registerButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Open the RegisterActivity page.
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
 
@@ -194,8 +206,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void signIn() {
         // Store what the user entered as email and password.
-        String emailInput = emailText.getText().toString();
-        String passwordInput = passwordText.getText().toString();
+        String emailInput = signInEmailText.getText().toString();
+        String passwordInput = signInPasswordText.getText().toString();
 
         // If either email or password are empty...
         if(TextUtils.isEmpty(emailInput) || TextUtils.isEmpty(passwordInput))
@@ -228,11 +240,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         }
-
-
-
-
-
     }
+
 }
 
