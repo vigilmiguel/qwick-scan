@@ -55,6 +55,13 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity {
 
+    // Create variables for the email and password text boxes.
+    private EditText emailText;
+    private EditText passwordText;
+
+    // Create a variable for the sign in button.
+    private Button signInButton;
+
     //a constant for detecting the login intent result
     private static final int RC_SIGN_IN = 234;
 
@@ -67,13 +74,28 @@ public class LoginActivity extends AppCompatActivity {
     //And also a Firebase Auth object
     FirebaseAuth mAuth;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //first we intialized the FirebaseAuth object
+        //first we intialized the FirebaseAuth objectsign_in_button
         mAuth = FirebaseAuth.getInstance();
+
+        // Set the text and button variables to the desired objects defined in activity_login.xml
+        emailText = findViewById(R.id.email_text);
+        passwordText = findViewById(R.id.password_text);
+        signInButton = findViewById(R.id.sign_in_button);
+
+        // Whenever the sign in button is pressed...
+        signInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Start sign in process.
+                signIn();
+            }
+        });
 
         //Then we need a GoogleSignInOptions object
         //And we need to build it as below
@@ -86,12 +108,12 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         //Now we will attach a click listener to the sign_in_button
-        //and inside onClick() method we are calling the signIn() method that will open
+        //and inside onClick() method we are calling the signInWithGoogle() method that will open
         //google sign in intent
-        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.google_sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signIn();
+                signInWithGoogle();
             }
         });
     }
@@ -162,12 +184,55 @@ public class LoginActivity extends AppCompatActivity {
 
 
     //this method is called on click
-    private void signIn() {
+    private void signInWithGoogle() {
         //getting the google signin intent
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
 
         //starting the activity for result
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void signIn() {
+        // Store what the user entered as email and password.
+        String emailInput = emailText.getText().toString();
+        String passwordInput = passwordText.getText().toString();
+
+        // If either email or password are empty...
+        if(TextUtils.isEmpty(emailInput) || TextUtils.isEmpty(passwordInput))
+        {
+            Toast.makeText(LoginActivity.this, "ERROR: E-mail and/or password are empty",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            // Stores the sign in result.
+            Task<AuthResult> signInResult;
+            signInResult = mAuth.signInWithEmailAndPassword(emailInput, passwordInput);
+
+            signInResult.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+
+                    // If sign in fails...
+                    if(!task.isSuccessful())
+                    {
+                        Toast.makeText(LoginActivity.this,
+                                "ERROR: E-mail and password do not match", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                    else
+                    {
+                        startActivity(new Intent(LoginActivity.this,
+                                MenuActivity.class));
+                    }
+                }
+            });
+        }
+
+
+
+
+
     }
 }
 
