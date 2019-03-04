@@ -37,7 +37,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
     Spider spidey = new Spider();
-    String myName = "";
+    String productName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +54,23 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
      // This is our Adapter implementation
      // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
     public void onProcessDone(String result) {
-        myName = "";
-        //The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
+        productName = "";
+
+        // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
+        // If we find a result...
         if(result.compareTo("Sorry we couldn't find that item")!=0) {
             for (int i = 12; i < result.length(); i++) {
-                myName += result.charAt(i);
+                productName += result.charAt(i);
             }
+
+            // Store it in the database
         }
-        else myName = result;
-       statusMessage.setText(myName);
+        // If we don't find a result...
+        else
+            productName = result;
+
+
+       statusMessage.setText(productName);
        spidey.cancel(true); // May not be needed, someday I may even test it
     }
 

@@ -137,8 +137,8 @@ public class LoginActivity extends AppCompatActivity {
         // If we are already signed in, take it directly to profile page
         // we will change profile page to our actual Scanner page
         if (mAuth.getCurrentUser() != null) {
-            finish();
             startActivity(new Intent(this, MenuActivity.class));
+            finish();
         }
     }
 
@@ -181,6 +181,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             Toast.makeText(LoginActivity.this, "User Signed In", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(LoginActivity.this   , MenuActivity.class));
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -236,6 +237,7 @@ public class LoginActivity extends AppCompatActivity {
                     {
                         startActivity(new Intent(LoginActivity.this,
                                 MenuActivity.class));
+                        finish();
                     }
                 }
             });
