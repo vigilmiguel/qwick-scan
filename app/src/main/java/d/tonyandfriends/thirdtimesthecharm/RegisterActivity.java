@@ -119,9 +119,18 @@ public class RegisterActivity extends AppCompatActivity {
 
                         //databaseUsers.child(fbUser.getUid()).setValue(user);
 
+                        Intent menuActivity = new Intent(RegisterActivity.this,
+                                MenuActivity.class);
 
-                        startActivity(new Intent(RegisterActivity.this,
-                                MenuActivity.class));
+                        /*
+                            Set flags to clear activities on the stack.
+                            This prevents the back button from going back
+                            to the register and login activities.
+                         */
+                        menuActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                        startActivity(menuActivity);
                     }
                 }
             });
