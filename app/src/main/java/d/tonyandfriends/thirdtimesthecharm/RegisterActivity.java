@@ -72,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void register() {
         // Store what the user entered as email and password.
-        final String emailInput = registerEmailText.getText().toString();
+        String emailInput = registerEmailText.getText().toString();
         String passwordInput = registerPasswordText.getText().toString();
         String confirmPasswordInput = registerConfirmPasswordText.getText().toString();
 
@@ -107,9 +107,6 @@ public class RegisterActivity extends AppCompatActivity {
                     if(!task.isSuccessful())
                     {
                         showError("ERROR: Registration failed!");
-                        //Toast.makeText(RegisterActivity.this,
-                        //        "ERROR: Registration failure...", Toast.LENGTH_SHORT)
-                        //        .show();
                     }
                     else
                     {
@@ -137,7 +134,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void showError(String message){
+    private void showError(String message) {
         registerErrorText.setText(message);
 
         handler.postDelayed(new Runnable() {
