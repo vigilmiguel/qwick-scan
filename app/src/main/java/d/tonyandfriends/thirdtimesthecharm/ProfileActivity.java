@@ -37,6 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         FirebaseUser user = mAuth.getCurrentUser();
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("970846969532-lqb3jcf2g3e46madqhubqjh4a9umoa2e.apps.googleusercontent.com")
                 .requestEmail()
@@ -48,7 +49,8 @@ public class ProfileActivity extends AppCompatActivity {
                 .load(user.getPhotoUrl())
                 .into(imageView);
 
-        textName.setText(user.getDisplayName());
+        //textName.setText(user.getDisplayName());
+        textName.setText(user.getUid());
         textEmail.setText(user.getEmail());
         findViewById(R.id.logOut).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +82,25 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // Send us back to LoginPage
-                        startActivity(new Intent(ProfileActivity.this   , LoginActivity.class));
+                        Intent loginActivity = new Intent(ProfileActivity.this,
+                                LoginActivity.class);
+
+                        /*
+                            Set flags to clear activities on the stack.
+                            This prevents the back button from going back
+                            to the logout page, menu page, etc.
+
+                            This fixes the bug when pressing back on the login page
+                            right after you logged out.
+
+                            It attempted to go back to the logout page and tried to
+                            retrieve the user email from the user who is not signed in!
+                         */
+                        loginActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                        startActivity(loginActivity);
+                        finish();
                     }
                 });
     }

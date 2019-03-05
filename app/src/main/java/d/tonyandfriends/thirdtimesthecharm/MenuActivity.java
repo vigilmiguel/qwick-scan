@@ -13,7 +13,7 @@ import com.hitomi.cmlibrary.OnMenuSelectedListener;
 
 
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity implements OnMenuSelectedListener{
 
     public static final int MENU_SCAN = 0;
     public static final int MENU_LOGOUT = 1;
@@ -36,55 +36,43 @@ public class MenuActivity extends AppCompatActivity {
         circleMenu.setMainMenu(Color.parseColor("#ADADAD"), R.drawable.openmenu,
                 R.drawable.closemenu)
                 .addSubMenu(Color.parseColor("#2F37FF"), R.mipmap.barcode)
-                .addSubMenu(Color.parseColor("#7E0B16"), R.drawable.logout)
+                .addSubMenu(Color.parseColor("#7E0B16"), R.drawable.logout);
 
-                .setOnMenuSelectedListener(new OnMenuSelectedListener() {
+
+        circleMenu.setOnMenuSelectedListener(this);
+
+    }
+
+
+    // Separate function so it looks cleaner.
+    @Override
+    public void onMenuSelected(int i) {
+        Toast.makeText(getApplicationContext(), "You Selected: " +
+                menuNames[i], Toast.LENGTH_SHORT).show();
+
+        // start activities based on what was selected.
+        switch (i) {
+            case MENU_SCAN:
+                // Wait 1 second  to complete menu animation.
+                handler.postDelayed(new Runnable() {
                     @Override
-                    public void onMenuSelected(int i) {
-                        Toast.makeText(getApplicationContext(), "You Selected: " +
-                                menuNames[i], Toast.LENGTH_SHORT).show();
-
-                        //
-                        switch(i)
-                        {
-                            case MENU_SCAN:
-                                // Wait 1 second  to complete menu animation.
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        startActivity(new Intent(MenuActivity.this,
-                                                ScannerStartActivity.class));
-                                    }
-                                }, 1000);
-                                break;
-
-                            case MENU_LOGOUT:
-                                // Wait 1 second  to complete menu animation.
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        startActivity(new Intent(MenuActivity.this,
-                                                ProfileActivity.class));
-                                    }
-                                }, 1000);
-                                break;
-                        }
+                    public void run() {
+                        startActivity(new Intent(MenuActivity.this,
+                                ScannerStartActivity.class));
                     }
-                });
+                }, 1000);
+                break;
 
-        /*
-        findViewById(R.id.settingsicon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MenuActivity.this   , ProfileActivity.class));
-            }
-        });
-        findViewById(R.id.scannericon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MenuActivity.this   , ScannerStartActivity.class));
-            }
-        });
-        */
+            case MENU_LOGOUT:
+                // Wait 1 second  to complete menu animation.
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(MenuActivity.this,
+                                ProfileActivity.class));
+                    }
+                }, 1000);
+                break;
+        }
     }
 }
