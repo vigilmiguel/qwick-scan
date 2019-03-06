@@ -26,6 +26,7 @@
         completions."</string>
     <string name="register_title">Create an Account</string>
     <string name="action_register">Sign Up</string>
+    <string name="title_activity_maps">Map</string>
 
 
 </resources>
