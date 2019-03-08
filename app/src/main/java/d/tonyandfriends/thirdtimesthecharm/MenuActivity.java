@@ -71,7 +71,8 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        // Do whatever here...
+                        startActivity(new Intent(MenuActivity.this,
+                                MapsActivity.class));
                     }
                 }, 1000);
                 break;
