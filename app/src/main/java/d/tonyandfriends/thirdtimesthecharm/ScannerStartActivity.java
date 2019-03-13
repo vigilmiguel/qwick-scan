@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
@@ -17,10 +18,22 @@ import android.widget.Toast;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.Barcode.UrlBookmark;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
 
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
@@ -39,10 +52,30 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
     Spider spidey = new Spider();
     String productName = "";
 
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+    DatabaseReference databaseUserScanHistory;
+    DatabaseReference databaseProductsScanned;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner_start);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        String dbHistoryPath = "userScanHistory/" + firebaseUser.getUid();
+
+        // Refer to this user's specific sub-table within the scan history table.
+        databaseUserScanHistory = FirebaseDatabase.getInstance()
+                .getReference(dbHistoryPath);
+
+        // Refers to the productsScanned table. This will store all products scanned
+        // by all users.
+        databaseProductsScanned = FirebaseDatabase.getInstance()
+                .getReference("productsScanned");
+
 
         statusMessage = (TextView)findViewById(R.id.status_message);
 
@@ -64,6 +97,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
             }
 
             // Store it in the database
+            storeInDatabase(productName);
         }
         // If we don't find a result...
         else
@@ -72,6 +106,70 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
 
        statusMessage.setText(productName);
        spidey.cancel(true); // May not be needed, someday I may even test it
+    }
+
+    // So far it just saves the products scanned. Not specific by user yet.
+    public void storeInDatabase(final String productName)
+    {
+        final String currentTime = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
+                .format(Calendar.getInstance().getTime());
+
+        final String productKey = databaseProductsScanned.push().getKey();
+
+        final Product scannedProduct = new Product(productKey, productName, currentTime, 1);
+
+        Query dbProductKeys = databaseProductsScanned.orderByChild("name").equalTo(productName);
+
+
+
+        dbProductKeys.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // If this product is already in the products scanned table...
+
+                if (dataSnapshot.exists()) {
+                    for(DataSnapshot data : dataSnapshot.getChildren()) {
+
+
+                        Toast.makeText(ScannerStartActivity.this, "This is already in the database!",
+                                Toast.LENGTH_SHORT).show();
+
+                        // Store the existing product
+                        Product existingProduct = data.getValue(Product.class);
+
+                        // Update the time and scan count of the existing product
+                        Product updatedProduct = new Product(existingProduct.getProductKey(),
+                                existingProduct.getName(),
+                                currentTime, existingProduct.getScanCount() + 1);
+
+                        // Write it to the database.
+                        databaseProductsScanned.child(existingProduct.getProductKey())
+                                .setValue(updatedProduct);
+
+                        break;
+                    }
+                }
+                else {
+
+                    Toast.makeText(ScannerStartActivity.this, "Never seen this one before!",
+                            Toast.LENGTH_SHORT).show();
+                    databaseProductsScanned.child(productKey).setValue(scannedProduct);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+        //databaseUserScanHistory.child(productID).setValue(scannedProduct);
+
+        //databaseProductsScanned.child(productID).setValue(scannedProduct);
     }
 
     /**
