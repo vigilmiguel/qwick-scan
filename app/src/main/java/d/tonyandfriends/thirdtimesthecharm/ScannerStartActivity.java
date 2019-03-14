@@ -115,24 +115,30 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
         final String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
                 .format(Calendar.getInstance().getTime());
 
-
         final String productKey = databaseProductsScanned.push().getKey();
-
-
 
         final Product scannedProduct = new Product(productKey, productName, currentTime, 1);
 
+        insertIntoTable(databaseProductsScanned, scannedProduct, false);
+
+        insertIntoTable(databaseUserScanHistory, scannedProduct, true);
+
+
+    }
+
+    public void insertIntoTable(final DatabaseReference reference, final Product scannedProduct,
+                                final boolean inheritProductKey) {
+
+        final String currentTime = scannedProduct.getDateRecentlyScanned();
+        final String productKey = scannedProduct.getProductKey();
+        String productName = scannedProduct.getName();
+
+
         // Run a query to return all products with the same productName.
         // Trim the results to only 1. (it should only be one anyway)
-        Query queryResult = databaseProductsScanned.orderByChild("name")
+        Query queryResult = reference.orderByChild("name")
                 .equalTo(productName)
                 .limitToFirst(1);
-
-        // Do the same but for userScanHistory.
-        Query queryUserResult = databaseUserScanHistory.orderByChild("name")
-                .equalTo(productName)
-                .limitToFirst(1);
-
 
         queryResult.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -142,7 +148,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                 // Should have only one child.
                 Iterable<DataSnapshot> dataList = dataSnapshot.getChildren();
 
-                // If the list isn't empty...
+                // If the scanned product already exists in this table...
                 if (dataList.iterator().hasNext()) {
 
                     // Store the first(only) product snapshot.
@@ -161,7 +167,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                         existingProduct.setScanCount(existingProduct.getScanCount() + 1);
 
                         // Write it to the database.
-                        databaseProductsScanned.child(existingProduct.getProductKey())
+                        reference.child(existingProduct.getProductKey())
                                 .setValue(existingProduct);
 
                         /*
@@ -171,57 +177,33 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                         existingProductKey = existingProduct.getProductKey();
                     }
                 }
+                // If the scanned product is not in this table...
                 else {
 
                     Toast.makeText(ScannerStartActivity.this,
                             "Never seen this one before!", Toast.LENGTH_SHORT).show();
 
-                    if(productKey != null)
-                    {
-                        databaseProductsScanned.child(productKey).setValue(scannedProduct);
-
-                        existingProductKey = productKey;
-                    }
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-        queryUserResult.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> dataList = dataSnapshot.getChildren();
-
-                if(dataList.iterator().hasNext()) {
-                    DataSnapshot data = dataList.iterator().next();
-
-                    Product existingProduct = data.getValue(Product.class);
-
-                    if(existingProduct != null) {
-                        existingProduct.setDateRecentlyScanned(currentTime);
-                        existingProduct.setScanCount(existingProduct.getScanCount() + 1);
-
-                        databaseUserScanHistory.child(existingProduct.getProductKey())
-                                .setValue(existingProduct);
-                    }
-
-                }
-                else {
                     if(productKey != null) {
-                        Product product = scannedProduct;
 
-                        product.setProductKey(existingProductKey);
+                        String key = productKey;
 
-                        databaseUserScanHistory.child(existingProductKey).setValue(product);
+                        /*
+                            This is for userScanHistory.
+                            We want the same productKey from productsScanned table.
+                         */
+                        if (inheritProductKey) {
+                            key = existingProductKey;
+                            scannedProduct.setProductKey(key);
+                        }
+
+                        // Create a new product with the given key.
+                        reference.child(key).setValue(scannedProduct);
+
+                        existingProductKey = key;
                     }
+
                 }
+
             }
 
             @Override
@@ -229,13 +211,6 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
 
             }
         });
-
-
-
-
-        //databaseUserScanHistory.child(productID).setValue(scannedProduct);
-
-        //databaseProductsScanned.child(productID).setValue(scannedProduct);
     }
 
     /**
