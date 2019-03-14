@@ -117,7 +117,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
 
         // Run a query to return all products with the same productName.
         // Trim the results to only 1. (it should only be one anyway)
-        Query dbExistingProductKey = databaseProductsScanned.orderByChild("name")
+        Query queryResult = databaseProductsScanned.orderByChild("name")
                 .equalTo(productName)
                 .limitToFirst(1);
 
@@ -125,7 +125,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
 
 
 
-        dbExistingProductKey.addListenerForSingleValueEvent(new ValueEventListener() {
+        queryResult.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
