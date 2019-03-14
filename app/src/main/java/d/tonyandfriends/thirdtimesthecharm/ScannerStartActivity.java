@@ -53,6 +53,9 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
     DatabaseReference databaseUserScanHistory;
     DatabaseReference databaseProductsScanned;
 
+    String existingProductKey = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,11 +64,13 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
-        String dbHistoryPath = "userScanHistory/" + firebaseUser.getUid();
+        if(firebaseUser != null) {
+            String dbHistoryPath = "userScanHistory/" + firebaseUser.getUid();
 
-        // Refer to this user's specific sub-table within the scan history table.
-        databaseUserScanHistory = FirebaseDatabase.getInstance()
-                .getReference(dbHistoryPath);
+            // Refer to this user's specific sub-table within the scan history table.
+            databaseUserScanHistory = FirebaseDatabase.getInstance()
+                    .getReference(dbHistoryPath);
+        }
 
         // Refers to the productsScanned table. This will store all products scanned
         // by all users.
@@ -105,13 +110,15 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
     }
 
     // So far it just saves the products scanned. Not specific by user yet.
-    public void storeInDatabase(final String productName)
+    public void storeInDatabase(String productName)
     {
         final String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
                 .format(Calendar.getInstance().getTime());
 
 
         final String productKey = databaseProductsScanned.push().getKey();
+
+
 
         final Product scannedProduct = new Product(productKey, productName, currentTime, 1);
 
@@ -121,8 +128,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                 .equalTo(productName)
                 .limitToFirst(1);
 
-
-
+        // Do the same but for userScanHistory.
+        Query queryUserResult = databaseUserScanHistory.orderByChild("name")
+                .equalTo(productName)
+                .limitToFirst(1);
 
 
         queryResult.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -133,13 +142,11 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                 // Should have only one child.
                 Iterable<DataSnapshot> dataList = dataSnapshot.getChildren();
 
-
                 // If the list isn't empty...
                 if (dataList.iterator().hasNext()) {
 
                     // Store the first(only) product snapshot.
                     DataSnapshot data = dataList.iterator().next();
-
 
                     Toast.makeText(ScannerStartActivity.this,
                             "This is already in the database!", Toast.LENGTH_SHORT).show();
@@ -147,33 +154,74 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                     // Extract the data of the existing product.
                     Product existingProduct = data.getValue(Product.class);
 
-                    // Update the time and increment scan count of the existing product.
-                    try {
-                        Product updatedProduct = new Product(existingProduct.getProductKey(),
-                                existingProduct.getName(),
-                                currentTime, existingProduct.getScanCount() + 1);
+                    if(existingProduct != null) {
+
+                        // Update the time and increment scan count of the existing product.
+                        existingProduct.setDateRecentlyScanned(currentTime);
+                        existingProduct.setScanCount(existingProduct.getScanCount() + 1);
 
                         // Write it to the database.
                         databaseProductsScanned.child(existingProduct.getProductKey())
-                                .setValue(updatedProduct);
+                                .setValue(existingProduct);
 
+                        /*
+                            Store the product key so the userScanHistory table doesn't
+                            generate a different key for the same product.
+                         */
+                        existingProductKey = existingProduct.getProductKey();
                     }
-                    catch(Exception e) {
-                        Toast.makeText(ScannerStartActivity.this,
-                                "ERROR: Failed to update the product.", Toast.LENGTH_SHORT)
-                                .show();
-                    }
-
-
-
                 }
                 else {
 
                     Toast.makeText(ScannerStartActivity.this,
                             "Never seen this one before!", Toast.LENGTH_SHORT).show();
-                    databaseProductsScanned.child(productKey).setValue(scannedProduct);
+
+                    if(productKey != null)
+                    {
+                        databaseProductsScanned.child(productKey).setValue(scannedProduct);
+
+                        existingProductKey = productKey;
+                    }
+
                 }
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        queryUserResult.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> dataList = dataSnapshot.getChildren();
+
+                if(dataList.iterator().hasNext()) {
+                    DataSnapshot data = dataList.iterator().next();
+
+                    Product existingProduct = data.getValue(Product.class);
+
+                    if(existingProduct != null) {
+                        existingProduct.setDateRecentlyScanned(currentTime);
+                        existingProduct.setScanCount(existingProduct.getScanCount() + 1);
+
+                        databaseUserScanHistory.child(existingProduct.getProductKey())
+                                .setValue(existingProduct);
+                    }
+
+                }
+                else {
+                    if(productKey != null) {
+                        Product product = scannedProduct;
+
+                        product.setProductKey(existingProductKey);
+
+                        databaseUserScanHistory.child(existingProductKey).setValue(product);
+                    }
+                }
             }
 
             @Override
