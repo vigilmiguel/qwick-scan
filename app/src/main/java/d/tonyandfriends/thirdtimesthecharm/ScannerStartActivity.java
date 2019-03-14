@@ -109,25 +109,28 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
        spidey.cancel(true); // May not be needed, someday I may even test it
     }
 
-    // So far it just saves the products scanned. Not specific by user yet.
+
     public void storeInDatabase(String productName)
     {
-        final String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+        String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
                 .format(Calendar.getInstance().getTime());
 
-        final String productKey = databaseProductsScanned.push().getKey();
+        String productKey = databaseProductsScanned.push().getKey();
 
-        final Product scannedProduct = new Product(productKey, productName, currentTime, 1);
+        // Create a new product.
+        Product scannedProduct = new Product(productKey, productName, currentTime, 1);
 
-        insertIntoTable(databaseProductsScanned, scannedProduct, false);
-
-        insertIntoTable(databaseUserScanHistory, scannedProduct, true);
+        // Attempt to insert the new product in both tables.
+        insertProductIntoTable(databaseProductsScanned, scannedProduct, false);
+        insertProductIntoTable(databaseUserScanHistory, scannedProduct, true);
 
 
     }
 
-    public void insertIntoTable(final DatabaseReference reference, final Product scannedProduct,
-                                final boolean inheritProductKey) {
+    // If the product is already in the given table, it will just update the date and count.
+    public void insertProductIntoTable(final DatabaseReference reference,
+                                       final Product scannedProduct,
+                                       final boolean inheritProductKey) {
 
         final String currentTime = scannedProduct.getDateRecentlyScanned();
         final String productKey = scannedProduct.getProductKey();
@@ -140,8 +143,16 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                 .equalTo(productName)
                 .limitToFirst(1);
 
+        // Make the following only happen once.
         queryResult.addListenerForSingleValueEvent(new ValueEventListener() {
+
             @Override
+            /*
+                This is called either when initialized(which is now) or when the data is changed.
+                Because its under a listener for a single value event, it will only be called now
+                and not at a later time when the data changes again. (The shit will hit the fan
+                if it does! xD)
+             */
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 // Put all children in a list.
@@ -154,8 +165,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                     // Store the first(only) product snapshot.
                     DataSnapshot data = dataList.iterator().next();
 
+                    /*
                     Toast.makeText(ScannerStartActivity.this,
                             "This is already in the database!", Toast.LENGTH_SHORT).show();
+                    */
 
                     // Extract the data of the existing product.
                     Product existingProduct = data.getValue(Product.class);
@@ -180,8 +193,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                 // If the scanned product is not in this table...
                 else {
 
+                    /*
                     Toast.makeText(ScannerStartActivity.this,
                             "Never seen this one before!", Toast.LENGTH_SHORT).show();
+                    */
 
                     if(productKey != null) {
 
@@ -196,7 +211,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                             scannedProduct.setProductKey(key);
                         }
 
-                        // Create a new product with the given key.
+                        // insert the new product with the given key.
                         reference.child(key).setValue(scannedProduct);
 
                         existingProductKey = key;
