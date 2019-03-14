@@ -5,19 +5,15 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.Barcode.UrlBookmark;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,13 +23,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
-import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
 
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
@@ -111,33 +107,48 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
     // So far it just saves the products scanned. Not specific by user yet.
     public void storeInDatabase(final String productName)
     {
-        final String currentTime = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
+        final String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
                 .format(Calendar.getInstance().getTime());
+
 
         final String productKey = databaseProductsScanned.push().getKey();
 
         final Product scannedProduct = new Product(productKey, productName, currentTime, 1);
 
-        Query dbProductKeys = databaseProductsScanned.orderByChild("name").equalTo(productName);
+        // Run a query to return all products with the same productName.
+        // Trim the results to only 1. (it should only be one anyway)
+        Query dbExistingProductKey = databaseProductsScanned.orderByChild("name")
+                .equalTo(productName)
+                .limitToFirst(1);
 
 
 
-        dbProductKeys.addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+        dbExistingProductKey.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // If this product is already in the products scanned table...
 
-                if (dataSnapshot.exists()) {
-                    for(DataSnapshot data : dataSnapshot.getChildren()) {
+                // Put all children in a list.
+                // Should have only one child.
+                Iterable<DataSnapshot> dataList = dataSnapshot.getChildren();
 
 
-                        Toast.makeText(ScannerStartActivity.this, "This is already in the database!",
-                                Toast.LENGTH_SHORT).show();
+                // If the list isn't empty...
+                if (dataList.iterator().hasNext()) {
 
-                        // Store the existing product
-                        Product existingProduct = data.getValue(Product.class);
+                    // Store the first(only) product snapshot.
+                    DataSnapshot data = dataList.iterator().next();
 
-                        // Update the time and scan count of the existing product
+
+                    Toast.makeText(ScannerStartActivity.this,
+                            "This is already in the database!", Toast.LENGTH_SHORT).show();
+
+                    // Extract the data of the existing product.
+                    Product existingProduct = data.getValue(Product.class);
+
+                    // Update the time and increment scan count of the existing product.
+                    try {
                         Product updatedProduct = new Product(existingProduct.getProductKey(),
                                 existingProduct.getName(),
                                 currentTime, existingProduct.getScanCount() + 1);
@@ -146,13 +157,20 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                         databaseProductsScanned.child(existingProduct.getProductKey())
                                 .setValue(updatedProduct);
 
-                        break;
                     }
+                    catch(Exception e) {
+                        Toast.makeText(ScannerStartActivity.this,
+                                "ERROR: Failed to update the product.", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+
+
+
                 }
                 else {
 
-                    Toast.makeText(ScannerStartActivity.this, "Never seen this one before!",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ScannerStartActivity.this,
+                            "Never seen this one before!", Toast.LENGTH_SHORT).show();
                     databaseProductsScanned.child(productKey).setValue(scannedProduct);
                 }
 
