@@ -27,7 +27,7 @@ import java.util.List;
  * reads barcodes.
  */
 public class ScannerStartActivity extends Activity implements DataTransporter  {
-
+    //String poop = "";
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton autoFocus;
     private CompoundButton useFlash;
@@ -53,23 +53,25 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
      @Override
      // This is our Adapter implementation
      // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
-    public void onProcessDone(String result) {
+    public void onProcessDone(ArrayList<String> result) {
         productName = "";
 
         // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
         // If we find a result...
-        if(result.compareTo("Sorry we couldn't find that item")!=0) {
-            for (int i = 0; i < result.length(); i++) {
-                productName += result.charAt(i);
+         String result1 = result.get(0);
+        if(result1.compareTo("Sorry we couldn't find that item")!=0) {
+            for (int i = 0; i < result1.length(); i++) {
+                productName += result1.charAt(i);
             }
 
             // Store it in the database
         }
         // If we don't find a result...
         else
-            productName = result;
+            productName = result1;
+        //Log.d("poop", poop);
 
-        First picture = new First();
+        //picture.image(poop);
         //.image();
 
        statusMessage.setText(productName);
@@ -118,7 +120,6 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                             List<String> answers = new ArrayList<String>();
                             for (int i = 0; i < set.length; i++){
                                 answers.add(set[i].address);
-
                                 Toast.makeText(this, "emails " + answers, Toast.LENGTH_LONG).show();
                             }
                             contactorganization.setText(barcode.contactInfo.organization);
@@ -140,6 +141,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                             Log.i(TAG, barcode.rawValue);
                             // Get the ID, only thing we are concerned with as far as I'm concerned
                             poop = barcode.rawValue;
+
                             break;
                         case Barcode.SMS:
                             Log.i(TAG, barcode.sms.message);
