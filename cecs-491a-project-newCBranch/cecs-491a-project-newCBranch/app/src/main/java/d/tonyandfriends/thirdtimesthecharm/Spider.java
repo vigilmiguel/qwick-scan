@@ -124,7 +124,9 @@ class Spider extends AsyncTask<String,Void,ArrayList<String>> {
 
     public String image(String x)
     {
-        Log.d("Hi","hi");
+        //List temp = new ArrayList();
+        //boolean temp = false;
+        //Log.d("Hi","hi");
         String URL = "https://www.barcodelookup.com/";
         Response doc; // = null
         String code = x;
@@ -133,17 +135,22 @@ class Spider extends AsyncTask<String,Void,ArrayList<String>> {
             doc = Jsoup.connect(URL + code).timeout(6000).execute();
             Document dic = doc.parse();
             Elements elements = dic.select("div#images"); // finds all h4 headers and add them together
-            Log.d("myelements",elements.toString());
-            String temp = elements.attr("src");
-            Log.d("xxxxx",temp);
+            //Log.d("myelements",elements.toString());
+           // temp = elements.hasAttr("img src");
+            Elements ss = dic.getElementsByAttribute("src");
+            imageurl = ss.eq(6).toString();
+            imageurl = imageurl.substring(10,62);
+            Log.d("firstone",imageurl);
+            //Log.d("tester", ss.toString());
+
+            //Log.d("xxxxx",Boolean.toString(temp));
             String aa = dic.getElementsByAttribute("src").first().toString();
             //String y = elements.eachText().get(0); //eachText returns an list of strings so we just need the first one
             if (elements.size() == 0) // if there were no values found with the header then return empty string and try next database
             {
                 return imageurl;
             }
-            Log.d("myurl", temp);
-            imageurl = temp;
+            //Log.d("myurl", (String)temp.get(0));
 
 
         } catch (IOException e) {

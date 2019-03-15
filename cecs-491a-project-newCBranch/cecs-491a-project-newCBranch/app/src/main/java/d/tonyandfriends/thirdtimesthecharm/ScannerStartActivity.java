@@ -38,6 +38,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
     private static final String TAG = "BarcodeMain";
     Spider spidey = new Spider();
     String productName = "";
+    String productImage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,26 +56,34 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
      // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
     public void onProcessDone(ArrayList<String> result) {
         productName = "";
-
+        //productImage = "";
         // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
         // If we find a result...
-         String result1 = result.get(0);
-        if(result1.compareTo("Sorry we couldn't find that item")!=0) {
-            for (int i = 0; i < result1.length(); i++) {
-                productName += result1.charAt(i);
+
+        String pname = result.get(0);
+        String purl = result.get(1);
+        if(pname.compareTo("Sorry we couldn't find that item")!=0) {
+            for (int i = 0; i < pname.length(); i++) {
+                productName += pname.charAt(i);
             }
 
             // Store it in the database
         }
         // If we don't find a result...
         else
-            productName = result1;
+            productName = pname;
         //Log.d("poop", poop);
-
+        //productImage = purl;
         //picture.image(poop);
         //.image();
+         if(purl.isEmpty())
+         {
+             Log.d("tests","what the fuck");
+         }
 
        statusMessage.setText(productName);
+
+
        spidey.cancel(true); // May not be needed, someday I may even test it
     }
 
