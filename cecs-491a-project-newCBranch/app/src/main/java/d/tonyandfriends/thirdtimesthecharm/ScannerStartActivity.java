@@ -11,9 +11,11 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.Barcode.UrlBookmark;
@@ -37,6 +39,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
     Spider spidey = new Spider();
+    ImageView productImageView;
     String productName = "";
     String productImage = "";
 
@@ -56,7 +59,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
      // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
     public void onProcessDone(ArrayList<String> result) {
         productName = "";
-        //productImage = "";
+        productImageView = findViewById(R.id.ProductPicture);
         // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
         // If we find a result...
 
@@ -70,45 +73,24 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
             // Store it in the database
         }
         // If we don't find a result...
-        else
-            productName = pname;
-        //Log.d("poop", poop);
-        //productImage = purl;
-        //picture.image(poop);
-        //.image();
-         if(purl.isEmpty())
+        else productName = pname;
+
+         if(purl.compareTo("https://www.barcodelookup.com/assets/images/no-image-available.jpg") == 0)
          {
-             Log.d("tests","what the fuck");
+             //Here we will add default cannot find image thing
+         }
+         else
+         {
+             Glide.with(this ).load(purl).into(productImageView);
          }
 
-       statusMessage.setText(productName);
+         statusMessage.setText(productName);
 
 
        spidey.cancel(true); // May not be needed, someday I may even test it
     }
 
-    /**
-     * Called when an activity you launched exits, giving you the requestCode
-     * you started it with, the resultCode it returned, and any additional
-     * data from it.  The <var>resultCode</var> will be
-     * {@link #RESULT_CANCELED} if the activity explicitly returned that,
-     * didn't return any result, or crashed during its operation.
-     * <p/>
-     * <p>You will receive this call immediately before onResume() when your
-     * activity is re-starting.
-     * <p/>
-     *
-     * @param requestCode The integer request code originally supplied to
-     *                    startActivityForResult(), allowing you to identify who this
-     *                    result came from.
-     * @param resultCode  The integer result code returned by the child activity
-     *                    through its setResult().
-     * @param data        An Intent, which can return result data to the caller
-     *                    (various data can be attached to Intent "extras").
-     * @see #startActivityForResult
-     * @see #createPendingResult
-     * @see #setResult(int)
-     */
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("NewApi")
     @Override

@@ -6,6 +6,7 @@ import android.util.Log;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 
@@ -29,7 +30,7 @@ class Spider extends AsyncTask<String,Void,ArrayList<String>> {
         String url = "";
         String description = "";
         String code = Code[0];
-
+        Log.d("myCiode",code);
         description = FirstDB(code);
 
         if (description == "") {
@@ -124,39 +125,27 @@ class Spider extends AsyncTask<String,Void,ArrayList<String>> {
 
     public String image(String x)
     {
-        //List temp = new ArrayList();
-        //boolean temp = false;
-        //Log.d("Hi","hi");
         String URL = "https://www.barcodelookup.com/";
-        Response doc; // = null
-        String code = x;
-        String imageurl = "";
+        String bigURL ="";
+        String finalURL ="";
         try {
-            doc = Jsoup.connect(URL + code).timeout(6000).execute();
-            Document dic = doc.parse();
+            Document dic = Jsoup.connect(URL + x).get();
             Elements elements = dic.select("div#images"); // finds all h4 headers and add them together
-            //Log.d("myelements",elements.toString());
-           // temp = elements.hasAttr("img src");
-            Elements ss = dic.getElementsByAttribute("src");
-            imageurl = ss.eq(6).toString();
-            imageurl = imageurl.substring(10,62);
-            Log.d("firstone",imageurl);
-            //Log.d("tester", ss.toString());
-
-            //Log.d("xxxxx",Boolean.toString(temp));
-            String aa = dic.getElementsByAttribute("src").first().toString();
-            //String y = elements.eachText().get(0); //eachText returns an list of strings so we just need the first one
-            if (elements.size() == 0) // if there were no values found with the header then return empty string and try next database
+            // Here we use the ID to select the string, it has a bunch of junk in addition to the img url we want. thats why I call it bigURL
+            for(Element e: elements)
             {
-                return imageurl;
+                bigURL = e.getElementById("img_preview").toString();
             }
-            //Log.d("myurl", (String)temp.get(0));
-
+            int i = 10; // The string we wants always starts at index 10 <img src="   then after that our url is found
+            while(bigURL.charAt(i) != '"') // extract until we gt to the terminating quote at the end
+            {
+                finalURL += bigURL.charAt(i++);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return imageurl;
+        return finalURL;
     }
 
 
