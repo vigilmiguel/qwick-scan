@@ -35,7 +35,6 @@ public class ProfileActivity extends AppCompatActivity {
         textName = findViewById(R.id.textViewName);
         textEmail = findViewById(R.id.textViewEmail);
 
-
         FirebaseUser user = mAuth.getCurrentUser();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

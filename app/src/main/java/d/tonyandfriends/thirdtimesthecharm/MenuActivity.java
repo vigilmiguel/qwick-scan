@@ -5,13 +5,10 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import com.hitomi.cmlibrary.CircleMenu;
 import com.hitomi.cmlibrary.OnMenuSelectedListener;
-
-
 
 public class MenuActivity extends AppCompatActivity implements OnMenuSelectedListener{
 
@@ -28,10 +25,7 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
-
-
-
+        //create a circle menu so our menu doesn't look ugly af
         circleMenu = (CircleMenu)findViewById(R.id.circleMenu);
         circleMenu.setMainMenu(Color.parseColor("#ADADAD"), R.drawable.openmenu,
                 R.drawable.closemenu)
@@ -42,7 +36,6 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
         circleMenu.setOnMenuSelectedListener(this);
 
     }
-
 
     // Separate function so it looks cleaner.
     @Override

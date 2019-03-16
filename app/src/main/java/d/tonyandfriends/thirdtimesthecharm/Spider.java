@@ -1,5 +1,4 @@
 package d.tonyandfriends.thirdtimesthecharm;
-import android.media.audiofx.AudioEffect;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -27,7 +26,6 @@ class Spider extends AsyncTask<String,Void,String>
         Response doc = null;
         String code = Code[0];
         String description = "poop";
-
 
         try {
             // How we connect and do other things
