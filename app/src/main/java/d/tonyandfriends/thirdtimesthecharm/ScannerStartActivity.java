@@ -121,8 +121,13 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
         Product scannedProduct = new Product(productKey, productName, currentTime, 1);
 
         // Attempt to insert the new product in both tables.
+        Log.i("ScannerStartActivity", "Before products scanned insertion");
         insertProductIntoTable(databaseProductsScanned, scannedProduct, false);
+        Log.i("ScannerStartActivity", "After products scanned insertion");
+
+        Log.i("ScannerStartActivity", "Before user scan history insertion");
         insertProductIntoTable(databaseUserScanHistory, scannedProduct, true);
+        Log.i("ScannerStartActivity", "After user scan history insertion");
 
 
     }
@@ -135,6 +140,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
         final String currentTime = scannedProduct.getDateRecentlyScanned();
         final String productKey = scannedProduct.getProductKey();
         String productName = scannedProduct.getName();
+
 
 
         // Run a query to return all products with the same productName.
@@ -155,6 +161,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
              */
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                if(reference == databaseProductsScanned)
+                    Log.i("ScannerStartActivity", "Beginning products scanned insertion....");
+                else
+                    Log.i("ScannerStartActivity", "Beginning user scan history insertion....");
                 // Put all children in a list.
                 // Should have only one child.
                 Iterable<DataSnapshot> dataList = dataSnapshot.getChildren();
@@ -180,6 +190,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                         existingProduct.setScanCount(existingProduct.getScanCount() + 1);
 
                         // Write it to the database.
+                        Log.i("ScannerStartActivity", "Existing: " +
+                                existingProduct.getProductKey());
                         reference.child(existingProduct.getProductKey())
                                 .setValue(existingProduct);
 
@@ -202,6 +214,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
 
                         String key = productKey;
 
+                        Log.i("ScannerStartActivity", "New: " + key);
+
                         /*
                             This is for userScanHistory.
                             We want the same productKey from productsScanned table.
@@ -209,15 +223,21 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                         if (inheritProductKey) {
                             key = existingProductKey;
                             scannedProduct.setProductKey(key);
+                            Log.i("ScannerStartActivity", "New for User: " + key);
                         }
+
+
+                        existingProductKey = key;
 
                         // insert the new product with the given key.
                         reference.child(key).setValue(scannedProduct);
 
-                        existingProductKey = key;
+
                     }
 
                 }
+
+                Log.i("ScannerStartActivity", "Ending insertion....!!!");
 
             }
 
@@ -226,6 +246,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
 
             }
         });
+
+
     }
 
     /**

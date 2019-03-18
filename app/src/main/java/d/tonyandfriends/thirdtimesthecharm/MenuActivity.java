@@ -83,9 +83,10 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
                     @Override
                     public void run() {
                         startActivity(new Intent(MenuActivity.this,
-                                ScannerStartActivity.class));
+                                HistoryActivity.class));
                     }
                 }, 1000);
+                break;
 
             case MENU_LOGOUT:
                 // Wait 1 second  to complete menu animation.
