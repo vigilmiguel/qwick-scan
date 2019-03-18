@@ -36,12 +36,13 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
 
 
         circleMenu = (CircleMenu)findViewById(R.id.circleMenu);
-        circleMenu.setMainMenu(Color.parseColor("#ADADAD"), R.drawable.openmenu,
+        circleMenu.setMainMenu(Color.parseColor("#1e1f26"), R.drawable.openmenu,
                 R.drawable.closemenu)
                 .addSubMenu(Color.parseColor("#2F37FF"), R.drawable.barcode)
                 .addSubMenu(Color.parseColor("#34AA46"), R.drawable.maps)
                 .addSubMenu(Color.parseColor("#ABABAB"), R.drawable.history)
                 .addSubMenu(Color.parseColor("#9E0B16"), R.drawable.logout);
+
 
 
         circleMenu.setOnMenuSelectedListener(this);
@@ -73,7 +74,8 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        // Do whatever here...
+                        startActivity(new Intent(MenuActivity.this,
+                                MapsActivity.class));
                     }
                 }, 1000);
                 break;

@@ -9,9 +9,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,7 +48,9 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
     Spider spidey = new Spider();
+    ImageView productImageView;
     String productName = "";
+    String productImage = "";
 
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
@@ -87,27 +91,40 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
      @Override
      // This is our Adapter implementation
      // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
-    public void onProcessDone(String result) {
+    public void onProcessDone(ArrayList<String> result) {
         productName = "";
-
+        productImageView = findViewById(R.id.ProductPicture);
         // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
         // If we find a result...
-        if(result.compareTo("Sorry we couldn't find that item")!=0) {
-            for (int i = 12; i < result.length(); i++) {
-                productName += result.charAt(i);
+
+        String pname = result.get(0);
+        String purl = result.get(1);
+        if(pname.compareTo("Sorry we couldn't find that item")!=0) {
+            for (int i = 12; i < pname.length(); i++) {
+                productName += pname.charAt(i);
             }
 
             // Store it in the database
             storeInDatabase(productName);
         }
         // If we don't find a result...
-        else
-            productName = result;
+        else productName = pname;
+
+         if(purl.compareTo("https://www.barcodelookup.com/assets/images/no-image-available.jpg") == 0)
+         {
+             //Here we will add default cannot find image thing
+         }
+         else
+         {
+             Glide.with(this ).load(purl).into(productImageView);
+         }
+
+         statusMessage.setText(productName);
 
 
-       statusMessage.setText(productName);
        spidey.cancel(true); // May not be needed, someday I may even test it
     }
+
 
 
     public void storeInDatabase(String productName)
@@ -272,6 +289,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
      * @see #createPendingResult
      * @see #setResult(int)
      */
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("NewApi")
     @Override
