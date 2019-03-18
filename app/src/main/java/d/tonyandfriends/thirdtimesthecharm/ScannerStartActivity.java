@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,11 +16,22 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.Barcode.UrlBookmark;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+
 
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
@@ -43,10 +52,35 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
     String productName = "";
     String productImage = "";
 
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+    DatabaseReference databaseUserScanHistory;
+    DatabaseReference databaseProductsScanned;
+
+    String existingProductKey = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner_start);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
+        if(firebaseUser != null) {
+            String dbHistoryPath = "userScanHistory/" + firebaseUser.getUid();
+
+            // Refer to this user's specific sub-table within the scan history table.
+            databaseUserScanHistory = FirebaseDatabase.getInstance()
+                    .getReference(dbHistoryPath);
+        }
+
+        // Refers to the productsScanned table. This will store all products scanned
+        // by all users.
+        databaseProductsScanned = FirebaseDatabase.getInstance()
+                .getReference("productsScanned");
+
 
         statusMessage = (TextView)findViewById(R.id.status_message);
 
@@ -71,6 +105,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
             }
 
             // Store it in the database
+            storeInDatabase(productName);
         }
         // If we don't find a result...
         else productName = pname;
@@ -90,6 +125,170 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
        spidey.cancel(true); // May not be needed, someday I may even test it
     }
 
+
+
+    public void storeInDatabase(String productName)
+    {
+        String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+                .format(Calendar.getInstance().getTime());
+
+        String productKey = databaseProductsScanned.push().getKey();
+
+        // Create a new product.
+        Product scannedProduct = new Product(productKey, productName, currentTime, 1);
+
+        // Attempt to insert the new product in both tables.
+        Log.i("ScannerStartActivity", "Before products scanned insertion");
+        insertProductIntoTable(databaseProductsScanned, scannedProduct, false);
+        Log.i("ScannerStartActivity", "After products scanned insertion");
+
+        Log.i("ScannerStartActivity", "Before user scan history insertion");
+        insertProductIntoTable(databaseUserScanHistory, scannedProduct, true);
+        Log.i("ScannerStartActivity", "After user scan history insertion");
+
+
+    }
+
+    // If the product is already in the given table, it will just update the date and count.
+    public void insertProductIntoTable(final DatabaseReference reference,
+                                       final Product scannedProduct,
+                                       final boolean inheritProductKey) {
+
+        final String currentTime = scannedProduct.getDateRecentlyScanned();
+        final String productKey = scannedProduct.getProductKey();
+        String productName = scannedProduct.getName();
+
+
+
+        // Run a query to return all products with the same productName.
+        // Trim the results to only 1. (it should only be one anyway)
+        Query queryResult = reference.orderByChild("name")
+                .equalTo(productName)
+                .limitToFirst(1);
+
+        // Make the following only happen once.
+        queryResult.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            /*
+                This is called either when initialized(which is now) or when the data is changed.
+                Because its under a listener for a single value event, it will only be called now
+                and not at a later time when the data changes again. (The shit will hit the fan
+                if it does! xD)
+             */
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if(reference == databaseProductsScanned)
+                    Log.i("ScannerStartActivity", "Beginning products scanned insertion....");
+                else
+                    Log.i("ScannerStartActivity", "Beginning user scan history insertion....");
+                // Put all children in a list.
+                // Should have only one child.
+                Iterable<DataSnapshot> dataList = dataSnapshot.getChildren();
+
+                // If the scanned product already exists in this table...
+                if (dataList.iterator().hasNext()) {
+
+                    // Store the first(only) product snapshot.
+                    DataSnapshot data = dataList.iterator().next();
+
+                    /*
+                    Toast.makeText(ScannerStartActivity.this,
+                            "This is already in the database!", Toast.LENGTH_SHORT).show();
+                    */
+
+                    // Extract the data of the existing product.
+                    Product existingProduct = data.getValue(Product.class);
+
+                    if(existingProduct != null) {
+
+                        // Update the time and increment scan count of the existing product.
+                        existingProduct.setDateRecentlyScanned(currentTime);
+                        existingProduct.setScanCount(existingProduct.getScanCount() + 1);
+
+                        // Write it to the database.
+                        Log.i("ScannerStartActivity", "Existing: " +
+                                existingProduct.getProductKey());
+                        reference.child(existingProduct.getProductKey())
+                                .setValue(existingProduct);
+
+                        /*
+                            Store the product key so the userScanHistory table doesn't
+                            generate a different key for the same product.
+                         */
+                        existingProductKey = existingProduct.getProductKey();
+                    }
+                }
+                // If the scanned product is not in this table...
+                else {
+
+                    /*
+                    Toast.makeText(ScannerStartActivity.this,
+                            "Never seen this one before!", Toast.LENGTH_SHORT).show();
+                    */
+
+                    if(productKey != null) {
+
+                        String key = productKey;
+
+                        Log.i("ScannerStartActivity", "New: " + key);
+
+                        /*
+                            This is for userScanHistory.
+                            We want the same productKey from productsScanned table.
+                         */
+                        if (inheritProductKey) {
+                            key = existingProductKey;
+                            scannedProduct.setProductKey(key);
+                            Log.i("ScannerStartActivity", "New for User: " + key);
+                        }
+
+
+                        existingProductKey = key;
+
+                        // insert the new product with the given key.
+                        reference.child(key).setValue(scannedProduct);
+
+
+                    }
+
+                }
+
+                Log.i("ScannerStartActivity", "Ending insertion....!!!");
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    /**
+     * Called when an activity you launched exits, giving you the requestCode
+     * you started it with, the resultCode it returned, and any additional
+     * data from it.  The <var>resultCode</var> will be
+     * {@link #RESULT_CANCELED} if the activity explicitly returned that,
+     * didn't return any result, or crashed during its operation.
+     * <p/>
+     * <p>You will receive this call immediately before onResume() when your
+     * activity is re-starting.
+     * <p/>
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode  The integer result code returned by the child activity
+     *                    through its setResult().
+     * @param data        An Intent, which can return result data to the caller
+     *                    (various data can be attached to Intent "extras").
+     * @see #startActivityForResult
+     * @see #createPendingResult
+     * @see #setResult(int)
+     */
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("NewApi")
