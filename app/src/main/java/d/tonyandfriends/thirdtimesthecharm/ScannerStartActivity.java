@@ -105,6 +105,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
              }
 
              // Store it in the database
+             storeInDatabase(productName);
          }
          // If we don't find a result...
          else productName = pname;
