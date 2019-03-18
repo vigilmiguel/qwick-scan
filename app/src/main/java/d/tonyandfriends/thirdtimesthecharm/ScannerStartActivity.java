@@ -100,7 +100,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
         String pname = result.get(0);
         String purl = result.get(1);
         if(pname.compareTo("Sorry we couldn't find that item")!=0) {
-            for (int i = 12; i < pname.length(); i++) {
+            for (int i = 0; i < pname.length(); i++) {
                 productName += pname.charAt(i);
             }
 
