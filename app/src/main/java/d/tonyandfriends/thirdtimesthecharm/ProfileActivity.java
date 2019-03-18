@@ -49,8 +49,8 @@ public class ProfileActivity extends AppCompatActivity {
                 .load(user.getPhotoUrl())
                 .into(imageView);
 
-        //textName.setText(user.getDisplayName());
-        textName.setText(user.getUid());
+        textName.setText(user.getDisplayName());
+        //textName.setText(user.getUid());
         textEmail.setText(user.getEmail());
         findViewById(R.id.logOut).setOnClickListener(new View.OnClickListener() {
             @Override

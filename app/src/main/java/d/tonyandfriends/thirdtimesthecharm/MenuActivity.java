@@ -16,9 +16,12 @@ import com.hitomi.cmlibrary.OnMenuSelectedListener;
 public class MenuActivity extends AppCompatActivity implements OnMenuSelectedListener{
 
     public static final int MENU_SCAN = 0;
-    public static final int MENU_LOGOUT = 1;
+    public static final int MENU_MAPS = 1;
+    public static final int MENU_HISTORY = 2;
+    public static final int MENU_LOGOUT = 3;
 
-    String menuNames[] = {"Scan", "Logout"};
+
+    String menuNames[] = {"Scan", "Maps", "History", "Logout"};
     CircleMenu circleMenu;
 
     // To handle delays.
@@ -33,10 +36,13 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
 
 
         circleMenu = (CircleMenu)findViewById(R.id.circleMenu);
-        circleMenu.setMainMenu(Color.parseColor("#ADADAD"), R.drawable.openmenu,
+        circleMenu.setMainMenu(Color.parseColor("#1e1f26"), R.drawable.openmenu,
                 R.drawable.closemenu)
-                .addSubMenu(Color.parseColor("#2F37FF"), R.mipmap.barcode)
-                .addSubMenu(Color.parseColor("#7E0B16"), R.drawable.logout);
+                .addSubMenu(Color.parseColor("#2F37FF"), R.drawable.barcode)
+                .addSubMenu(Color.parseColor("#34AA46"), R.drawable.maps)
+                .addSubMenu(Color.parseColor("#ABABAB"), R.drawable.history)
+                .addSubMenu(Color.parseColor("#9E0B16"), R.drawable.logout);
+
 
 
         circleMenu.setOnMenuSelectedListener(this);
@@ -59,6 +65,27 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
                     public void run() {
                         startActivity(new Intent(MenuActivity.this,
                                 ScannerStartActivity.class));
+                    }
+                }, 1000);
+                break;
+
+            case MENU_MAPS:
+                // Wait 1 second  to complete menu animation.
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(MenuActivity.this,
+                                MapsActivity.class));
+                    }
+                }, 1000);
+                break;
+
+            case MENU_HISTORY:
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(MenuActivity.this,
+                                HistoryActivity.class));
                     }
                 }, 1000);
                 break;
