@@ -16,7 +16,6 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
 
     private int mId;
 
-    //These colors are associated with the different barcode types
     private static final int COLOR_CHOICES[] = {
             Color.BLUE,
             Color.CYAN,
@@ -25,7 +24,6 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
 
     private static int mCurrentColorIndex = 0;
 
-    //Create graphic overlay
     private Paint mRectPaint;
     private Paint mTextPaint;
     private volatile Barcode mBarcode;

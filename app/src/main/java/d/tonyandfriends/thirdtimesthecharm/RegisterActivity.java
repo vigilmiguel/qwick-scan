@@ -1,5 +1,6 @@
 package d.tonyandfriends.thirdtimesthecharm;
 
+
 import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -9,11 +10,22 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.List;
+
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -47,6 +59,8 @@ public class RegisterActivity extends AppCompatActivity {
         registerErrorText = findViewById(R.id.text_error);
         registerButton = findViewById(R.id.register_button);
 
+
+
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,11 +69,15 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+
     public void register() {
         // Store what the user entered as email and password.
         String emailInput = registerEmailText.getText().toString();
         String passwordInput = registerPasswordText.getText().toString();
         String confirmPasswordInput = registerConfirmPasswordText.getText().toString();
+
+
+
 
         // If either email or passwords are empty...
         if(TextUtils.isEmpty(emailInput) || TextUtils.isEmpty(passwordInput)
@@ -79,6 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
             // Stores the register result.
             Task<AuthResult> registerResult;
             registerResult = firebaseAuth.createUserWithEmailAndPassword(emailInput, passwordInput);
+
 
             registerResult.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -125,5 +144,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }, 5000);
     }
+
 
 }
