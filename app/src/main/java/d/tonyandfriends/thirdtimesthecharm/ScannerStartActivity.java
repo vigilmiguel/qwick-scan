@@ -91,24 +91,23 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
      @Override
      // This is our Adapter implementation
      // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
-    public void onProcessDone(ArrayList<String> result) {
-        productName = "";
-        productImageView = findViewById(R.id.ProductPicture);
-        // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
-        // If we find a result...
+     public void onProcessDone(SpiderData result) {
+         productName = "";
+         productImageView = findViewById(R.id.ProductPicture);
+         // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
+         // If we find a result...
 
-        String pname = result.get(0);
-        String purl = result.get(1);
-        if(pname.compareTo("Sorry we couldn't find that item")!=0) {
-            for (int i = 0; i < pname.length(); i++) {
-                productName += pname.charAt(i);
-            }
+         String pname = result.getProductName();
+         String purl = result.getImgURL();
+         if(pname != "") {
+             for (int i = 0; i < pname.length(); i++) {
+                 productName += pname.charAt(i);
+             }
 
-            // Store it in the database
-            storeInDatabase(productName);
-        }
-        // If we don't find a result...
-        else productName = pname;
+             // Store it in the database
+         }
+         // If we don't find a result...
+         else productName = pname;
 
          if(purl.compareTo("https://www.barcodelookup.com/assets/images/no-image-available.jpg") == 0)
          {
@@ -120,10 +119,16 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
          }
 
          statusMessage.setText(productName);
+         for(int i =0; i<result.getPrices().size();i++)
+         {
+             Log.d("myprice " +i, result.getPrices().get(i));
+             Log.d("myName " +i, result.getURLS().get(i)); // Can be ignnored for now (doesnt work)
+             Log.d("myUrl " +i, result.getStores().get(i));
+         }
 
 
-       spidey.cancel(true); // May not be needed, someday I may even test it
-    }
+         spidey.cancel(true); // May not be needed, someday I may even test it
+     }
 
 
 
