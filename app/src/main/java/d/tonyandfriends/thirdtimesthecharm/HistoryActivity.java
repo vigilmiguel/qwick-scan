@@ -63,6 +63,7 @@ public class HistoryActivity extends AppCompatActivity {
                 }
 
                 /*
+                Displays the user's current scan history.
                 For testing if the list actually received the products the user has scanned.
                 */
                 for(Product p : userProductHistory) {

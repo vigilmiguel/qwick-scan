@@ -1,5 +1,5 @@
 package d.tonyandfriends.thirdtimesthecharm;
-import android.media.audiofx.AudioEffect;
+//import android.media.audiofx.AudioEffect;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -15,9 +15,11 @@ import java.util.*;
 
 
 
-class Spider extends AsyncTask<String,Void,ArrayList<String>>
-{
+class Spider extends AsyncTask<String,Void,SpiderData> {
     public DataTransporter myVessel = null;
+    public SpiderData myInfo = new SpiderData();
+    public boolean foundProduct = false;
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -25,33 +27,36 @@ class Spider extends AsyncTask<String,Void,ArrayList<String>>
     }
 
     @Override
-    protected ArrayList<String> doInBackground(String... Code) {
+    protected SpiderData doInBackground(String... Code) {
         ArrayList<String> product = new ArrayList<String>();
         String url = "";
         String description = "";
         String code = Code[0];
         Log.d("myCiode",code);
-        description = FirstDB(code);
-
-        if (description == "") {
-            description = SecondDB(code);
+        FirstDB(code);
+        if(!foundProduct)  SecondDB(code);
+        if(foundProduct)
+        {
+            //crawling time
+            image(code);
+            getPrice(myInfo.getProductName());
         }
 
-        url = image(code);
-        product.add(description);
-        product.add(url);
+        //url = image(code);
+        //product.add(description);
+        //product.add(url);
         Log.d("firstd",description);
         Log.d("firsturl",url);
-        return product;
+        return myInfo;
     }
 
-    public void onPostExecute(ArrayList<String> result) {
+    public void onPostExecute(SpiderData result) {
 
         // Only way I found to transfer Data from Async task to other places, using an interface
         myVessel.onProcessDone(result);
     }
 
-    public String FirstDB(String x) {
+    public void FirstDB(String x) {
         String URL = "https://www.upcdatabase.com/item/";
         Response doc; // = null
         String code = x;
@@ -68,9 +73,11 @@ class Spider extends AsyncTask<String,Void,ArrayList<String>>
             Log.d("mySize", String.valueOf(rows.size()));
             if (rows.size() < 3) // Check how big the table is, if its size 2 then There is no valid Scan in their DB
             {
-                description = "";
+                Log.d("MyfirstFailure", "a true fail");
+                return;
             } else { // Otherwise the second row gives us the Name
 
+                foundProduct = true;
                 description = rows.get(2).text();
                 Log.d("mydesc", description); // name on barcode lookup is going to be h4
                 int i = 2;
@@ -87,17 +94,17 @@ class Spider extends AsyncTask<String,Void,ArrayList<String>>
                     temp = temp.substring(11);
                     description += "" + temp;
                 }
+                myInfo.setProductName(description);
                 Log.d("ss", temp);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return description;
 
     }
 
-    public String SecondDB(String x) {
+    public void SecondDB(String x) {
         String URL = "https://www.barcodelookup.com/";
         Response doc; // = null
         String code = x;
@@ -107,47 +114,127 @@ class Spider extends AsyncTask<String,Void,ArrayList<String>>
             doc = Jsoup.connect(URL + code).timeout(6000).execute();
             Document dic = doc.parse();
             Elements elements = dic.select("h4"); // finds all h4 headers and add them together
-            // String y = elements.eachText().get(0); //eachText returns an list of strings so we just need the first one
+            //String y = elements.eachText().get(0); //eachText returns an list of strings so we just need the first one
             if (elements.size() == 0) // if there were no values found with the header then return empty string and try next database
             {
-                description = "Sorry we couldn't find that item";
-                return description;
+                Log.d("mySecond Failure","wowowow");
+                return;
             }
+
             Log.d("code", code);
             description = elements.eachText().get(0);
+            Log.d("MyBS", description);
+            if(description.length() == 0)
+            {
+                Log.d("myLength","ezfix");
+                return;
+            }
+            foundProduct = true;
+            myInfo.setProductName(description);
 
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return description;
     }
 
-    public String image(String x)
+    public void image(String x)
     {
         String URL = "https://www.barcodelookup.com/";
         String bigURL ="";
         String finalURL ="";
         try {
             Document dic = Jsoup.connect(URL + x).get();
-            Elements elements = dic.select("div#images"); // finds all h4 headers and add them together
+            Elements elements = dic.select("div#images"); // go straight to Div Images
             // Here we use the ID to select the string, it has a bunch of junk in addition to the img url we want. thats why I call it bigURL
-            for (Element e : elements)
+            for(Element e: elements)
             {
                 bigURL = e.getElementById("img_preview").toString();
             }
             int i = 10; // The string we wants always starts at index 10 <img src="   then after that our url is found
-            while (bigURL.charAt(i) != '"') // extract until we gt to the terminating quote at the end
+            while(bigURL.charAt(i) != '"') // extract until we gt to the terminating quote at the end
             {
                 finalURL += bigURL.charAt(i++);
             }
+            myInfo.setImgURL(finalURL);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return finalURL;
+
+    }
+
+
+    //A complicated function full of wonder and mystery
+    public void getPrice(String product)
+    {
+
+        // add "+" to make a google search
+        Log.d("myPRoduict",product);
+        product = product.replace("(","");
+        product = product.replace(")","");
+        product = product.replaceAll("\\s","+");
+        //SpiderData myInfo = new SpiderData();
+        String secondVisit = "";
+        // our first hop, google shopping query
+        String googleQuery = "https://www.google.com/search?q=" + product + "&hl=en&tbm=shop&tbs=p_ord:rv&ei=73uNXKbSEeHi9APDlJ64Bw&ved=0ahUKEwjmheCC3ofhAhVhMX0KHUOKB3cQuw0IkAMoAQ";
+        try {
+            Document dic = Jsoup.connect(googleQuery).get();
+            Elements elements = dic.select("div.eIuuYe");
+            Log.d("MyGoogleQuery",googleQuery);
+            // This is our link we need to follow to get to the prices page
+            String firstURL = elements.get(0).toString();
+            int i = 45;
+            while(firstURL.charAt(i) != '"')
+            {
+                secondVisit += firstURL.charAt(i++);
+            }
+            String letsTryit = "https://www.google.com" + secondVisit;
+            dic = Jsoup.connect(letsTryit).get();
+
+            //This selects all the base prices
+            elements = dic.select(".tiOgyd");
+            int Size = elements.size();
+            //For now im going with only 3 results, we can change this later if we so choose
+            if(Size > 3) Size = 3;
+
+            //First loop grabs the prices
+            for(i=0; i<Size;i++)
+            {
+                int j = 21;
+                String temp = "";
+                while(elements.get(i).toString().charAt(j) != '<') temp += elements.get(i).toString().charAt(j++);
+                myInfo.addPrice(temp); // add to our data
+            }
+
+            //This displays name and URL info
+            elements = dic.select(".os-seller-name");
+            for(i=0; i<Size;i++)
+            {
+                //First part of loop gets URL(Not working atm, the url is a special google one and it wont work unless directly clicked, so parsing is out of the question)
+                //I'll try to find a solution one day.
+                int j = 90;
+                String temp = "";
+                while(elements.get(i).toString().charAt(j) != '"')  temp += elements.get(i).toString().charAt(j++);
+                temp = "https://www.google.com" + temp;
+                myInfo.addURL(temp); //add to our data
+
+                // Second loop grabs the name of the website.
+                j += 18;
+                String temp2 ="";
+                while(elements.get(i).toString().charAt(j) != '<') temp2 += elements.get(i).toString().charAt(j++);
+                myInfo.addName(temp2); //Add to our data
+            }
+
+
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            Log.d("myPatience","isrunning out");
+        }
     }
 
 
 }
+
 
