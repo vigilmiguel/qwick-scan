@@ -122,8 +122,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
          for(int i =0; i<result.getPrices().size();i++)
          {
              Log.d("myprice " +i, result.getPrices().get(i));
-             Log.d("myName " +i, result.getURLS().get(i)); // Can be ignnored for now (doesnt work)
-             Log.d("myUrl " +i, result.getStores().get(i));
+             Log.d("myURL " +i, result.getURLS().get(i)); // Can be ignnored for now (doesnt work)
+             Log.d("myStoreName " +i, result.getStores().get(i));
          }
 
 

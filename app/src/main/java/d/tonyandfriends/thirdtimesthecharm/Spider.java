@@ -73,6 +73,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             Log.d("mySize", String.valueOf(rows.size()));
             if (rows.size() < 3) // Check how big the table is, if its size 2 then There is no valid Scan in their DB
             {
+                Log.d("MyfirstFailure", "a true fail");
                 return;
             } else { // Otherwise the second row gives us the Name
 
@@ -87,13 +88,13 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 Log.d("des", description);
                 if (description.contains("Description")) {
                     description = description.substring(12); // gets rid of the description part
-                    myInfo.setProductName(description);
                 }
                 String temp = rows.get(++i).text();
                 if (temp.contains("Size")) {
                     temp = temp.substring(11);
-                    //description += "" + temp;
+                    description += "" + temp;
                 }
+                myInfo.setProductName(description);
                 Log.d("ss", temp);
             }
         } catch (IOException e) {
@@ -116,11 +117,19 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             //String y = elements.eachText().get(0); //eachText returns an list of strings so we just need the first one
             if (elements.size() == 0) // if there were no values found with the header then return empty string and try next database
             {
+                Log.d("mySecond Failure","wowowow");
+                return;
+            }
+
+            Log.d("code", code);
+            description = elements.eachText().get(0);
+            Log.d("MyBS", description);
+            if(description.length() == 0)
+            {
+                Log.d("myLength","ezfix");
                 return;
             }
             foundProduct = true;
-            Log.d("code", code);
-            //description = elements.eachText().get(0);
             myInfo.setProductName(description);
 
 
@@ -161,6 +170,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
     {
 
         // add "+" to make a google search
+        Log.d("myPRoduict",product);
         product = product.replace("(","");
         product = product.replace(")","");
         product = product.replaceAll("\\s","+");
@@ -171,7 +181,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
         try {
             Document dic = Jsoup.connect(googleQuery).get();
             Elements elements = dic.select("div.eIuuYe");
-
+            Log.d("MyGoogleQuery",googleQuery);
             // This is our link we need to follow to get to the prices page
             String firstURL = elements.get(0).toString();
             int i = 45;
