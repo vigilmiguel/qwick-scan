@@ -53,13 +53,13 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
     ImageView productImageView;
     String productName = "";
     String productImage = "";
+    String productBarode = "";
 
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     DatabaseReference databaseUserScanHistory;
     DatabaseReference databaseProductsScanned;
-
-    String existingProductKey = null;
+    
 
 
     @Override
@@ -105,20 +105,33 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
 
         String pname = result.getProductName();
         String purl = result.getImgURL();
-        if(pname != "") {
-            for (int i = 0; i < pname.length(); i++) {
-                productName += pname.charAt(i);
-            }
+        if(spidey.foundProduct) {
+
+            Log.i("SCANNERSTARTACTIVITY","PRODUCT_FOUND");
+            String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+                    .format(Calendar.getInstance().getTime());
+
+            productName = pname;
+
+            Product product = new Product(productBarode, productName, purl, currentTime, 1);
 
             // Store it in the database
-            storeInDatabase(productName);
+            storeInDatabase(product);
         }
         // If we don't find a result...
-        else productName = pname;
+        else {
+            Log.i("SCANNERSTARTACTIVITY","PRODUCT_NOT_FOUND");
+            productName = "Sorry, we could not find that product!";
+        }
 
-        if(purl.compareTo("https://www.barcodelookup.com/assets/images/no-image-available.jpg") == 0)
+
+        if(purl.compareTo("https://www.barcodelookup.com/assets/images/no-image-available.jpg") == 0
+            || purl.isEmpty())
         {
             //Here we will add default cannot find image thing
+            Glide.with(this )
+                    .load("https://www.barcodelookup.com/assets/images/no-image-available.jpg")
+                    .into(productImageView);
         }
         else
         {
@@ -141,23 +154,16 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
 
 
 
-    public void storeInDatabase(String productName)
+    public void storeInDatabase(Product newProduct)
     {
-        String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
-                .format(Calendar.getInstance().getTime());
-
-        String productKey = databaseProductsScanned.push().getKey();
-
-        // Create a new product.
-        Product scannedProduct = new Product(productKey, productName, currentTime, 1);
 
         // Attempt to insert the new product in both tables.
         Log.i("ScannerStartActivity", "Before products scanned insertion");
-        insertProductIntoTable(databaseProductsScanned, scannedProduct, false);
+        insertProductIntoTable(databaseProductsScanned, newProduct);
         Log.i("ScannerStartActivity", "After products scanned insertion");
 
         Log.i("ScannerStartActivity", "Before user scan history insertion");
-        insertProductIntoTable(databaseUserScanHistory, scannedProduct, true);
+        insertProductIntoTable(databaseUserScanHistory, newProduct);
         Log.i("ScannerStartActivity", "After user scan history insertion");
 
 
@@ -165,19 +171,12 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
 
     // If the product is already in the given table, it will just update the date and count.
     public void insertProductIntoTable(final DatabaseReference reference,
-                                       final Product scannedProduct,
-                                       final boolean inheritProductKey) {
-
-        final String currentTime = scannedProduct.getDateRecentlyScanned();
-        final String productKey = scannedProduct.getProductKey();
-        String productName = scannedProduct.getName();
-
-
+                                       final Product scannedProduct) {
 
         // Run a query to return all products with the same productName.
         // Trim the results to only 1. (it should only be one anyway)
-        Query queryResult = reference.orderByChild("name")
-                .equalTo(productName)
+        Query queryResult = reference.orderByChild("barcode")
+                .equalTo(scannedProduct.getBarcode())
                 .limitToFirst(1);
 
         // Make the following only happen once.
@@ -196,6 +195,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                     Log.i("ScannerStartActivity", "Beginning products scanned insertion....");
                 else
                     Log.i("ScannerStartActivity", "Beginning user scan history insertion....");
+
                 // Put all children in a list.
                 // Should have only one child.
                 Iterable<DataSnapshot> dataList = dataSnapshot.getChildren();
@@ -217,20 +217,15 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                     if(existingProduct != null) {
 
                         // Update the time and increment scan count of the existing product.
-                        existingProduct.setDateRecentlyScanned(currentTime);
+                        existingProduct.setDateRecentlyScanned(scannedProduct.getDateRecentlyScanned());
                         existingProduct.setScanCount(existingProduct.getScanCount() + 1);
 
                         // Write it to the database.
                         Log.i("ScannerStartActivity", "Existing: " +
-                                existingProduct.getProductKey());
-                        reference.child(existingProduct.getProductKey())
+                                existingProduct.getBarcode());
+                        reference.child(existingProduct.getBarcode())
                                 .setValue(existingProduct);
 
-                        /*
-                            Store the product key so the userScanHistory table doesn't
-                            generate a different key for the same product.
-                         */
-                        existingProductKey = existingProduct.getProductKey();
                     }
                 }
                 // If the scanned product is not in this table...
@@ -241,27 +236,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                             "Never seen this one before!", Toast.LENGTH_SHORT).show();
                     */
 
-                    if(productKey != null) {
-
-                        String key = productKey;
-
-                        Log.i("ScannerStartActivity", "New: " + key);
-
-                        /*
-                            This is for userScanHistory.
-                            We want the same productKey from productsScanned table.
-                         */
-                        if (inheritProductKey) {
-                            key = existingProductKey;
-                            scannedProduct.setProductKey(key);
-                            Log.i("ScannerStartActivity", "New for User: " + key);
-                        }
-
-
-                        existingProductKey = key;
+                    if(scannedProduct.getBarcode() != null) {
 
                         // insert the new product with the given key.
-                        reference.child(key).setValue(scannedProduct);
+                        reference.child(scannedProduct.getBarcode()).setValue(scannedProduct);
 
 
                     }
@@ -376,6 +354,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                     //Field one will be for data we want to pass, field 2 is unimporant as far as I know, keep it void. Field 3 is our return data
                     String [] container = new String[1]; // Here we are passing String, so we need a String Array
                     container[0] = poop; // one day I may make this a legit name, we assign our ID we get from barcode into our Array
+                    productBarode = poop;
                     try { // Async threads can only run once, so if we want multiple scans we need new objects. This may not be the best way, but it works for now
                         spidey = spidey.getClass().newInstance();
                     } catch (InstantiationException e) {
