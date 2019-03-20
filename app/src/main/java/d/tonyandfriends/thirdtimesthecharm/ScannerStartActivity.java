@@ -1,7 +1,9 @@
 package d.tonyandfriends.thirdtimesthecharm;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
@@ -24,8 +26,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,7 +41,7 @@ import java.util.Locale;
  * Main activity demonstrating how to pass extra parameters to an activity that
  * reads barcodes.
  */
-public class ScannerStartActivity extends Activity implements DataTransporter  {
+public class ScannerStartActivity extends Activity implements DataTransporter, Serializable {
 
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton autoFocus;
@@ -92,6 +96,17 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
      // This is our Adapter implementation
      // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
      public void onProcessDone(SpiderData result) {
+
+        Log.d("mymymymymymymym",Integer.toString(result.prices.size()));
+         // Using sharedPreferences and json/gson files, I can transfer an object from one activity to another.
+         //this is one of the only ways to transfer an object between activites
+         SharedPreferences mPrefs = getSharedPreferences("poop",MODE_PRIVATE);
+         SharedPreferences.Editor prefEdit = mPrefs.edit();
+         Gson gson = new Gson();
+         String jsonData = gson.toJson(result);
+         prefEdit.putString("mySpider",jsonData);
+         prefEdit.commit();
+
          productName = "";
          productImageView = findViewById(R.id.ProductPicture);
          // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
@@ -121,9 +136,9 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
          statusMessage.setText(productName);
          for(int i =0; i<result.getPrices().size();i++)
          {
-             Log.d("myprice " +i, result.getPrices().get(i));
-             Log.d("myURL " +i, result.getURLS().get(i)); // Can be ignnored for now (doesnt work)
-             Log.d("myStoreName " +i, result.getStores().get(i));
+             //Log.d("myprice " +i, result.getPrices().get(i));
+             //Log.d("myURL " +i, result.getURLS().get(i)); // Can be ignnored for now (doesnt work)
+             //Log.d("myStoreName " +i, result.getStores().get(i));
          }
 
 
@@ -374,6 +389,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
+
                     spidey.myVessel = this; // Assign the our instance to Spider
                     spidey.execute(container); // Jesus take the wheel
 

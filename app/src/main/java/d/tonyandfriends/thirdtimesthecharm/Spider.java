@@ -40,6 +40,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             //crawling time
             image(code);
             getPrice(myInfo.getProductName());
+            locationScraper(myInfo.getProductName());
         }
 
         //url = image(code);
@@ -150,6 +151,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             for(Element e: elements)
             {
                 bigURL = e.getElementById("img_preview").toString();
+                //Log.d("whats happening", e.getElementById(""))
             }
             int i = 10; // The string we wants always starts at index 10 <img src="   then after that our url is found
             while(bigURL.charAt(i) != '"') // extract until we gt to the terminating quote at the end
@@ -233,7 +235,147 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             Log.d("myPatience","isrunning out");
         }
     }
+    //An n^2 function, with an nlogn kind of feel
+    public void locationScraper(String product) // Get address and coordinates to local stores that may sell our product
+    {
+        // Priming our product String for a search
+       product = product.replace("(","");
+       product = product.replace(")","");
+       product = product.replaceAll("\\s","+");
+       String googleQuery = "https://www.google.com/search?q=" + product + "+near+me"; // the query
+       ArrayList<String> localStores = new ArrayList<String>(); // Two ArrayLists that will store the data we parse
+       ArrayList<String> localCords = new ArrayList<String>();
 
+        try {
+            Document dic = Jsoup.connect(googleQuery).get();
+            Elements elements = dic.select("div.dbg0pd"); // This retrieves the names of our stores
+            //Elements elements2 = dic.select(".rllt__details");
+            Log.d("myLocationQuery",googleQuery);
+            Log.d("MyTestSize", Integer.toString(elements.size()));
+            //Log.d("MyTestSize", Integer.toString(elements2.size()));
+            //Log.d("MyLoop1", elements.get(0).toString());
+            //Log.d("MyLoop1", Character.toString(elements.get(0).toString().charAt(58)));
+
+            // Again I limit to 3 results, we can change in the future
+            int Size = elements.size();
+            if(Size == 0) return;
+            if(Size > 3) Size = 3;
+
+            //How we get our name from the Parsed Div, its pretty big
+            int j =58;
+            for(int i =0; i<Size; i++)
+            {
+               String temp  ="";
+               while(elements.get(i).toString().charAt(j) != '<') temp += elements.get(i).toString().charAt(j++);
+               localStores.add(temp);
+               j = 58;
+               Log.d("myFinalStore",temp);
+            }
+            for(int i=0; i<localStores.size(); i++) Log.d("myLocals:", localStores.get(i));
+
+
+            elements = dic.select(".rllt__details");
+
+            //This has the address data, split into two spans within it
+            elements = dic.select(".rllt__details span");
+            Log.d("myRRLLY", Integer.toString(elements.size()));
+            for(int i =0; i<elements.size(); i++) Log.d("myGG", elements.get(i).toString());
+            Log.d("MySizeee", Integer.toString(Size));
+
+
+            int n =0;
+            j = 6;
+            Log.d("myReally?", elements.toString());
+
+            //The loop to parse our address
+            for(int i=0; i<Size; i++)
+            {
+                Log.d("myi", Integer.toString(i));
+                // For each store we have, we need to find its corresponding address in a sea of useless span information
+                while (n < elements.size()) {
+
+                    Log.d("myHUH?", elements.get(n).toString());
+                    char validChar = elements.get(n++).toString().charAt(j); //The char we should start at
+                    //A disgusting if loop that checks (I think) all unvalid chars. if it works it doesnt matter how ugly it is
+                    if(validChar != '<' && validChar != '>' && validChar != '"' && validChar != ' '
+                    && validChar != '$' &&(validChar != 'T' && elements.get(n-1).toString().charAt(j+1) != 'h'
+                    && elements.get(n-1).toString().charAt(j+2) != 'e' && elements.get(n-1).toString().charAt(j+3) != 'i')
+                    & elements.get(n-1).toString().charAt(j-1) != ' ')
+                    {
+                        Log.d("myValid", Character.toString(validChar));
+                        //Appending the address to our store Name
+                        String temp = "";
+                        temp += localStores.get(i) + " ";
+                        while(elements.get(n-1).toString().charAt(j) != '<') temp += elements.get(n-1).toString().charAt(j++);
+                        localStores.set(i,temp);
+                        Log.d("myFinalSet",localStores.get(i));
+                        j=6;
+                        break;
+                    }
+
+                    // A relic of the past, but one day I might revert to it.
+                    /*
+                    int peter = elements.get(n++).toString().charAt(j) - '0';
+                    if (peter >= 0 && peter <= 9) {
+                        String temp = "";
+                        temp += localStores.get(i) + " ";
+                        Log.d("myChar", Integer.toString(peter));
+                        while(elements.get(n-1).toString().charAt(j) != '<') temp += elements.get(n-1).toString().charAt(j++);
+                        localStores.set(i,temp);
+                        Log.d("MyFinalSet",localStores.get(i));
+                        j = 6;
+                        break;
+                    }
+                    */
+                }
+            }
+
+
+            //Coordinate time
+            for(int i =0; i<localStores.size(); i++)
+            {
+                Log.d("myWHAT", localStores.get(i));
+                //The next netcall, finding coordinates
+                googleQuery = "https://www.google.com/search?q=" + localStores.get(i) + "coordinates";
+                dic = Jsoup.connect(googleQuery).get();
+                elements = dic.select("div.Z0LcW"); // should get us straight to the cords
+                Log.d("myCords", elements.toString());
+                localCords.add(elements.toString()); // Add them to our local
+                myInfo.addLocalStore(localStores.get(i)); //while we're here add our final stores to our SpiderData
+                Log.d("myFirst cords" +i, elements.toString());
+            }
+            //String manipulation stuff
+            for(int i=0; i<localCords.size();i++)
+            {
+                String temp = localCords.get(i);
+                if(temp.length() == 0){
+                    Log.d("mySac", "i get here");
+                    myInfo.getLocalStores().remove(i);
+                    continue;
+                }
+                temp = temp.substring(21,45); //rough guess of where our cords are
+                Log.d("myyyy",temp);
+                // get rid of that bullstuff
+                temp = temp.replaceAll("N","");
+                temp  =temp.replaceAll("W","");
+                temp = temp.replaceAll(",","");
+                temp  = temp.replaceAll("\u00B0","");
+                Log.d("myFinalCordTemp", temp);
+                //Split our cords into latitude and longitude
+                String [] tempCords = temp.split(" ",2);
+                Log.d("myzzzz", tempCords[0]);
+                Log.d("myjjjjjj", tempCords[1]);
+                //probably should just use a hashmap, but its amateur hour tonight
+                myInfo.addLatitude(Double.parseDouble(tempCords[0]));
+                myInfo.addLongitude(Double.parseDouble(tempCords[1]));
+
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
 
