@@ -353,13 +353,19 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             //String manipulation stuff
             for(int i=0; i<localCords.size();i++)
             {
+                Log.i("TESTLOOP", "" + i);
                 String temp = localCords.get(i);
-                if(temp.length() == 0){
+
+                // Sometimes getLocalStores wouldn't have an ith element.
+                if(temp.length() == 0 && myInfo.getLocalStores().size() > i) {
                     Log.d("mySac", "i get here");
                     myInfo.getLocalStores().remove(i);
                     continue;
                 }
-                temp = temp.substring(21,45); //rough guess of where our cords are
+
+                // Sometimes the string was too short.
+                if(temp.length() > 45)
+                    temp = temp.substring(21,45); //rough guess of where our cords are
                 Log.d("myyyy",temp);
                 // get rid of that bullstuff
                 temp = temp.replaceAll("N","");
@@ -369,12 +375,19 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 Log.d("myFinalCordTemp", temp);
                 //Split our cords into latitude and longitude
                 String [] tempCords = temp.split(" ",2);
-                Log.d("myzzzz", tempCords[0]);
-                Log.d("myjjjjjj", tempCords[1]);
-                //probably should just use a hashmap, but its amateur hour tonight
-                myInfo.addLatitude(Double.parseDouble(tempCords[0]));
-                myInfo.addLongitude(Double.parseDouble(tempCords[1]));
 
+                // It sometimes only has a length of 1.
+                if(tempCords.length == 2) {
+                    Log.d("myzzzz", tempCords[0]);
+                    Log.d("myjjjjjj", tempCords[1]);
+
+                    //probably should just use a hashmap, but its amateur hour tonight
+                    myInfo.addLatitude(Double.parseDouble(tempCords[0]));
+                    myInfo.addLongitude(Double.parseDouble(tempCords[1]));
+
+                }
+
+                Log.i("TESTLOOP", "" + i);
             }
 
 
