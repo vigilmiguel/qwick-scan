@@ -25,6 +25,8 @@ public class HistoryActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
     DatabaseReference databaseUserScanHistory;
 
+    ValueEventListener databaseListener;
+
     List<Product> userProductHistory = new ArrayList<>();
     List<String> returnedVals = new ArrayList<>();
 
@@ -53,9 +55,10 @@ public class HistoryActivity extends AppCompatActivity {
 
         OR, we can use addValueEventListener and remove the listener when the user leaves
         this page. This may be useful if we want live data to be updated as it changes.
-        But we don't need that feature in this activity.
+        We can use this when deleting data so it automatically updates.
          */
-        databaseUserScanHistory.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        databaseListener = databaseUserScanHistory.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
@@ -88,6 +91,16 @@ public class HistoryActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        databaseUserScanHistory.removeEventListener(databaseListener);
+
+
+
     }
 
 

@@ -152,10 +152,16 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 bigURL = e.getElementById("img_preview").toString();
             }
             int i = 10; // The string we wants always starts at index 10 <img src="   then after that our url is found
-            while(bigURL.charAt(i) != '"') // extract until we gt to the terminating quote at the end
-            {
-                finalURL += bigURL.charAt(i++);
+
+            // Check if bigURL has a length of at least i+1 before checking indices.
+            if(bigURL.length() > i) {
+
+                while(bigURL.charAt(i) != '"') // extract until we gt to the terminating quote at the end
+                {
+                    finalURL += bigURL.charAt(i++);
+                }
             }
+
             myInfo.setImgURL(finalURL);
 
         } catch (IOException e) {
