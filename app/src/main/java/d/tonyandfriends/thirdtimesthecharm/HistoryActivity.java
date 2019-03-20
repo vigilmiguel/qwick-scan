@@ -70,8 +70,8 @@ public class HistoryActivity extends AppCompatActivity {
                 */
                 for(Product p : userProductHistory) {
                     Log.i("HistoryActivity", p.getName());
-                    Toast.makeText(HistoryActivity.this, p.getName(), Toast.LENGTH_SHORT)
-                            .show();
+                    //Toast.makeText(HistoryActivity.this, p.getName(), Toast.LENGTH_SHORT)
+                    //        .show();
                     returnedVals.add(p.getName() +"\n" + p.getDateRecentlyScanned());
                     Spinner s = (Spinner) findViewById(R.id.spinner3);
                     ArrayAdapter<String> adapter =
