@@ -12,6 +12,7 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,20 +49,21 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     private CompoundButton useFlash;
     private TextView statusMessage;
     private TextView contactname, contacttitle, contactorganization;
-
+    private ProgressBar pBar;
+    private TextView Title;
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
     Spider spidey = new Spider();
     ImageView productImageView;
     String productName = "";
     String productImage = "";
+    String productBarode = "";
 
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     DatabaseReference databaseUserScanHistory;
     DatabaseReference databaseProductsScanned;
-
-    String existingProductKey = null;
+    
 
 
     @Override
@@ -87,83 +89,98 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
 
         statusMessage = (TextView)findViewById(R.id.status_message);
+        Title = (TextView)findViewById(R.id.Title);
+        pBar = (ProgressBar)findViewById(R.id.progressBar);
+        pBar.setVisibility(ProgressBar.VISIBLE);
+        Title.setVisibility(TextView.INVISIBLE);
 
         Intent intent = new Intent(this, BarcodeCaptureActivity.class);
         startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
 
-     @Override
-     // This is our Adapter implementation
-     // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
-     public void onProcessDone(SpiderData result) {
 
+    @Override
+    // This is our Adapter implementation
+    // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
+    public void onProcessDone(SpiderData result) {
+      
         Log.d("mymymymymymymym",Integer.toString(result.prices.size()));
-         // Using sharedPreferences and json/gson files, I can transfer an object from one activity to another.
-         //this is one of the only ways to transfer an object between activites
-         SharedPreferences mPrefs = getSharedPreferences("poop",MODE_PRIVATE);
-         SharedPreferences.Editor prefEdit = mPrefs.edit();
-         Gson gson = new Gson();
-         String jsonData = gson.toJson(result);
-         prefEdit.putString("mySpider",jsonData);
-         prefEdit.commit();
+        // Using sharedPreferences and json/gson files, I can transfer an object from one activity to another.
+        //this is one of the only ways to transfer an object between activites
+        SharedPreferences mPrefs = getSharedPreferences("poop",MODE_PRIVATE);
+        SharedPreferences.Editor prefEdit = mPrefs.edit();
+        Gson gson = new Gson();
+        String jsonData = gson.toJson(result);
+        prefEdit.putString("mySpider",jsonData);
+        prefEdit.commit();
+  
+        productName = "";
+        productImageView = findViewById(R.id.ProductPicture);
+        // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
+        // If we find a result...
 
-         productName = "";
-         productImageView = findViewById(R.id.ProductPicture);
-         // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
-         // If we find a result...
+        String pname = result.getProductName();
+        String purl = result.getImgURL();
+        if(spidey.foundProduct) {
 
-         String pname = result.getProductName();
-         String purl = result.getImgURL();
-         if(pname != "") {
-             for (int i = 0; i < pname.length(); i++) {
-                 productName += pname.charAt(i);
-             }
+            Log.i("SCANNERSTARTACTIVITY","PRODUCT_FOUND");
+            String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+                    .format(Calendar.getInstance().getTime());
 
-             // Store it in the database
-         }
-         // If we don't find a result...
-         else productName = pname;
+            productName = pname;
 
-         if(purl.compareTo("https://www.barcodelookup.com/assets/images/no-image-available.jpg") == 0)
-         {
-             //Here we will add default cannot find image thing
-         }
-         else
-         {
-             Glide.with(this ).load(purl).into(productImageView);
-         }
+            Product product = new Product(productBarode, productName, purl, currentTime, 1);
 
-         statusMessage.setText(productName);
-         for(int i =0; i<result.getPrices().size();i++)
-         {
+            // Store it in the database
+            storeInDatabase(product);
+        }
+        // If we don't find a result...
+        else {
+            Log.i("SCANNERSTARTACTIVITY","PRODUCT_NOT_FOUND");
+            productName = "Sorry, we could not find that product!";
+        }
+
+
+        if(purl.compareTo("https://www.barcodelookup.com/assets/images/no-image-available.jpg") == 0
+            || purl.isEmpty())
+        {
+            //Here we will add default cannot find image thing
+            Glide.with(this )
+                    .load("https://www.barcodelookup.com/assets/images/no-image-available.jpg")
+                    .into(productImageView);
+        }
+        else
+        {
+            Glide.with(this ).load(purl).into(productImageView);
+        }
+
+
+        statusMessage.setText(productName);
+        for(int i =0; i<result.getPrices().size();i++)
+        {
              //Log.d("myprice " +i, result.getPrices().get(i));
              //Log.d("myURL " +i, result.getURLS().get(i)); // Can be ignnored for now (doesnt work)
              //Log.d("myStoreName " +i, result.getStores().get(i));
-         }
+        }
 
 
-         spidey.cancel(true); // May not be needed, someday I may even test it
-     }
+        spidey.cancel(true); // May not be needed, someday I may even test it
+        pBar.setVisibility(ProgressBar.INVISIBLE);
+        Title.setVisibility(TextView.VISIBLE);
+    }
 
 
 
-    public void storeInDatabase(String productName)
+    public void storeInDatabase(Product newProduct)
     {
-        String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
-                .format(Calendar.getInstance().getTime());
-
-        String productKey = databaseProductsScanned.push().getKey();
-
-        // Create a new product.
-        Product scannedProduct = new Product(productKey, productName, currentTime, 1);
 
         // Attempt to insert the new product in both tables.
         Log.i("ScannerStartActivity", "Before products scanned insertion");
-        insertProductIntoTable(databaseProductsScanned, scannedProduct, false);
+        insertProductIntoTable(databaseProductsScanned, newProduct);
         Log.i("ScannerStartActivity", "After products scanned insertion");
 
         Log.i("ScannerStartActivity", "Before user scan history insertion");
-        insertProductIntoTable(databaseUserScanHistory, scannedProduct, true);
+        insertProductIntoTable(databaseUserScanHistory, newProduct);
         Log.i("ScannerStartActivity", "After user scan history insertion");
 
 
@@ -171,19 +188,12 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
     // If the product is already in the given table, it will just update the date and count.
     public void insertProductIntoTable(final DatabaseReference reference,
-                                       final Product scannedProduct,
-                                       final boolean inheritProductKey) {
-
-        final String currentTime = scannedProduct.getDateRecentlyScanned();
-        final String productKey = scannedProduct.getProductKey();
-        String productName = scannedProduct.getName();
-
-
+                                       final Product scannedProduct) {
 
         // Run a query to return all products with the same productName.
         // Trim the results to only 1. (it should only be one anyway)
-        Query queryResult = reference.orderByChild("name")
-                .equalTo(productName)
+        Query queryResult = reference.orderByChild("barcode")
+                .equalTo(scannedProduct.getBarcode())
                 .limitToFirst(1);
 
         // Make the following only happen once.
@@ -202,6 +212,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     Log.i("ScannerStartActivity", "Beginning products scanned insertion....");
                 else
                     Log.i("ScannerStartActivity", "Beginning user scan history insertion....");
+
                 // Put all children in a list.
                 // Should have only one child.
                 Iterable<DataSnapshot> dataList = dataSnapshot.getChildren();
@@ -223,20 +234,15 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     if(existingProduct != null) {
 
                         // Update the time and increment scan count of the existing product.
-                        existingProduct.setDateRecentlyScanned(currentTime);
+                        existingProduct.setDateRecentlyScanned(scannedProduct.getDateRecentlyScanned());
                         existingProduct.setScanCount(existingProduct.getScanCount() + 1);
 
                         // Write it to the database.
                         Log.i("ScannerStartActivity", "Existing: " +
-                                existingProduct.getProductKey());
-                        reference.child(existingProduct.getProductKey())
+                                existingProduct.getBarcode());
+                        reference.child(existingProduct.getBarcode())
                                 .setValue(existingProduct);
 
-                        /*
-                            Store the product key so the userScanHistory table doesn't
-                            generate a different key for the same product.
-                         */
-                        existingProductKey = existingProduct.getProductKey();
                     }
                 }
                 // If the scanned product is not in this table...
@@ -247,27 +253,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                             "Never seen this one before!", Toast.LENGTH_SHORT).show();
                     */
 
-                    if(productKey != null) {
-
-                        String key = productKey;
-
-                        Log.i("ScannerStartActivity", "New: " + key);
-
-                        /*
-                            This is for userScanHistory.
-                            We want the same productKey from productsScanned table.
-                         */
-                        if (inheritProductKey) {
-                            key = existingProductKey;
-                            scannedProduct.setProductKey(key);
-                            Log.i("ScannerStartActivity", "New for User: " + key);
-                        }
-
-
-                        existingProductKey = key;
+                    if(scannedProduct.getBarcode() != null) {
 
                         // insert the new product with the given key.
-                        reference.child(key).setValue(scannedProduct);
+                        reference.child(scannedProduct.getBarcode()).setValue(scannedProduct);
 
 
                     }
@@ -382,6 +371,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     //Field one will be for data we want to pass, field 2 is unimporant as far as I know, keep it void. Field 3 is our return data
                     String [] container = new String[1]; // Here we are passing String, so we need a String Array
                     container[0] = poop; // one day I may make this a legit name, we assign our ID we get from barcode into our Array
+                    productBarode = poop;
                     try { // Async threads can only run once, so if we want multiple scans we need new objects. This may not be the best way, but it works for now
                         spidey = spidey.getClass().newInstance();
                     } catch (InstantiationException e) {

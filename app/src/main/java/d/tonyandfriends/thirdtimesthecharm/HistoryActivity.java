@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,13 +25,15 @@ public class HistoryActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
     DatabaseReference databaseUserScanHistory;
 
+    ValueEventListener databaseListener;
+
     List<Product> userProductHistory = new ArrayList<>();
+    List<String> returnedVals = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if(firebaseUser != null) {
@@ -51,9 +55,10 @@ public class HistoryActivity extends AppCompatActivity {
 
         OR, we can use addValueEventListener and remove the listener when the user leaves
         this page. This may be useful if we want live data to be updated as it changes.
-        But we don't need that feature in this activity.
+        We can use this when deleting data so it automatically updates.
          */
-        databaseUserScanHistory.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        databaseListener = databaseUserScanHistory.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
@@ -68,8 +73,15 @@ public class HistoryActivity extends AppCompatActivity {
                 */
                 for(Product p : userProductHistory) {
                     Log.i("HistoryActivity", p.getName());
-                    Toast.makeText(HistoryActivity.this, p.getName(), Toast.LENGTH_SHORT)
-                            .show();
+                    //Toast.makeText(HistoryActivity.this, p.getName(), Toast.LENGTH_SHORT)
+                    //        .show();
+                    returnedVals.add(p.getName() +"\n" + p.getDateRecentlyScanned());
+                    Spinner s = (Spinner) findViewById(R.id.spinner3);
+                    ArrayAdapter<String> adapter =
+                            new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, returnedVals);
+                    adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+
+                    s.setAdapter(adapter);
                 }
 
             }
@@ -79,6 +91,16 @@ public class HistoryActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        databaseUserScanHistory.removeEventListener(databaseListener);
+
+
+
     }
 
 
