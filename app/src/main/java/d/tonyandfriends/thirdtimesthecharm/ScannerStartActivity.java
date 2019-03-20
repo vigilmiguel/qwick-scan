@@ -10,6 +10,7 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +45,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
     private CompoundButton useFlash;
     private TextView statusMessage;
     private TextView contactname, contacttitle, contactorganization;
-
+    private ProgressBar pBar;
+    private TextView Title;
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
     Spider spidey = new Spider();
@@ -83,53 +85,59 @@ public class ScannerStartActivity extends Activity implements DataTransporter  {
 
 
         statusMessage = (TextView)findViewById(R.id.status_message);
+        Title = (TextView)findViewById(R.id.Title);
+        pBar = (ProgressBar)findViewById(R.id.progressBar);
+        pBar.setVisibility(ProgressBar.VISIBLE);
+        Title.setVisibility(TextView.INVISIBLE);
 
         Intent intent = new Intent(this, BarcodeCaptureActivity.class);
         startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
 
-     @Override
-     // This is our Adapter implementation
-     // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
-     public void onProcessDone(SpiderData result) {
-         productName = "";
-         productImageView = findViewById(R.id.ProductPicture);
-         // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
-         // If we find a result...
+    @Override
+    // This is our Adapter implementation
+    // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
+    public void onProcessDone(SpiderData result) {
+        productName = "";
+        productImageView = findViewById(R.id.ProductPicture);
+        // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
+        // If we find a result...
 
-         String pname = result.getProductName();
-         String purl = result.getImgURL();
-         if(pname != "") {
-             for (int i = 0; i < pname.length(); i++) {
-                 productName += pname.charAt(i);
-             }
+        String pname = result.getProductName();
+        String purl = result.getImgURL();
+        if(pname != "") {
+            for (int i = 0; i < pname.length(); i++) {
+                productName += pname.charAt(i);
+            }
 
-             // Store it in the database
-             storeInDatabase(productName);
-         }
-         // If we don't find a result...
-         else productName = pname;
+            // Store it in the database
+            storeInDatabase(productName);
+        }
+        // If we don't find a result...
+        else productName = pname;
 
-         if(purl.compareTo("https://www.barcodelookup.com/assets/images/no-image-available.jpg") == 0)
-         {
-             //Here we will add default cannot find image thing
-         }
-         else
-         {
-             Glide.with(this ).load(purl).into(productImageView);
-         }
+        if(purl.compareTo("https://www.barcodelookup.com/assets/images/no-image-available.jpg") == 0)
+        {
+            //Here we will add default cannot find image thing
+        }
+        else
+        {
+            Glide.with(this ).load(purl).into(productImageView);
+        }
 
-         statusMessage.setText(productName);
-         for(int i =0; i<result.getPrices().size();i++)
-         {
-             Log.d("myprice " +i, result.getPrices().get(i));
-             Log.d("myURL " +i, result.getURLS().get(i)); // Can be ignnored for now (doesnt work)
-             Log.d("myStoreName " +i, result.getStores().get(i));
-         }
+        statusMessage.setText(productName);
+        for(int i =0; i<result.getPrices().size();i++)
+        {
+            Log.d("myprice " +i, result.getPrices().get(i));
+            Log.d("myURL " +i, result.getURLS().get(i)); // Can be ignnored for now (doesnt work)
+            Log.d("myStoreName " +i, result.getStores().get(i));
+        }
 
 
-         spidey.cancel(true); // May not be needed, someday I may even test it
-     }
+        spidey.cancel(true); // May not be needed, someday I may even test it
+        pBar.setVisibility(ProgressBar.INVISIBLE);
+        Title.setVisibility(TextView.VISIBLE);
+    }
 
 
 
