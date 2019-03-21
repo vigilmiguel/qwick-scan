@@ -54,7 +54,42 @@ public class HistoryActivity extends AppCompatActivity {
             // Refer to this user's specific sub-table within the scan history table.
             databaseUserScanHistory = FirebaseDatabase.getInstance().getReference(dbHistoryPath);
         }
+        returnedVals.add("");
+        s.setSelection(0);
+        //Heres our fancy clicker
+        s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                select = position; //Here we track the position using a class variable
+                if (position > 0) {
+                    new AlertDialog.Builder(HistoryActivity.this)
+
+                            //your shit i didn't change
+                            .setTitle("Delete")
+                            .setMessage("Do you really want to delete " + userProductHistory.get(select-1).getName() + " from your history?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                // more shit of yours i didnt change, just instead of position we use select.
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    databaseUserScanHistory.child(userProductHistory.get(select-1).getBarcode()).removeValue();
+                                    Log.d("myCrash2?", "or here?");
+                                    Toast.makeText(HistoryActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                    userProductHistory.clear();
+                                    s.setAdapter(null);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
+
+
 
     // Called after onCreate()
     @Override
@@ -92,34 +127,6 @@ public class HistoryActivity extends AppCompatActivity {
                     Log.d("myCrash?", "Is it here?");
                     s.setAdapter(adapter);
                 }
-                //Heres our fancy clicker
-                s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        select = position; //Here we track the position using a class variable
-                        new AlertDialog.Builder(HistoryActivity.this)
-
-                                //your shit i didn't change
-                                .setTitle("Delete")
-                                .setMessage("Do you really want to delete " + userProductHistory.get(position).getName() +" from your history?")
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    // more shit of yours i didnt change, just instead of position we use select.
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        databaseUserScanHistory.child(userProductHistory.get(select).getBarcode()).removeValue();
-                                        Log.d("myCrash2?", "or here?");
-                                        Toast.makeText(HistoryActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
-                                    }})
-                                .setNegativeButton(android.R.string.no, null).show();
-
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-
             }
 
             @Override
