@@ -27,6 +27,7 @@
     <string name="register_title">Create an Account</string>
     <string name="action_register">Sign Up</string>
     <string name="title_activity_maps">Map</string>
+    <string name="open_map">Find Locations</string>
 
 
 </resources>

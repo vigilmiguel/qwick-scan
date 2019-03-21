@@ -10,6 +10,8 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 
 
 /**
@@ -55,6 +58,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     private static final String TAG = "BarcodeMain";
     Spider spidey = new Spider();
     ImageView productImageView;
+    Button mapButton;
+
     String productName = "";
     String productImage = "";
     String productBarode = "";
@@ -91,8 +96,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         statusMessage = (TextView)findViewById(R.id.status_message);
         Title = (TextView)findViewById(R.id.Title);
         pBar = (ProgressBar)findViewById(R.id.progressBar);
+        mapButton = (Button)findViewById(R.id.map_button);
         pBar.setVisibility(ProgressBar.VISIBLE);
         Title.setVisibility(TextView.INVISIBLE);
+        mapButton.setVisibility(Button.INVISIBLE);
 
         Intent intent = new Intent(this, BarcodeCaptureActivity.class);
         startActivityForResult(intent, RC_BARCODE_CAPTURE);
@@ -133,6 +140,15 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
             // Store it in the database
             storeInDatabase(product);
+
+            mapButton.setVisibility(Button.VISIBLE);
+
+            mapButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(ScannerStartActivity.this, MapsActivity.class));
+                }
+            });
         }
         // If we don't find a result...
         else {
