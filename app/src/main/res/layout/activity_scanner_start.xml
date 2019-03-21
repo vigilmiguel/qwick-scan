@@ -23,8 +23,9 @@
         android:layout_marginRight="40dp"
         android:layout_marginBottom="257dp"
         android:gravity="center"
-        android:text="Qwick Scanning"
+        android:text="Qwick Scanning..."
         android:textAppearance="?android:attr/textAppearanceLarge"
+        app:fontFamily="@font/montserrat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.538"
@@ -86,8 +87,9 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.32999998" />
+        app:layout_constraintVertical_bias="0.353" />
 
 </android.support.constraint.ConstraintLayout>
