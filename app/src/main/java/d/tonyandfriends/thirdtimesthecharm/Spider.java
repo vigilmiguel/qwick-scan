@@ -225,6 +225,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             Log.d("myConfuse",elements.toString());
             for(i=0; i<Size;i++)
             {
+                Log.d("myNameSite",elements.get(i).toString());
                 //First part of loop gets URL(Not working atm, the url is a special google one and it wont work unless directly clicked, so parsing is out of the question)
                 //I'll try to find a solution one day.
                 int j = 90;
@@ -234,10 +235,11 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 myInfo.addURL(temp); //add to our data
 
                 // Second loop grabs the name of the website.
-                j += 18;
+                j+= 40;
+                //j += 18;
                 String temp2 ="";
                 while(elements.get(i).toString().charAt(j) != '<') temp2 += elements.get(i).toString().charAt(j++);
-                temp2 = temp2.replace("\u0026amp;","&");
+                //temp2 = temp2.replace("\u0026amp;","&");
 
                 Log.d("myRealReplace",temp2);
                 myInfo.addName(temp2); //Add to our data
