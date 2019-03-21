@@ -278,7 +278,6 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         */
 
 
-        spidey.cancel(true); // May not be needed, someday I may even test it
         pBar.setVisibility(ProgressBar.INVISIBLE);
         Progress.setVisibility(Progress.INVISIBLE);
         Title.setVisibility(TextView.VISIBLE);
@@ -288,6 +287,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             priceTextViews.get(i).setVisibility(TextView.VISIBLE);
         }
 
+        spidey.cancel(true); // May not be needed, someday I may even test it
         /*
         S1.setVisibility(S1.VISIBLE);
         S2.setVisibility(S2.VISIBLE);
