@@ -36,6 +36,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.*;
+
+import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
 
 
 /**
@@ -50,7 +53,17 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     private TextView statusMessage;
     private TextView contactname, contacttitle, contactorganization;
     private ProgressBar pBar;
+    private TextView Progress;
     private TextView Title;
+    private TextView P1;
+    private TextView P2;
+    private TextView P3;
+    private TextView S1;
+    private TextView S2;
+    private TextView S3;
+    private TextView L1;
+    private TextView L2;
+    private TextView L3;
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
     Spider spidey = new Spider();
@@ -89,11 +102,26 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
 
         statusMessage = (TextView)findViewById(R.id.status_message);
+        S1 = (TextView)findViewById(R.id.S1);
+        S2 = (TextView)findViewById(R.id.S2);
+        S3 = (TextView)findViewById(R.id.S3);
+        P1 = (TextView)findViewById(R.id.P1);
+        P2 = (TextView)findViewById(R.id.P2);
+        P3 = (TextView)findViewById(R.id.P3);
+        Progress = (TextView)findViewById(R.id.Progress);
+
+
         Title = (TextView)findViewById(R.id.Title);
         pBar = (ProgressBar)findViewById(R.id.progressBar);
         pBar.setVisibility(ProgressBar.VISIBLE);
         Title.setVisibility(TextView.INVISIBLE);
-
+        S1.setVisibility(S1.INVISIBLE);
+        S2.setVisibility(S2.INVISIBLE);
+        S3.setVisibility(S3.INVISIBLE);
+        P1.setVisibility(P1.INVISIBLE);
+        P2.setVisibility(P2.INVISIBLE);
+        P3.setVisibility(P3.INVISIBLE);
+        Progress.setVisibility(Progress.VISIBLE);
         Intent intent = new Intent(this, BarcodeCaptureActivity.class);
         startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
@@ -156,17 +184,58 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
 
         statusMessage.setText(productName);
+
         for(int i =0; i<result.getPrices().size();i++)
         {
              //Log.d("myprice " +i, result.getPrices().get(i));
              //Log.d("myURL " +i, result.getURLS().get(i)); // Can be ignnored for now (doesnt work)
              //Log.d("myStoreName " +i, result.getStores().get(i));
         }
+        ArrayList<String> store = result.getStores();
+        ArrayList<String> price = result.getPrices();
+        ArrayList<String> links = result.getURLS();
+
+        for(int k =0; k < store.size(); k++)
+        {
+            if(store.get(k) == NULL || store.get(k)== "")
+            {
+                store.set(k,"");
+            }
+        }
+        for(int j =0; j < price.size(); j++)
+        {
+            if(price.get(j) == NULL || price.get(j)== "")
+            {
+                price.set(j,"");
+            }
+        }
+        for(int j =0; j < links.size(); j++)
+        {
+            if(links.get(j) == NULL || links.get(j)== "")
+            {
+                links.set(j,"");
+            }
+        }
+
+        S1.setText(store.get(0));
+        S2.setText(store.get(1));
+        S3.setText(store.get(2));
+        P1.setText(price.get(0));
+        P2.setText(price.get(1));
+        P3.setText(price.get(2));
 
 
         spidey.cancel(true); // May not be needed, someday I may even test it
         pBar.setVisibility(ProgressBar.INVISIBLE);
+        Progress.setVisibility(Progress.INVISIBLE);
         Title.setVisibility(TextView.VISIBLE);
+        S1.setVisibility(S1.VISIBLE);
+        S2.setVisibility(S2.VISIBLE);
+        S3.setVisibility(S3.VISIBLE);
+        P1.setVisibility(P1.VISIBLE);
+        P2.setVisibility(P2.VISIBLE);
+        P3.setVisibility(P3.VISIBLE);
+
     }
 
 
