@@ -23,7 +23,7 @@
         android:layout_marginRight="40dp"
         android:layout_marginBottom="257dp"
         android:gravity="center"
-        android:text="Qwik Scanning"
+        android:text="Qwick Scanning"
         android:textAppearance="?android:attr/textAppearanceLarge"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
