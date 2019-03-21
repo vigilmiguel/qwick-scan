@@ -516,7 +516,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                 } else {
                     // IDK if these are ever even used, I've tried to get them to work, but nothing happens
                     pBar.setVisibility(ProgressBar.INVISIBLE);
-                    statusMessage.setText(R.string.barcode_failure);
+                    Progress.setText(R.string.barcode_failure);
                     Log.d(TAG, "No barcode captured, intent data is null");
                 }
             } else {
