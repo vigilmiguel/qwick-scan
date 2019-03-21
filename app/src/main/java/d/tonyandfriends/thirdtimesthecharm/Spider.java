@@ -192,6 +192,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             Elements elements = dic.select("div.eIuuYe");
             Log.d("MyGoogleQuery",googleQuery);
             // This is our link we need to follow to get to the prices page
+            if(elements.size() == 0) return;
             String firstURL = elements.get(0).toString();
             int i = 45;
             while(firstURL.charAt(i) != '"')
@@ -213,13 +214,18 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 int j = 21;
                 String temp = "";
                 while(elements.get(i).toString().charAt(j) != '<') temp += elements.get(i).toString().charAt(j++);
+
+                temp = temp.replace("&amp;","&");
+                Log.d("myReplace",temp);
                 myInfo.addPrice(temp); // add to our data
             }
 
             //This displays name and URL info
             elements = dic.select(".os-seller-name");
+            Log.d("myConfuse",elements.toString());
             for(i=0; i<Size;i++)
             {
+                Log.d("myNameSite",elements.get(i).toString());
                 //First part of loop gets URL(Not working atm, the url is a special google one and it wont work unless directly clicked, so parsing is out of the question)
                 //I'll try to find a solution one day.
                 int j = 90;
@@ -229,9 +235,13 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 myInfo.addURL(temp); //add to our data
 
                 // Second loop grabs the name of the website.
-                j += 18;
+                j+= 40;
+                //j += 18;
                 String temp2 ="";
                 while(elements.get(i).toString().charAt(j) != '<') temp2 += elements.get(i).toString().charAt(j++);
+                //temp2 = temp2.replace("\u0026amp;","&");
+
+                Log.d("myRealReplace",temp2);
                 myInfo.addName(temp2); //Add to our data
             }
 
@@ -295,7 +305,8 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
 
             int n =0;
             j = 6;
-            boolean continueScan = false;
+            //boolean continueScan = false;
+            int continueScan = 0;
             Log.d("myReally?", elements.toString());
 
             //The loop to parse our address
@@ -308,9 +319,14 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                     Log.d("myHUH?", elements.get(n).toString());
                     char validChar = elements.get(n++).toString().charAt(j); //The char we should start at
                     int validInt = validChar - '0';
-                    if(continueScan &&(validInt <0 || validInt >9))
+                    if(continueScan > 1)
                     {
-                        continueScan = false;
+                        continueScan = 0;
+                        break;
+                    }
+                    if(continueScan ==1 &&(validInt <0 || validInt >9))
+                    {
+                        continueScan = 0;
                         break;
                     }
                     //A disgusting if loop that checks (I think) all unvalid chars. if it works it doesnt matter how ugly it is
@@ -327,12 +343,12 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                         localStores.set(i,temp);
                         Log.d("myFinalSet",localStores.get(i));
                         j=6;
-                        continueScan = true;
+                        continueScan += 1;
                         //break;
                     }
-                    else if(continueScan)
+                    else if(continueScan == 1)
                     {
-                        continueScan = false;
+                        continueScan = 0;
                         j=6;
                         break;
                     }
@@ -360,8 +376,14 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             {
                 Log.d("myWHAT", localStores.get(i));
                 //The next netcall, finding coordinates
-                googleQuery = "https://www.google.com/search?q=" + localStores.get(i) + "coordinates";
+                String tempStore = localStores.get(i);
+                tempStore = tempStore.replace("&","and");
+                tempStore = tempStore.replace("-","");
+                tempStore = tempStore.replaceAll("\\s","+");
+                googleQuery = "https://www.google.com/search?q=" + tempStore + "coordinates";
+                //googleQuery = googleQuery.replace("","+");
                 dic = Jsoup.connect(googleQuery).get();
+                Log.d("myLocalQuery",googleQuery);
                 elements = dic.select("div.Z0LcW"); // should get us straight to the cords
                 Log.d("myCords", elements.toString());
                 localCords.add(elements.toString()); // Add them to our local
