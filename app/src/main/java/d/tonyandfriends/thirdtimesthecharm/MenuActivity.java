@@ -16,12 +16,11 @@ import com.hitomi.cmlibrary.OnMenuSelectedListener;
 public class MenuActivity extends AppCompatActivity implements OnMenuSelectedListener{
 
     public static final int MENU_SCAN = 0;
-    public static final int MENU_MAPS = 1;
-    public static final int MENU_HISTORY = 2;
-    public static final int MENU_LOGOUT = 3;
+    public static final int MENU_HISTORY = 1;
+    public static final int MENU_LOGOUT = 2;
 
 
-    String menuNames[] = {"Scan", "Maps", "History", "Logout"};
+    String menuNames[] = {"Scan", "History", "Logout"};
     CircleMenu circleMenu;
 
     // To handle delays.
@@ -39,7 +38,7 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
         circleMenu.setMainMenu(Color.parseColor("#1e1f26"), R.drawable.openmenu,
                 R.drawable.closemenu)
                 .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.barcode)
-                .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.maps)
+                //.addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.maps)
                 .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.history)
                 .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.logout);
 
@@ -68,7 +67,7 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
                     }
                 }, 1000);
                 break;
-
+            /*
             case MENU_MAPS:
                 // Wait 1 second  to complete menu animation.
                 handler.postDelayed(new Runnable() {
@@ -79,7 +78,7 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
                     }
                 }, 1000);
                 break;
-
+            */
             case MENU_HISTORY:
                 handler.postDelayed(new Runnable() {
                     @Override
