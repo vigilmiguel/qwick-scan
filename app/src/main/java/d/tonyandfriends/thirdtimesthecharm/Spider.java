@@ -33,6 +33,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
         String description = "";
         String code = Code[0];
         Log.d("myCiode",code);
+
         FirstDB(code);
         if(!foundProduct)  SecondDB(code);
         if(foundProduct)
@@ -245,8 +246,11 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
     public void locationScraper(String product) // Get address and coordinates to local stores that may sell our product
     {
         // Priming our product String for a search
+       Double longSign = 1.0;
+       Double latSign = 1.0;
        product = product.replace("(","");
        product = product.replace(")","");
+       product = product.replace("&","and");
        product = product.replaceAll("\\s","+");
        String googleQuery = "https://www.google.com/search?q=" + product + "+near+me"; // the query
        ArrayList<String> localStores = new ArrayList<String>(); // Two ArrayLists that will store the data we parse
@@ -291,6 +295,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
 
             int n =0;
             j = 6;
+            boolean continueScan = false;
             Log.d("myReally?", elements.toString());
 
             //The loop to parse our address
@@ -302,6 +307,12 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
 
                     Log.d("myHUH?", elements.get(n).toString());
                     char validChar = elements.get(n++).toString().charAt(j); //The char we should start at
+                    int validInt = validChar - '0';
+                    if(continueScan &&(validInt <0 || validInt >9))
+                    {
+                        continueScan = false;
+                        break;
+                    }
                     //A disgusting if loop that checks (I think) all unvalid chars. if it works it doesnt matter how ugly it is
                     if(validChar != '<' && validChar != '>' && validChar != '"' && validChar != ' '
                     && validChar != '$' &&(validChar != 'T' && elements.get(n-1).toString().charAt(j+1) != 'h'
@@ -315,6 +326,13 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                         while(elements.get(n-1).toString().charAt(j) != '<') temp += elements.get(n-1).toString().charAt(j++);
                         localStores.set(i,temp);
                         Log.d("myFinalSet",localStores.get(i));
+                        j=6;
+                        continueScan = true;
+                        //break;
+                    }
+                    else if(continueScan)
+                    {
+                        continueScan = false;
                         j=6;
                         break;
                     }
@@ -367,8 +385,12 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 if(temp.length() > 45)
                     temp = temp.substring(21,45); //rough guess of where our cords are
                 Log.d("myyyy",temp);
+                if(temp.contains("W")) longSign = -1.0;
+                if(temp.contains("S")) latSign = -1.0;
                 // get rid of that bullstuff
                 temp = temp.replaceAll("N","");
+                temp = temp.replaceAll("E","");
+                temp = temp.replaceAll("S","");
                 temp  =temp.replaceAll("W","");
                 temp = temp.replaceAll(",","");
                 temp  = temp.replaceAll("\u00B0","");
@@ -382,9 +404,10 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                     Log.d("myjjjjjj", tempCords[1]);
 
                     //probably should just use a hashmap, but its amateur hour tonight
-                    myInfo.addLatitude(Double.parseDouble(tempCords[0]));
-                    myInfo.addLongitude(Double.parseDouble(tempCords[1]));
-
+                    myInfo.addLatitude(Double.parseDouble(tempCords[0]) * latSign);
+                    myInfo.addLongitude(Double.parseDouble(tempCords[1]) * longSign);
+                    latSign = 1.0;
+                    longSign = 1.0;
                 }
 
                 Log.i("TESTLOOP", "" + i);

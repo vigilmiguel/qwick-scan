@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -51,18 +52,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        ArrayList<LatLng> myMarkers = new ArrayList<LatLng>();
         //retrieving our spiderData
         SharedPreferences mPrefs = getSharedPreferences("poop",MODE_PRIVATE);
         Gson gson = new Gson();
         String json = mPrefs.getString("mySpider",null);
         SpiderData obj = gson.fromJson(json,SpiderData.class);
+        for(int i=0; i<obj.getLatitude().size(); i++)
+        {
 
+            Log.d("MyLat", Double.toString(obj.getLatitude().get(i)));
+            Log.d("MyLot", Double.toString(obj.getLongitude().get(i)));
+            LatLng temp = new LatLng(obj.getLatitude().get(i),obj.getLongitude().get(i));
+            Log.d("mylatng", temp.toString());
+            myMarkers.add(new LatLng(obj.getLatitude().get(i),obj.getLongitude().get(i)));
+            mMap.addMarker(new MarkerOptions().position(myMarkers.get(i)).title(obj.getLocalStores().get(i)));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(myMarkers.get(i)));
+        }
 
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-47,-43);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //LatLng sydney = new LatLng(-47,-43);
+        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
 
