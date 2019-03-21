@@ -108,6 +108,9 @@ public class HistoryActivity extends AppCompatActivity {
         databaseListener = databaseUserScanHistory.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                userProductHistory.clear();
+
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
                     Product product = data.getValue(Product.class);
 
@@ -118,6 +121,11 @@ public class HistoryActivity extends AppCompatActivity {
                 Displays the user's current scan history.
                 For testing if the list actually received the products the user has scanned.
                 */
+
+
+                returnedVals.clear();
+                returnedVals.add("");
+
                 for(Product p : userProductHistory) {
                     Log.i("HistoryActivity", p.getName());
                     returnedVals.add(p.getName() +"\n" + p.getDateRecentlyScanned());
