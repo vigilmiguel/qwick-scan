@@ -36,15 +36,18 @@ public class HistoryActivity extends AppCompatActivity {
 
     List<Product> userProductHistory = new ArrayList<>();
     List<String> returnedVals = new ArrayList<>();
+    Spinner s;
+    int select = 0;
 
-    Spinner s = (Spinner) findViewById(R.id.spinner3);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
+        s = (Spinner) findViewById(R.id.spinner3);
+        Log.d("myFirstSTop", "ihere");
         if(firebaseUser != null) {
             String dbHistoryPath = "userScanHistory/" + firebaseUser.getUid();
 
@@ -86,25 +89,37 @@ public class HistoryActivity extends AppCompatActivity {
                     ArrayAdapter<String> adapter =
                             new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, returnedVals);
                     adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
-
+                    Log.d("myCrash?", "Is it here?");
                     s.setAdapter(adapter);
                 }
-                s.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                //Heres our fancy clicker
+                s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        select = position; //Here we track the position using a class variable
                         new AlertDialog.Builder(HistoryActivity.this)
+
+                                //your shit i didn't change
                                 .setTitle("Delete")
-                                .setMessage("Do you really want to delete " + userProductHistory.get(position)+" from your history?")
+                                .setMessage("Do you really want to delete " + userProductHistory.get(position).getName() +" from your history?")
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
+                                    // more shit of yours i didnt change, just instead of position we use select.
                                     public void onClick(DialogInterface dialog, int whichButton) {
-                                        databaseUserScanHistory.child(userProductHistory.get(position).getBarcode()).removeValue();
+                                        databaseUserScanHistory.child(userProductHistory.get(select).getBarcode()).removeValue();
+                                        Log.d("myCrash2?", "or here?");
                                         Toast.makeText(HistoryActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
                                     }})
                                 .setNegativeButton(android.R.string.no, null).show();
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
                     }
                 });
+
             }
 
             @Override
