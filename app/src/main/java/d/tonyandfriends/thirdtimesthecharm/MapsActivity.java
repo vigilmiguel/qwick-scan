@@ -2,11 +2,13 @@ package d.tonyandfriends.thirdtimesthecharm;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,7 +27,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //private static final android.util.Log Log = ;
     private GoogleMap mMap;
     //SpiderData mydata;
-    TextView errormsg;
+    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        errormsg = (TextView)findViewById(R.id.Title);
+
+        title = (TextView)findViewById(R.id.Title);
+        title.setBackgroundColor(Color.WHITE);
     }
 
 
@@ -53,10 +57,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        // = null;
-        
-
         ArrayList<LatLng> myMarkers = new ArrayList<LatLng>();
+
         //retrieving our spiderData
         SharedPreferences mPrefs = getSharedPreferences("poop",MODE_PRIVATE);
         Gson gson = new Gson();
@@ -64,7 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SpiderData obj = gson.fromJson(json,SpiderData.class);
         if(obj.getLatitude().size() == 0 || obj.getLongitude().size() == 0)
         {
-            errormsg.setText("Could not Find any Local Stores, Sorry!");
+            Toast.makeText(MapsActivity.this, "Sorry No Results!", Toast.LENGTH_LONG).show();
             LatLng errorCord = new LatLng(-77.8400829,166.6443582);
         }
         else {
