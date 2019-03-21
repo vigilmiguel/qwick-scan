@@ -192,6 +192,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             Elements elements = dic.select("div.eIuuYe");
             Log.d("MyGoogleQuery",googleQuery);
             // This is our link we need to follow to get to the prices page
+            if(elements.size() == 0) return;
             String firstURL = elements.get(0).toString();
             int i = 45;
             while(firstURL.charAt(i) != '"')
