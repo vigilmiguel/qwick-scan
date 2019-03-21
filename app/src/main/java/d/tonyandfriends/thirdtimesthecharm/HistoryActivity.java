@@ -1,12 +1,19 @@
 package d.tonyandfriends.thirdtimesthecharm;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.app.AlertDialog;
+import android.app.ListActivity;
+import android.content.DialogInterface;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,6 +36,8 @@ public class HistoryActivity extends AppCompatActivity {
 
     List<Product> userProductHistory = new ArrayList<>();
     List<String> returnedVals = new ArrayList<>();
+
+    Spinner s = (Spinner) findViewById(R.id.spinner3);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,17 +82,29 @@ public class HistoryActivity extends AppCompatActivity {
                 */
                 for(Product p : userProductHistory) {
                     Log.i("HistoryActivity", p.getName());
-                    //Toast.makeText(HistoryActivity.this, p.getName(), Toast.LENGTH_SHORT)
-                    //        .show();
                     returnedVals.add(p.getName() +"\n" + p.getDateRecentlyScanned());
-                    Spinner s = (Spinner) findViewById(R.id.spinner3);
                     ArrayAdapter<String> adapter =
                             new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, returnedVals);
                     adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
 
                     s.setAdapter(adapter);
                 }
+                s.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                        new AlertDialog.Builder(HistoryActivity.this)
+                                .setTitle("Delete")
+                                .setMessage("Do you really want to delete " + userProductHistory.get(position)+" from your history?")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        databaseUserScanHistory.child(userProductHistory.get(position).getBarcode()).removeValue();
+                                        Toast.makeText(HistoryActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                    }})
+                                .setNegativeButton(android.R.string.no, null).show();
+                    }
+                });
             }
 
             @Override
