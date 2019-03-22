@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.app.AlertDialog;
@@ -34,6 +35,7 @@ public class HistoryActivity extends AppCompatActivity {
     DatabaseReference databaseUserScanHistory;
 
     ValueEventListener databaseListener;
+    ImageButton imageButton;
 
     List<Product> userProductHistory = new ArrayList<>();
     List<String> returnedVals = new ArrayList<>();
@@ -47,6 +49,15 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        imageButton = (ImageButton)findViewById(R.id.imageButton4);
+        imageButton.setBackgroundDrawable(null);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Open the RegisterActivity page.
+                startActivity(new Intent(HistoryActivity.this, MenuActivity.class));
+            }
+        });
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         s = (Spinner) findViewById(R.id.spinner3);
