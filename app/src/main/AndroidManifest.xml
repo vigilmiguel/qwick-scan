@@ -45,20 +45,25 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"></activity>
-
-        <activity android:name=".HistoryActivity"/>
-
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".BarcodeCaptureActivity" />
-        <activity android:name=".ScannerStartActivity" />
-        <activity android:name=".MenuActivity" />
-        <activity android:name=".StartActivity" />
-        <activity android:name=".ProfileActivity" /> <!-- Make the LoginActivity our main activity. -->
-        <activity android:name=".LoginActivity">
+        <activity android:name=".HistoryActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".BarcodeCaptureActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ScannerStartActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MenuActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".StartActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ProfileActivity"
+            android:screenOrientation="portrait"/> <!-- Make the LoginActivity our main activity. -->
+        <activity android:name=".LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

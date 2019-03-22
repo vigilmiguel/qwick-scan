@@ -1,6 +1,7 @@
 package d.tonyandfriends.thirdtimesthecharm;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -45,6 +46,8 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         s = (Spinner) findViewById(R.id.spinner3);
         Log.d("myFirstSTop", "ihere");

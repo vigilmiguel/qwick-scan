@@ -1,6 +1,7 @@
 package d.tonyandfriends.thirdtimesthecharm;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,7 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
 
@@ -41,8 +43,6 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
                 //.addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.maps)
                 .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.history)
                 .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.logout);
-
-
 
         circleMenu.setOnMenuSelectedListener(this);
 
