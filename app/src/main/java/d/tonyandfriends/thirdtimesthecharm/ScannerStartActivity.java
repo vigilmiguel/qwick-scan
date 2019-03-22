@@ -59,7 +59,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     private TextView contactname, contacttitle, contactorganization;
     private ProgressBar pBar;
     private TextView Progress;
-    private TextView Title;
+    //private TextView Title;
 
     private ArrayList<TextView> priceTextViews;
     private ArrayList<TextView> storeTextViews;
@@ -143,7 +143,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         Progress = (TextView)findViewById(R.id.Progress);
 
 
-        Title = (TextView)findViewById(R.id.Title);
+        //Title = (TextView)findViewById(R.id.Title);
         pBar = (ProgressBar)findViewById(R.id.progressBar);
         mapButton = (Button)findViewById(R.id.map_button);
         scanButton = (Button)findViewById(R.id.scan_button);
@@ -151,7 +151,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         menuButton.setVisibility(Button.INVISIBLE);
         scanButton.setVisibility(Button.INVISIBLE);
         pBar.setVisibility(ProgressBar.VISIBLE);
-        Title.setVisibility(TextView.INVISIBLE);
+        //Title.setVisibility(TextView.INVISIBLE);
         mapButton.setVisibility(Button.INVISIBLE);
 
         for(int i = 0; i < storeTextViews.size() && i < priceTextViews.size(); i++) {
@@ -307,7 +307,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
         pBar.setVisibility(ProgressBar.INVISIBLE);
         Progress.setVisibility(Progress.INVISIBLE);
-        Title.setVisibility(TextView.VISIBLE);
+        //Title.setVisibility(TextView.VISIBLE);
 
         for(int i = 0; i < storeTextViews.size() && i < priceTextViews.size(); i++) {
             storeTextViews.get(i).setVisibility(TextView.VISIBLE);
