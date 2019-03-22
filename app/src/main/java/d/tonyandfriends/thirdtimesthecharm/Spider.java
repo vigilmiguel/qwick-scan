@@ -180,6 +180,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
 
         // add "+" to make a google search
         Log.d("myPRoduict",product);
+        product = product.replace("'","");
         product = product.replace("(","");
         product = product.replace(")","");
         product = product.replaceAll("\\s","+");
@@ -258,6 +259,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
         // Priming our product String for a search
        Double longSign = 1.0;
        Double latSign = 1.0;
+       product = product.replace("'","");
        product = product.replace("(","");
        product = product.replace(")","");
        product = product.replace("&","and");
