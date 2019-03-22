@@ -239,7 +239,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 //j += 18;
                 String temp2 ="";
                 while(elements.get(i).toString().charAt(j) != '<') temp2 += elements.get(i).toString().charAt(j++);
-                //temp2 = temp2.replace("\u0026amp;","&");
+                temp2 = temp2.replace("\u0026amp;","&");
 
                 Log.d("myRealReplace",temp2);
                 myInfo.addName(temp2); //Add to our data
