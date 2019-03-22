@@ -213,6 +213,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             mapButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    finish();
                     startActivity(new Intent(ScannerStartActivity.this, MapsActivity.class));
                 }
             });
@@ -222,11 +223,13 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
             menuButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    finish();
                     startActivity(new Intent(ScannerStartActivity.this, MenuActivity.class));
                 }
             });
             scanButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
+                    finish();
                     startActivity(new Intent(ScannerStartActivity.this, ScannerStartActivity.class));
                 }
             });
