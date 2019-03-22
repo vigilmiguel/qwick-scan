@@ -80,6 +80,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     Spider spidey = new Spider();
     ImageView productImageView;
     Button mapButton;
+    Button scanButton;
+    Button menuButton;
 
     String productName = "";
     String productImage = "";
@@ -144,6 +146,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         Title = (TextView)findViewById(R.id.Title);
         pBar = (ProgressBar)findViewById(R.id.progressBar);
         mapButton = (Button)findViewById(R.id.map_button);
+        scanButton = (Button)findViewById(R.id.scan_button);
+        menuButton = (Button)findViewById(R.id.menu_button);
+        menuButton.setVisibility(Button.INVISIBLE);
+        scanButton.setVisibility(Button.INVISIBLE);
         pBar.setVisibility(ProgressBar.VISIBLE);
         Title.setVisibility(TextView.INVISIBLE);
         mapButton.setVisibility(Button.INVISIBLE);
@@ -210,7 +216,23 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     startActivity(new Intent(ScannerStartActivity.this, MapsActivity.class));
                 }
             });
+            scanButton.setVisibility(Button.VISIBLE);
+            menuButton.setVisibility(Button.VISIBLE);
+
+
+            menuButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    startActivity(new Intent(ScannerStartActivity.this, MenuActivity.class));
+                }
+            });
+            scanButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    startActivity(new Intent(ScannerStartActivity.this, ScannerStartActivity.class));
+                }
+            });
         }
+
+
         // If we don't find a result...
         else {
             Log.i("SCANNERSTARTACTIVITY","PRODUCT_NOT_FOUND");
@@ -518,7 +540,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                 } else {
                     // IDK if these are ever even used, I've tried to get them to work, but nothing happens
                     pBar.setVisibility(ProgressBar.INVISIBLE);
-                    statusMessage.setText(R.string.barcode_failure);
+                    Progress.setText(R.string.barcode_failure);
                     Log.d(TAG, "No barcode captured, intent data is null");
                 }
             } else {
