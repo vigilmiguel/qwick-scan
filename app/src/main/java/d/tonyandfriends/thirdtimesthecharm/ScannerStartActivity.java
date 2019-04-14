@@ -82,6 +82,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     Button mapButton;
     Button scanButton;
     Button menuButton;
+    Button shareButton;
 
     String productName = "";
     String productImage = "";
@@ -148,11 +149,13 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         mapButton = (Button)findViewById(R.id.map_button);
         scanButton = (Button)findViewById(R.id.scan_button);
         menuButton = (Button)findViewById(R.id.menu_button);
+        shareButton = (Button)findViewById(R.id.share_button);
         menuButton.setVisibility(Button.INVISIBLE);
         scanButton.setVisibility(Button.INVISIBLE);
         pBar.setVisibility(ProgressBar.VISIBLE);
         //Title.setVisibility(TextView.INVISIBLE);
         mapButton.setVisibility(Button.INVISIBLE);
+        shareButton.setVisibility(Button.INVISIBLE);
 
         for(int i = 0; i < storeTextViews.size() && i < priceTextViews.size(); i++) {
             storeTextViews.get(i).setVisibility(TextView.INVISIBLE);
@@ -218,6 +221,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             });
             scanButton.setVisibility(Button.VISIBLE);
             menuButton.setVisibility(Button.VISIBLE);
+            shareButton.setVisibility(Button.VISIBLE);
 
 
             menuButton.setOnClickListener(new View.OnClickListener() {
@@ -230,6 +234,12 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                 public void onClick(View v) {
                     finish();
                     startActivity(new Intent(ScannerStartActivity.this, ScannerStartActivity.class));
+                }
+            });
+            shareButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    finish();
+                    startActivity(new Intent(ScannerStartActivity.this, shareActivity.class));
                 }
             });
         }
