@@ -55,7 +55,15 @@
           }
         },
         {
-          "client_id": "970846969532-lqb3jcf2g3e46madqhubqjh4a9umoa2e.apps.googleusercontent.com",
+          "client_id": "970846969532-9kdv06or43o4u3kmhiha9ii3aeuep0jc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "d.tonyandfriends.thirdtimesthecharm",
+            "certificate_hash": "6a7fcd42065249c4251d7c3b1facb3836889b45c"
+          }
+        },
+        {
+          "client_id": "970846969532-kt5iofogdhf1vog34f5q402r9knsh4l1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -65,20 +73,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "970846969532-kt5iofogdhf1vog34f5q402r9knsh4l1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }
