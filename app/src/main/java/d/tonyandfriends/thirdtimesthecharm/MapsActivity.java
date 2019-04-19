@@ -41,7 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        title = (TextView)findViewById(R.id.Title);
+        title = findViewById(R.id.Title);
         title.setBackgroundColor(Color.WHITE);
     }
 

@@ -77,8 +77,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         setContentView(R.layout.activity_barcode_capture);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        mPreview = (CameraSourcePreview) findViewById(R.id.preview);
-        mGraphicOverlay = (GraphicOverlay<BarcodeGraphic>) findViewById(R.id.graphicOverlay);
+        mPreview = findViewById(R.id.preview);
+        mGraphicOverlay = findViewById(R.id.graphicOverlay);
 
         // read parameters from the intent used to launch the activity.
         boolean autoFocus = true;
@@ -350,7 +350,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
 
         if (best != null) {
             Intent data = new Intent();
-            data.putExtra(BarcodeObject, (Parcelable) best);
+            data.putExtra(BarcodeObject, best);
             setResult(CommonStatusCodes.SUCCESS, data);
             finish();
             return true;

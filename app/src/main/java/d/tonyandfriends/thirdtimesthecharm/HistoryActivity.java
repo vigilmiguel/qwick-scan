@@ -49,7 +49,7 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        imageButton = (ImageButton)findViewById(R.id.imageButton4);
+        imageButton = findViewById(R.id.imageButton4);
         imageButton.setBackgroundDrawable(null);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +60,7 @@ public class HistoryActivity extends AppCompatActivity {
         });
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        s = (Spinner) findViewById(R.id.spinner3);
+        s = findViewById(R.id.spinner3);
         Log.d("myFirstSTop", "ihere");
         if(firebaseUser != null) {
             String dbHistoryPath = "userScanHistory/" + firebaseUser.getUid();

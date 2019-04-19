@@ -1,5 +1,6 @@
 package d.tonyandfriends.thirdtimesthecharm;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -7,6 +8,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.hitomi.cmlibrary.CircleMenu;
@@ -36,7 +38,7 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
 
 
 
-        circleMenu = (CircleMenu)findViewById(R.id.circleMenu);
+        circleMenu = findViewById(R.id.circleMenu);
         circleMenu.setMainMenu(Color.parseColor("#1e1f26"), R.drawable.openmenu,
                 R.drawable.closemenu)
                 .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.barcode)
@@ -46,6 +48,31 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
 
         circleMenu.setOnMenuSelectedListener(this);
 
+
+        //Testing Button for Auto Testers
+
+        Button scanButton2 = (Button)findViewById(R.id.scan_button2);
+
+        scanButton2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this, ScannerStartActivity.class));            }
+        });
+
+        Button historyButton = (Button)findViewById(R.id.history_button);
+
+        historyButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this, HistoryActivity.class));            }
+        });
+
+        Button logoutButton = (Button)findViewById(R.id.profile_button);
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this, ProfileActivity.class));            }
+        });
+
+        //End of Testing
     }
 
 

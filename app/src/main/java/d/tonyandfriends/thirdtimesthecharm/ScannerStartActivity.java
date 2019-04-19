@@ -551,9 +551,31 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     //Log.d(TAG, "Barcode read: " + barcode.displayValue);
                 } else {
                     // IDK if these are ever even used, I've tried to get them to work, but nothing happens
-                    pBar.setVisibility(ProgressBar.INVISIBLE);
-                    Progress.setText(R.string.barcode_failure);
-                    Log.d(TAG, "No barcode captured, intent data is null");
+//                    pBar.setVisibility(ProgressBar.INVISIBLE);
+//                    Progress.setText(R.string.barcode_failure);
+//                    Log.d(TAG, "No barcode captured, intent data is null");
+
+                    //Testing Purpose Code Only
+
+
+                    String testUPC = "821793049157";
+                    String [] container = new String[1]; // Here we are passing String, so we need a String Array
+                    container[0] = testUPC; // one day I may make this a legit name, we assign our ID we get from barcode into our Array
+                    productBarode = testUPC;
+                    try { // Async threads can only run once, so if we want multiple scans we need new objects. This may not be the best way, but it works for now
+                        spidey = spidey.getClass().newInstance();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+
+                    spidey.myVessel = this; // Assign the our instance to Spider
+                    spidey.execute(container); // Jesus take the wheel
+
+
+                    //End of Testing Code
+
                 }
             } else {
 
