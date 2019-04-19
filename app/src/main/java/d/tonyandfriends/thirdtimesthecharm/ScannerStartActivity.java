@@ -315,6 +315,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     bundle.putStringArrayList("prices", price);
 
 
+
                     // Add it to the intent.
                     intent.putExtras(bundle);
 
