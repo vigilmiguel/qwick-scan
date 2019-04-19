@@ -238,7 +238,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             });
             shareButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    finish();
+                    
                     startActivity(new Intent(ScannerStartActivity.this, shareActivity.class));
                 }
             });
