@@ -40,7 +40,8 @@
         app:layout_constraintStart_toEndOf="@+id/scan_button"
         app:layout_constraintTop_toBottomOf="@+id/P3"
         app:layout_constraintVertical_bias="0.946"
-        tools:visibility="invisible" />
+        android:visibility="invisible"
+        />
 
     <com.hitomi.cmlibrary.CircleMenu
         android:id="@+id/circleMenu"
