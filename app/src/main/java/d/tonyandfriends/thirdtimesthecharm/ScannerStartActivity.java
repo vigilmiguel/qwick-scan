@@ -309,16 +309,18 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     // Create a bundle to store the info we want to send to shareActivity.
                     Bundle bundle = new Bundle();
 
-                    // Store the stores and prices for the product in the bundle.
+                    // Store the name, stores and prices for the product in the bundle.
+                    bundle.putString("productName", productName);
                     bundle.putStringArrayList("stores", store);
                     bundle.putStringArrayList("prices", price);
+
 
                     // Add it to the intent.
                     intent.putExtras(bundle);
 
 
                     // Fire her up!!
-                    startActivity(new Intent(ScannerStartActivity.this, shareActivity.class));
+                    startActivity(intent);
                 }
             });
         }

@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.SEND_SMS;
@@ -86,6 +87,15 @@ public class shareActivity extends AppCompatActivity {
 
         String phone = ccp.getFullNumberWithPlus();
         String message = messageText.getText().toString();
+
+        // Get the extras from the bundle in this intent.
+        Bundle bundle = getIntent().getExtras();
+
+        // Extract the data from the bundle.
+        String productName = bundle.getString("productName");
+        ArrayList<String> stores = bundle.getStringArrayList("stores");
+        ArrayList<String> prices = bundle.getStringArrayList("prices");
+
 
         //Check if the phoneNumber is empty
         if (phone.isEmpty() || message.isEmpty()) {
