@@ -190,83 +190,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         String jsonData = gson.toJson(result);
         prefEdit.putString("mySpider",jsonData);
         prefEdit.commit();
-  
-        productName = "";
-        productImageView = findViewById(R.id.ProductPicture);
-        // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
-        // If we find a result...
-
-        String pname = result.getProductName();
-        String purl = result.getImgURL();
-        if(spidey.foundProduct) {
-
-            Log.i("SCANNERSTARTACTIVITY","PRODUCT_FOUND");
-            String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
-                    .format(Calendar.getInstance().getTime());
-
-            productName = pname;
-
-            Product product = new Product(productBarode, productName, purl, currentTime, 1);
-
-            // Store it in the database
-            storeInDatabase(product);
-
-            mapButton.setVisibility(Button.VISIBLE);
-
-            mapButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(ScannerStartActivity.this, MapsActivity.class));
-                }
-            });
-            scanButton.setVisibility(Button.VISIBLE);
-            menuButton.setVisibility(Button.VISIBLE);
-            shareButton.setVisibility(Button.VISIBLE);
 
 
-            menuButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    finish();
-                    startActivity(new Intent(ScannerStartActivity.this, MenuActivity.class));
-                }
-            });
-            scanButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    finish();
-                    startActivity(new Intent(ScannerStartActivity.this, ScannerStartActivity.class));
-                }
-            });
-            shareButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    
-                    startActivity(new Intent(ScannerStartActivity.this, shareActivity.class));
-                }
-            });
-        }
-
-
-        // If we don't find a result...
-        else {
-            Log.i("SCANNERSTARTACTIVITY","PRODUCT_NOT_FOUND");
-            productName = "Sorry, we could not find that product!";
-        }
-
-
-        if(purl.compareTo("https://www.barcodelookup.com/assets/images/no-image-available.jpg") == 0
-            || purl.isEmpty())
-        {
-            //Here we will add default cannot find image thing
-            Glide.with(this )
-                    .load("https://www.barcodelookup.com/assets/images/no-image-available.jpg")
-                    .into(productImageView);
-        }
-        else
-        {
-            Glide.with(this ).load(purl).into(productImageView);
-        }
-
-
-        statusMessage.setText(productName);
 
         for(int i =0; i<result.getPrices().size();i++)
         {
@@ -274,8 +199,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
              //Log.d("myURL " +i, result.getURLS().get(i)); // Can be ignnored for now (doesnt work)
              //Log.d("myStoreName " +i, result.getStores().get(i));
         }
-        ArrayList<String> store = result.getStores();
-        ArrayList<String> price = result.getPrices();
+        final ArrayList<String> store = result.getStores();
+        final ArrayList<String> price = result.getPrices();
         ArrayList<String> links = result.getURLS();
 
         for(int k =0; k < store.size() && k < storeTextViews.size(); k++)
@@ -332,6 +257,95 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         P2.setVisibility(P2.VISIBLE);
         P3.setVisibility(P3.VISIBLE);
         */
+
+        productName = "";
+        productImageView = findViewById(R.id.ProductPicture);
+        // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
+        // If we find a result...
+        String pname = result.getProductName();
+        String purl = result.getImgURL();
+        if(spidey.foundProduct) {
+
+            Log.i("SCANNERSTARTACTIVITY","PRODUCT_FOUND");
+            String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+                    .format(Calendar.getInstance().getTime());
+
+            productName = pname;
+
+            Product product = new Product(productBarode, productName, purl, currentTime, 1);
+
+            // Store it in the database
+            storeInDatabase(product);
+
+            mapButton.setVisibility(Button.VISIBLE);
+
+            mapButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(ScannerStartActivity.this, MapsActivity.class));
+                }
+            });
+            scanButton.setVisibility(Button.VISIBLE);
+            menuButton.setVisibility(Button.VISIBLE);
+            shareButton.setVisibility(Button.VISIBLE);
+
+
+            menuButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    finish();
+                    startActivity(new Intent(ScannerStartActivity.this, MenuActivity.class));
+                }
+            });
+            scanButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    finish();
+                    startActivity(new Intent(ScannerStartActivity.this, ScannerStartActivity.class));
+                }
+            });
+            shareButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(ScannerStartActivity.this, shareActivity.class);
+
+                    // Create a bundle to store the info we want to send to shareActivity.
+                    Bundle bundle = new Bundle();
+
+                    // Store the stores and prices for the product in the bundle.
+                    bundle.putStringArrayList("stores", store);
+                    bundle.putStringArrayList("prices", price);
+
+                    // Add it to the intent.
+                    intent.putExtras(bundle);
+
+
+                    // Fire her up!!
+                    startActivity(new Intent(ScannerStartActivity.this, shareActivity.class));
+                }
+            });
+        }
+
+
+        // If we don't find a result...
+        else {
+            Log.i("SCANNERSTARTACTIVITY","PRODUCT_NOT_FOUND");
+            productName = "Sorry, we could not find that product!";
+        }
+
+
+        if(purl.compareTo("https://www.barcodelookup.com/assets/images/no-image-available.jpg") == 0
+                || purl.isEmpty())
+        {
+            //Here we will add default cannot find image thing
+            Glide.with(this )
+                    .load("https://www.barcodelookup.com/assets/images/no-image-available.jpg")
+                    .into(productImageView);
+        }
+        else
+        {
+            Glide.with(this ).load(purl).into(productImageView);
+        }
+
+
+        statusMessage.setText(productName);
     }
 
 
