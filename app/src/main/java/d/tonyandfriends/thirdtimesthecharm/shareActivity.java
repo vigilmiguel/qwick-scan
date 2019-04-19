@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.SEND_SMS;
@@ -85,14 +86,75 @@ public class shareActivity extends AppCompatActivity {
     public void sendMySMS() {
 
         String phone = ccp.getFullNumberWithPlus();
-        String message = messageText.getText().toString();
+        String message;
+        StringBuilder builder = new StringBuilder();
+
+        // Get the extras from the bundle in this intent.
+        Bundle bundle = getIntent().getExtras();
+
+        String productName = "";
+        ArrayList<String> stores = new ArrayList<>();
+        ArrayList<String> prices = new ArrayList<>();
+
+
+        if(bundle != null) {
+            // Extract the data from the bundle.
+            productName = bundle.getString("productName");
+            stores = bundle.getStringArrayList("stores");
+            prices = bundle.getStringArrayList("prices");
+        }
+
+        builder.append(productName);
+        builder.append("\n\n");
+
+
+        if(stores != null && prices != null) {
+
+            // Add all stores with their prices to the message.
+            for (int i = 0; i < stores.size() && i < prices.size(); i++) {
+                builder.append(stores.get(i));
+                builder.append("\t");
+
+                builder.append(prices.get(i));
+                builder.append("\n");
+            }
+        }
+
+        message = builder.toString();
+
+
 
         //Check if the phoneNumber is empty
         if (phone.isEmpty() || message.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please Enter a Valid Phone Number", Toast.LENGTH_SHORT).show();
         } else {
 
+
             SmsManager sms = SmsManager.getDefault();
+
+            // Divide the message together if it is too long. It will be sent as a MMS all together.
+            ArrayList<String> mmsMessage = sms.divideMessage(message);
+
+            //byte[] data = message.getBytes();
+            try
+            {
+                sms.sendMultipartTextMessage(phone, null, mmsMessage, null, null);
+                Toast.makeText(shareActivity.this, "Text success.", Toast.LENGTH_SHORT).show();
+
+            }
+            catch(Exception e)
+            {
+                Toast.makeText(shareActivity.this, "Text failed!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            //sms.sendDataMessage(phone, null, (short)8091, data, sentIntent, deliveredIntent);
+
+
+            //sms.sendMultipartTextMessage(phone, null, messages, );
+
+
+            /*
             // if message length is too long messages are divided
             List<String> messages = sms.divideMessage(message);
             for (String msg : messages) {
@@ -102,6 +164,8 @@ public class shareActivity extends AppCompatActivity {
                 sms.sendTextMessage(phone, null, msg, sentIntent, deliveredIntent);
 
             }
+            */
+
         }
     }
 
