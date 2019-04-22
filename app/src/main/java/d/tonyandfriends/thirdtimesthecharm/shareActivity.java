@@ -49,7 +49,7 @@ public class shareActivity extends AppCompatActivity {
         phoneText = (EditText) findViewById(R.id.phoneText);
         sendButton = (Button) findViewById(R.id.sendButton);
 
-        ccp = (CountryCodePicker) findViewById(R.id.ccp);
+        ccp = (CountryCodePicker) findViewById(R.id.ccp); // For international calls (who would do this?)
         ccp.registerCarrierNumberEditText(phoneText);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -59,14 +59,14 @@ public class shareActivity extends AppCompatActivity {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                     int hasSMSPermission = checkSelfPermission(SEND_SMS);
                     if (hasSMSPermission != PackageManager.PERMISSION_GRANTED) {
-                        if (!shouldShowRequestPermissionRationale(SEND_SMS)) {
+                        if (!shouldShowRequestPermissionRationale(SEND_SMS)) { // Make sure the user has pressed yes on the prompt
                             showMessageOKCancel("You need to allow access to Send SMS",
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                                 requestPermissions(new String[] {SEND_SMS},
-                                                        REQUEST_SMS);
+                                                        REQUEST_SMS); //Send user a message prompt
                                             }
                                         }
                                     });
@@ -174,7 +174,7 @@ public class shareActivity extends AppCompatActivity {
         sentStatusReceiver=new BroadcastReceiver() {
 
             @Override
-            public void onReceive(Context arg0, Intent arg1) {
+            public void onReceive(Context arg0, Intent arg1) { //This will handle SMS success/error codes
                 String s = "Unknown Error";
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
@@ -200,7 +200,7 @@ public class shareActivity extends AppCompatActivity {
         deliveredStatusReceiver=new BroadcastReceiver() {
 
             @Override
-            public void onReceive(Context arg0, Intent arg1) {
+            public void onReceive(Context arg0, Intent arg1) { //Handles delivery status (good/bad)
                 String s = "Message Not Delivered";
                 switch(getResultCode()) {
                     case Activity.RESULT_OK:
