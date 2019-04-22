@@ -16,13 +16,12 @@
         android:background="@drawable/border"
         android:ems="5"
         android:gravity="center"
-        android:hint="Type message here"
+        android:hint="Share your scan!"
         android:inputType="textMultiLine"
         android:maxLines="100"
-        android:paddingLeft="5dp"
         android:paddingStart="5dp"
+        android:paddingLeft="5dp"
         android:textColorHint="#000" />
-
 
     <RelativeLayout
         android:id="@+id/phoneAuth"
