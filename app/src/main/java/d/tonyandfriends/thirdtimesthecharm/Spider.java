@@ -443,6 +443,57 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
         }
     }
 
+    public void ReviewFind()
+    {
+
+        String barcode = myInfo.getBarcodeNumber();
+        String productURL  ="";
+        String search = "https://brickseek.com/products/?search="  + barcode;
+        String productPrice = "";
+        Log.d("mySearch",search);
+
+        try {
+            Document dic = Jsoup.connect(search).userAgent("Opera").get();
+
+            //Find first page, based on first Result
+            Elements element = dic.select(".item-list__tile");
+            if(element.size() == 0) return;                     // Make sure to check if we have a match or not.
+
+            int i =41;
+                                                                //Second hop takes us to the page with all of our information
+            String secondHop  = "https://brickseek.com";
+            while(element.get(0).toString().charAt(i) !=  '"') secondHop += element.get(0).toString().charAt(i++);
+
+            dic = Jsoup.connect(secondHop).userAgent("Opera").get();
+            element = dic.select(".product-super__reviews-tile");        //Class with Review URLS, Star Ratings and Name of Website
+
+
+            for(int j =0; j<element.size(); j++)
+            {
+                String temp = "";
+                String tempName = "";
+                String tempStar = "";
+                i = 61;
+                while(element.get(j).toString().charAt(i) != '"') temp += element.get(j).toString().charAt(i++);
+                myInfo.addReviewURL(temp);
+                i += 56;
+                while(element.get(j).toString().charAt(i) != '<') tempName += element.get(j).toString().charAt(i++);
+                myInfo.addReviewName(tempName);
+                i += 160;
+                while(element.get(j).toString().charAt(i) != '<') tempStar += element.get(j).toString().charAt(i++);
+                myInfo.addStarRating(tempStar);
+                /*
+                Log.d("myUrl",temp);
+                Log.d("myName",tempName);
+                Log.d("myStar", tempStar);
+                   */
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 
