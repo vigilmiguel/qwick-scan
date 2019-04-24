@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import com.hbb20.CountryCodePicker;
 
@@ -31,11 +32,14 @@ import static android.Manifest.permission.SEND_SMS;
 
 
 public class shareActivity extends AppCompatActivity {
-    private EditText messageText;
     private EditText phoneText;
     private String number;
     private CountryCodePicker ccp;
     private Button sendButton;
+    private Button btnview;
+    private static final int PICK_CONTACT=1;
+    private String st;
+    final private int REQUEST_MULTIPLE_PERMISSIONS=124;
     private BroadcastReceiver sentStatusReceiver, deliveredStatusReceiver;
     private static final int REQUEST_SMS = 0;
 
@@ -45,9 +49,12 @@ public class shareActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.share_activity);
 
-        messageText = (EditText) findViewById(R.id.message);
+
         phoneText = (EditText) findViewById(R.id.phoneText);
         sendButton = (Button) findViewById(R.id.sendButton);
+
+        AccessContact();
+        btnview = (Button) findViewById(R.id.btnload);
 
         ccp = (CountryCodePicker) findViewById(R.id.ccp); // For international calls (who would do this?)
         ccp.registerCarrierNumberEditText(phoneText);
@@ -81,11 +88,19 @@ public class shareActivity extends AppCompatActivity {
             }
         });
 
+        btnview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(intent, PICK_CONTACT);
+            }
+        });
+
     }
 
     public void sendMySMS() {
 
-        String phone = ccp.getFullNumberWithPlus();
+        String phone = ccp.getFullNumber();
         String message;
         StringBuilder builder = new StringBuilder();
 
@@ -210,7 +225,6 @@ public class shareActivity extends AppCompatActivity {
                         break;
                 }
                 phoneText.setText("");
-                messageText.setText("");
             }
         };
         registerReceiver(sentStatusReceiver, new IntentFilter("SMS_SENT"));
@@ -270,6 +284,88 @@ public class shareActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show();
+    }
+
+    // Access contact function, Asks the user for permission to read/write contacts
+    private void AccessContact()
+    {
+        List<String> permissionsNeeded = new ArrayList<String>();
+        final List<String> permissionsList = new ArrayList<String>();
+        if (!addPermission(permissionsList, Manifest.permission.READ_CONTACTS))
+            permissionsNeeded.add("Read Contacts");
+        // We don't need write permission because we're not writing anything
+        //if (!addPermission(permissionsList, Manifest.permission.WRITE_CONTACTS))
+        //    permissionsNeeded.add("Write Contacts");
+        if (permissionsList.size() > 0) {
+            if (permissionsNeeded.size() > 0) {
+                String message = "You need to grant access to " + permissionsNeeded.get(0);
+                for (int i = 1; i < permissionsNeeded.size(); i++)
+                    message = message + ", " + permissionsNeeded.get(i);
+                showMessageOKCancel(message,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                                            REQUEST_MULTIPLE_PERMISSIONS);
+                                }
+                            }
+                        });
+                return;
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                        REQUEST_MULTIPLE_PERMISSIONS);
+            }
+            return;
+        }
+    }
+
+    // Adds permissions to permissionList
+    private boolean addPermission(List<String> permissionsList, String permission) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionsList.add(permission);
+
+                if (!shouldShowRequestPermissionRationale(permission))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    // Gets contact data, sets the phone number text box to selected number
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        switch (reqCode) {
+            case (PICK_CONTACT):
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri contactData = data.getData();
+                    Cursor c = managedQuery(contactData, null, null, null, null);
+                    if (c.moveToFirst()) {
+                        String id = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                        String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                        try {
+                            if (hasPhone.equalsIgnoreCase("1")) {
+                                Cursor phones = getContentResolver().query(
+                                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id,
+                                        null, null);
+                                phones.moveToFirst();
+                                String cNumber = phones.getString(phones.getColumnIndex("data1"));
+                                System.out.println("number is:" + cNumber);
+                                phoneText.setText(cNumber);
+                            }
+                            String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        }
+                        catch (Exception ex)
+                        {
+                            System.out.println(st);
+                        }
+                    }
+                }
+                break;
+        }
     }
 
 }
