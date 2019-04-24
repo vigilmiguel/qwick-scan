@@ -28,6 +28,7 @@
     <string name="action_register">Sign Up</string>
     <string name="title_activity_maps">Map</string>
     <string name="open_map">Find Locations</string>
+    <string name="logo_description">An image view meant to store company logos.</string>
 
 
 </resources>

@@ -83,6 +83,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     Button scanButton;
     Button menuButton;
     Button shareButton;
+    Button reviewButton;
 
     String productName = "";
     String productImage = "";
@@ -150,12 +151,16 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         scanButton = (Button)findViewById(R.id.scan_button);
         menuButton = (Button)findViewById(R.id.menu_button);
         shareButton = (Button)findViewById(R.id.share_button);
+        reviewButton = findViewById(R.id.review_button);
+
+
         menuButton.setVisibility(Button.INVISIBLE);
         scanButton.setVisibility(Button.INVISIBLE);
         pBar.setVisibility(ProgressBar.VISIBLE);
         //Title.setVisibility(TextView.INVISIBLE);
         mapButton.setVisibility(Button.INVISIBLE);
         shareButton.setVisibility(Button.INVISIBLE);
+        reviewButton.setVisibility(Button.INVISIBLE);
 
         for(int i = 0; i < storeTextViews.size() && i < priceTextViews.size(); i++) {
             storeTextViews.get(i).setVisibility(TextView.INVISIBLE);
@@ -277,23 +282,24 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             // Store it in the database
             storeInDatabase(product);
 
-            mapButton.setVisibility(Button.VISIBLE);
-
-            mapButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(ScannerStartActivity.this, MapsActivity.class));
-                }
-            });
-            scanButton.setVisibility(Button.VISIBLE);
             menuButton.setVisibility(Button.VISIBLE);
+            mapButton.setVisibility(Button.VISIBLE);
+            scanButton.setVisibility(Button.VISIBLE);
             shareButton.setVisibility(Button.VISIBLE);
+            reviewButton.setVisibility(Button.VISIBLE);
+
 
 
             menuButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     finish();
                     startActivity(new Intent(ScannerStartActivity.this, MenuActivity.class));
+                }
+            });
+            mapButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(ScannerStartActivity.this, MapsActivity.class));
                 }
             });
             scanButton.setOnClickListener(new View.OnClickListener() {
@@ -324,6 +330,45 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     startActivity(intent);
                 }
             });
+            reviewButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ScannerStartActivity.this, ReviewActivity.class);
+
+                    Bundle bundle = new Bundle();
+
+                    // Assuming the array lists have the respective names: urls, names, starRatings
+                    ArrayList<String> urls = new ArrayList<>();
+                    ArrayList<String> names = new ArrayList<>();
+                    ArrayList<String> starRatings = new ArrayList<>();
+
+                    names.add("Best Buy");
+                    starRatings.add("4.5");
+                    urls.add("https://popgoestheweek.com/wp-content/uploads/2019/03/Momo-Vincent-Marcus-1.jpg");
+
+                    names.add("E-Bay");
+                    starRatings.add("3.1");
+                    urls.add("https://www.ebay.com/");
+
+                    names.add("Macy's");
+                    starRatings.add("4.9");
+                    urls.add("https://www.macys.com/");
+
+                    names.add("Macy");
+                    starRatings.add("4.9");
+                    urls.add("https://popgoestheweek.com/wp-content/uploads/2019/03/Momo-Vincent-Marcus-1.jpg");
+
+                    bundle.putStringArrayList("urls", urls);
+                    bundle.putStringArrayList("names", names);
+                    bundle.putStringArrayList("starRatings", starRatings);
+
+
+                    intent.putExtras(bundle);
+
+
+                    startActivity(intent);
+                }
+            });
         }
 
 
@@ -341,6 +386,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             Glide.with(this )
                     .load("https://www.barcodelookup.com/assets/images/no-image-available.jpg")
                     .into(productImageView);
+
+
         }
         else
         {
