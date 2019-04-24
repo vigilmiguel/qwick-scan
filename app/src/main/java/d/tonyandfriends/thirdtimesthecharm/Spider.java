@@ -42,6 +42,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             image(code);
             getPrice(myInfo.getProductName());
             locationScraper(myInfo.getProductName());
+            ReviewFind();
         }
 
         //url = image(code);

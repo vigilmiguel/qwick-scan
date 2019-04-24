@@ -184,7 +184,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     @Override
     // This is our Adapter implementation
     // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
-    public void onProcessDone(SpiderData result) {
+    public void onProcessDone(final SpiderData result) {
       
         Log.d("mymymymymymymym",Integer.toString(result.prices.size()));
         // Using sharedPreferences and json/gson files, I can transfer an object from one activity to another.
@@ -338,10 +338,11 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     Bundle bundle = new Bundle();
 
                     // Assuming the array lists have the respective names: urls, names, starRatings
-                    ArrayList<String> urls = new ArrayList<>();
-                    ArrayList<String> names = new ArrayList<>();
-                    ArrayList<String> starRatings = new ArrayList<>();
+                    ArrayList<String> urls = result.reviewSitesURl;
+                    ArrayList<String> names = result.reviewSitesName;
+                    ArrayList<String> starRatings = result.starRating;
 
+                    /*
                     names.add("Best Buy");
                     starRatings.add("4.5");
                     urls.add("https://popgoestheweek.com/wp-content/uploads/2019/03/Momo-Vincent-Marcus-1.jpg");
@@ -357,6 +358,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     names.add("Macy");
                     starRatings.add("4.9");
                     urls.add("https://popgoestheweek.com/wp-content/uploads/2019/03/Momo-Vincent-Marcus-1.jpg");
+                    */
 
                     bundle.putStringArrayList("urls", urls);
                     bundle.putStringArrayList("names", names);
