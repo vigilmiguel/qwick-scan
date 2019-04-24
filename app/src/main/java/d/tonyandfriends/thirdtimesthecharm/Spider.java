@@ -33,6 +33,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
         String description = "";
         String code = Code[0];
         Log.d("myCiode",code);
+        myInfo.barcodeNumber = code;
 
         FirstDB(code);
         if(!foundProduct)  SecondDB(code);
@@ -42,13 +43,9 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             image(code);
             getPrice(myInfo.getProductName());
             locationScraper(myInfo.getProductName());
+            ReviewFind();
         }
 
-        //url = image(code);
-        //product.add(description);
-        //product.add(url);
-        Log.d("firstd",description);
-        Log.d("firsturl",url);
         return myInfo;
     }
 
@@ -71,11 +68,8 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             // For a site with only one table this works, We will need the actual table names for sites with more than 1 table per page
             Elements elements = dic.select("table");
             Elements rows = elements.select("tr"); // this finds elements with tr and counts it
-            Log.d("mySite", URL + code);
-            Log.d("mySize", String.valueOf(rows.size()));
             if (rows.size() < 3) // Check how big the table is, if its size 2 then There is no valid Scan in their DB
             {
-                Log.d("MyfirstFailure", "a true fail");
                 return;
             } else { // Otherwise the second row gives us the Name
 
@@ -119,16 +113,12 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
             //String y = elements.eachText().get(0); //eachText returns an list of strings so we just need the first one
             if (elements.size() == 0) // if there were no values found with the header then return empty string and try next database
             {
-                Log.d("mySecond Failure","wowowow");
                 return;
             }
 
-            Log.d("code", code);
             description = elements.eachText().get(0);
-            Log.d("MyBS", description);
             if(description.length() == 0)
             {
-                Log.d("myLength","ezfix");
                 return;
             }
             foundProduct = true;
@@ -179,7 +169,6 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
     {
 
         // add "+" to make a google search
-        Log.d("myPRoduict",product);
         product = product.replace("'","");
         product = product.replace("(","");
         product = product.replace(")","");
@@ -191,7 +180,6 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
         try {
             Document dic = Jsoup.connect(googleQuery).get();
             Elements elements = dic.select("div.eIuuYe");
-            Log.d("MyGoogleQuery",googleQuery);
             // This is our link we need to follow to get to the prices page
             if(elements.size() == 0) return;
             String firstURL = elements.get(0).toString();
@@ -217,16 +205,13 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 while(elements.get(i).toString().charAt(j) != '<') temp += elements.get(i).toString().charAt(j++);
 
                 temp = temp.replace("&amp;","&");
-                Log.d("myReplace",temp);
                 myInfo.addPrice(temp); // add to our data
             }
 
             //This displays name and URL info
             elements = dic.select(".os-seller-name");
-            Log.d("myConfuse",elements.toString());
             for(i=0; i<Size;i++)
             {
-                Log.d("myNameSite",elements.get(i).toString());
                 //First part of loop gets URL(Not working atm, the url is a special google one and it wont work unless directly clicked, so parsing is out of the question)
                 //I'll try to find a solution one day.
                 int j = 90;
@@ -242,15 +227,12 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 while(elements.get(i).toString().charAt(j) != '<') temp2 += elements.get(i).toString().charAt(j++);
                 temp2 = temp2.replace("\u0026amp;","&");
 
-                Log.d("myRealReplace",temp2);
                 myInfo.addName(temp2); //Add to our data
             }
-
 
         }
         catch (IOException e) {
             e.printStackTrace();
-            Log.d("myPatience","isrunning out");
         }
     }
     //An n^2 function, with an nlogn kind of feel
@@ -385,12 +367,9 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 googleQuery = "https://www.google.com/search?q=" + tempStore + "coordinates";
                 //googleQuery = googleQuery.replace("","+");
                 dic = Jsoup.connect(googleQuery).get();
-                Log.d("myLocalQuery",googleQuery);
                 elements = dic.select("div.Z0LcW"); // should get us straight to the cords
-                Log.d("myCords", elements.toString());
                 localCords.add(elements.toString()); // Add them to our local
                 myInfo.addLocalStore(localStores.get(i)); //while we're here add our final stores to our SpiderData
-                Log.d("myFirst cords" +i, elements.toString());
             }
             //String manipulation stuff
             for(int i=0; i<localCords.size();i++)
@@ -400,7 +379,6 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
 
                 // Sometimes getLocalStores wouldn't have an ith element.
                 if(temp.length() == 0 && myInfo.getLocalStores().size() > i) {
-                    Log.d("mySac", "i get here");
                     myInfo.getLocalStores().remove(i);
                     continue;
                 }
@@ -408,7 +386,6 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 // Sometimes the string was too short.
                 if(temp.length() > 45)
                     temp = temp.substring(21,45); //rough guess of where our cords are
-                Log.d("myyyy",temp);
                 if(temp.contains("W")) longSign = -1.0;
                 if(temp.contains("S")) latSign = -1.0;
                 // get rid of that bullstuff
@@ -418,14 +395,11 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 temp  =temp.replaceAll("W","");
                 temp = temp.replaceAll(",","");
                 temp  = temp.replaceAll("\u00B0","");
-                Log.d("myFinalCordTemp", temp);
                 //Split our cords into latitude and longitude
                 String [] tempCords = temp.split(" ",2);
 
                 // It sometimes only has a length of 1.
                 if(tempCords.length == 2) {
-                    Log.d("myzzzz", tempCords[0]);
-                    Log.d("myjjjjjj", tempCords[1]);
 
                     //probably should just use a hashmap, but its amateur hour tonight
                     myInfo.addLatitude(Double.parseDouble(tempCords[0]) * latSign);
@@ -434,7 +408,6 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                     longSign = 1.0;
                 }
 
-                Log.i("TESTLOOP", "" + i);
             }
 
 
@@ -450,7 +423,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
         String productURL  ="";
         String search = "https://brickseek.com/products/?search="  + barcode;
         String productPrice = "";
-        Log.d("mySearch",search);
+        Log.d("myFirst",search);
 
         try {
             Document dic = Jsoup.connect(search).userAgent("Opera").get();
@@ -463,7 +436,7 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                                                                 //Second hop takes us to the page with all of our information
             String secondHop  = "https://brickseek.com";
             while(element.get(0).toString().charAt(i) !=  '"') secondHop += element.get(0).toString().charAt(i++);
-
+            Log.d("mysecond",secondHop);
             dic = Jsoup.connect(secondHop).userAgent("Opera").get();
             element = dic.select(".product-super__reviews-tile");        //Class with Review URLS, Star Ratings and Name of Website
 
@@ -482,11 +455,9 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 i += 160;
                 while(element.get(j).toString().charAt(i) != '<') tempStar += element.get(j).toString().charAt(i++);
                 myInfo.addStarRating(tempStar);
-                /*
-                Log.d("myUrl",temp);
-                Log.d("myName",tempName);
-                Log.d("myStar", tempStar);
-                   */
+                Log.d("myshit", temp);
+                Log.d("myshit", tempName);
+                Log.d("myshit", tempStar);
             }
 
         } catch (IOException e) {

@@ -163,10 +163,6 @@ public class HistoryActivity extends AppCompatActivity {
         super.onBackPressed();
 
         databaseUserScanHistory.removeEventListener(databaseListener);
-
-
-
     }
-
 
 }
