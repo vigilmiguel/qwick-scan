@@ -3,7 +3,7 @@
     "eventType": "DELAYED_MESSAGE_POSTED",
     "timestamp": 1556219154836,
     "actionCode": -1,
-    "delayTime": 7000,
+    "delayTime": 2000,
     "canScrollTo": false,
     "elementDescriptors": []
   },
