@@ -25,7 +25,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
+    <!--<Spinner
         android:id="@+id/spinner3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.131" />
+        app:layout_constraintVertical_bias="0.131" />-->
 
     <TextView
         android:id="@+id/textView2"
@@ -74,6 +74,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.78"
         app:srcCompat="@drawable/icons8realestate48" />
+
+    <ListView
+        android:id="@+id/historyList"
+        android:layout_width="395dp"
+        android:layout_height="325dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        <!--app:layout_constraintTop_toBottomOf="@+id/spinner3" />-->
 
 
 </android.support.constraint.ConstraintLayout>
