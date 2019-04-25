@@ -322,6 +322,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
 
 
+
                     // Add it to the intent.
                     intent.putExtras(bundle);
 
@@ -341,6 +342,17 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     ArrayList<String> urls = result.reviewSitesURl;
                     ArrayList<String> names = result.reviewSitesName;
                     ArrayList<String> starRatings = result.starRating;
+
+                    String size = Integer.toString(urls.size());
+                    Log.i("cheekESTER", size);
+
+
+                    size = Integer.toString(names.size());
+                    Log.i("cheekESTER", size);
+
+
+                    size = Integer.toString(starRatings.size());
+                    Log.i("cheekESTER", size);
 
                     /*
                     names.add("Best Buy");

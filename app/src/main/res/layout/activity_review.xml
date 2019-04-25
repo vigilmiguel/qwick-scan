@@ -7,6 +7,87 @@
     tools:context=".ReviewActivity">
 
 
+    <TextView
+        android:id="@+id/ratingText5"
+        android:layout_width="122dp"
+        android:layout_height="39dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginBottom="148dp"
+        android:text=""
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/ratingText4"
+        android:layout_width="122dp"
+        android:layout_height="39dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginBottom="52dp"
+        android:text=""
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/ratingText5"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/ratingText3"
+        android:layout_width="122dp"
+        android:layout_height="39dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginBottom="48dp"
+        android:text=""
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/ratingText4"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/ratingText2"
+        android:layout_width="122dp"
+        android:layout_height="39dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginBottom="56dp"
+        android:text=""
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/ratingText3"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/ratingText1"
+        android:layout_width="122dp"
+        android:layout_height="39dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginBottom="56dp"
+        android:text=""
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/ratingText2"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/ratingText0"
+        android:layout_width="122dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginBottom="8dp"
+        android:text=""
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/ratingText1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.672" />
+
     <ImageButton
         android:id="@+id/logoImageButton0"
         android:layout_width="103dp"
@@ -14,12 +95,11 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:contentDescription="@string/logo_description"
         android:clickable="true"
         android:focusable="true"
+        android:contentDescription="@string/logo_description"
         app:layout_constraintBottom_toTopOf="@+id/logoImageButton1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintEnd_toStartOf="@+id/ratingText0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.797" />
@@ -31,12 +111,11 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="20dp"
-        android:contentDescription="@string/logo_description"
         android:clickable="true"
+        android:contentDescription="@string/logo_description"
         android:focusable="true"
         app:layout_constraintBottom_toTopOf="@+id/logoImageButton2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintEnd_toStartOf="@+id/ratingText1"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
@@ -46,10 +125,11 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="20dp"
+        android:clickable="true"
         android:contentDescription="@string/logo_description"
+        android:focusable="true"
         app:layout_constraintBottom_toTopOf="@+id/logoImageButton3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintEnd_toStartOf="@+id/ratingText2"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
@@ -59,10 +139,11 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="20dp"
+        android:clickable="true"
         android:contentDescription="@string/logo_description"
+        android:focusable="true"
         app:layout_constraintBottom_toTopOf="@+id/logoImageButton4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintEnd_toStartOf="@+id/ratingText3"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
@@ -72,10 +153,11 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="20dp"
+        android:clickable="true"
         android:contentDescription="@string/logo_description"
+        android:focusable="true"
         app:layout_constraintBottom_toTopOf="@+id/logoImageButton5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintEnd_toStartOf="@+id/ratingText4"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
@@ -85,10 +167,11 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="128dp"
+        android:clickable="true"
         android:contentDescription="@string/logo_description"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintEnd_toStartOf="@+id/ratingText5"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView

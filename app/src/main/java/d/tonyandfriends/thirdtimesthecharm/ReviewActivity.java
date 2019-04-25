@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
         ArrayList<String> starRatings = new ArrayList<>();
 
         ArrayList<ImageButton> imageButtons = new ArrayList<>();
+        ArrayList<TextView> ratingTexts = new ArrayList<>();
 
         imageButtons.add((ImageButton)findViewById(R.id.logoImageButton0));
         imageButtons.add((ImageButton)findViewById(R.id.logoImageButton1));
@@ -36,9 +38,22 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
         imageButtons.add((ImageButton)findViewById(R.id.logoImageButton4));
         imageButtons.add((ImageButton)findViewById(R.id.logoImageButton5));
 
+        ratingTexts.add((TextView)findViewById(R.id.ratingText0));
+        ratingTexts.add((TextView)findViewById(R.id.ratingText1));
+        ratingTexts.add((TextView)findViewById(R.id.ratingText2));
+        ratingTexts.add((TextView)findViewById(R.id.ratingText3));
+        ratingTexts.add((TextView)findViewById(R.id.ratingText4));
+        ratingTexts.add((TextView)findViewById(R.id.ratingText5));
+
+
         for(int i = 0; i < imageButtons.size(); i++)
         {
             imageButtons.get(i).setVisibility(ImageButton.INVISIBLE);
+        }
+
+        for(int i = 0; i < ratingTexts.size(); i++)
+        {
+            ratingTexts.get(i).setVisibility(TextView.INVISIBLE);
         }
 
         if(bundle != null) {
@@ -55,14 +70,16 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
                 // Get the company image based on their name.
                 int image = getCompanyImage(names.get(i));
 
-                Log.i("ReviewActivity", "ImageButton");
-
                 imageButtons.get(i).setImageResource(image);
                 imageButtons.get(i).setTag(urls.get(i));
                 imageButtons.get(i).setVisibility(ImageButton.VISIBLE);
                 imageButtons.get(i).setClickable(true);
 
                 imageButtons.get(i).setOnClickListener(this);
+
+                ratingTexts.get(i).setText(starRatings.get(i));
+                ratingTexts.get(i).setVisibility(TextView.VISIBLE);
+
 
             }
 
@@ -93,7 +110,17 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
 
         intent.setData(Uri.parse(url));
 
-        startActivity(intent);
+        try
+        {
+            startActivity(intent);
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(ReviewActivity.this, "Invalid website!", Toast.LENGTH_SHORT)
+                    .show();
+            e.printStackTrace();
+        }
+
 
     }
 
