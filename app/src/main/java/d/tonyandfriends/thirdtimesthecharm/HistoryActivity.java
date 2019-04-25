@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.ListView;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -36,10 +37,11 @@ public class HistoryActivity extends AppCompatActivity {
 
     ValueEventListener databaseListener;
     ImageButton imageButton;
+    ListView scanHistoryList;
 
     List<Product> userProductHistory = new ArrayList<>();
     List<String> returnedVals = new ArrayList<>();
-    Spinner s;
+    //Spinner s;
     int select = 0;
 
 
@@ -60,7 +62,8 @@ public class HistoryActivity extends AppCompatActivity {
         });
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        s = findViewById(R.id.spinner3);
+        //s = findViewById(R.id.spinner3);
+        scanHistoryList = findViewById(R.id.historyList);
         Log.d("myFirstSTop", "ihere");
         if(firebaseUser != null) {
             String dbHistoryPath = "userScanHistory/" + firebaseUser.getUid();
@@ -69,7 +72,7 @@ public class HistoryActivity extends AppCompatActivity {
             databaseUserScanHistory = FirebaseDatabase.getInstance().getReference(dbHistoryPath);
         }
         returnedVals.add("");
-        s.setSelection(0);
+        /*s.setSelection(0);
         //Heres our fancy clicker
         s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -99,6 +102,33 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });*/
+
+        // Set item click to bring up item delete dialog
+        scanHistoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                select = position; //Here we track the position using a class variable
+                if (position > 0) {
+                    new AlertDialog.Builder(HistoryActivity.this)
+
+                            //your shit i didn't change
+                            .setTitle("Delete")
+                            .setMessage("Do you really want to delete " + userProductHistory.get(select - 1).getName() + " from your history?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                // more shit of yours i didnt change, just instead of position we use select.
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    databaseUserScanHistory.child(userProductHistory.get(select - 1).getBarcode()).removeValue();
+                                    Log.d("myCrash2?", "or here?");
+                                    Toast.makeText(HistoryActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                    userProductHistory.clear();
+                                    scanHistoryList.setAdapter(null);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null).show();
+                }
             }
         });
     }
@@ -143,11 +173,13 @@ public class HistoryActivity extends AppCompatActivity {
                 for(Product p : userProductHistory) {
                     Log.i("HistoryActivity", p.getName());
                     returnedVals.add(p.getName() +"\n" + p.getDateRecentlyScanned());
-                    ArrayAdapter<String> adapter =
-                            new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, returnedVals);
-                    adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+                    /*ArrayAdapter<String> adapter =
+                            new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_dropdown_item_1line, returnedVals);
+                    adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);*/
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_selectable_list_item, returnedVals);
+                    // Do i need to set adapter here?
                     Log.d("myCrash?", "Is it here?");
-                    s.setAdapter(adapter);
+                    scanHistoryList.setAdapter(adapter);
                 }
             }
 
