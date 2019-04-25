@@ -1,7 +1,7 @@
 [
   {
     "eventType": "DELAYED_MESSAGE_POSTED",
-    "timestamp": 1555461827563,
+    "timestamp": 1556219154836,
     "actionCode": -1,
     "delayTime": 7000,
     "canScrollTo": false,
@@ -9,7 +9,7 @@
   },
   {
     "eventType": "VIEW_CLICKED",
-    "timestamp": 1555461831114,
+    "timestamp": 1556219162162,
     "replacementText": "Sign in",
     "actionCode": -1,
     "delayTime": 0,
@@ -46,42 +46,7 @@
   },
   {
     "eventType": "DELAYED_MESSAGE_POSTED",
-    "timestamp": 1555461834454,
-    "actionCode": -1,
-    "delayTime": 7000,
-    "canScrollTo": false,
-    "elementDescriptors": []
-  },
-  {
-    "eventType": "PERMISSIONS_REQUEST",
-    "timestamp": 1555461845487,
-    "actionCode": -1,
-    "delayTime": 0,
-    "requestedPermissions": [
-      "android.permission.CAMERA"
-    ],
-    "canScrollTo": false,
-    "elementDescriptors": []
-  },
-  {
-    "eventType": "DELAYED_MESSAGE_POSTED",
-    "timestamp": 1555461845646,
-    "actionCode": -1,
-    "delayTime": 7000,
-    "canScrollTo": false,
-    "elementDescriptors": []
-  },
-  {
-    "eventType": "PRESSED_BACK",
-    "timestamp": 1555461858233,
-    "actionCode": -1,
-    "delayTime": 0,
-    "canScrollTo": false,
-    "elementDescriptors": []
-  },
-  {
-    "eventType": "DELAYED_MESSAGE_POSTED",
-    "timestamp": 1555461858695,
+    "timestamp": 1556219164183,
     "actionCode": -1,
     "delayTime": 7000,
     "canScrollTo": false,
@@ -89,32 +54,32 @@
   },
   {
     "eventType": "VIEW_CLICKED",
-    "timestamp": 1555461874215,
-    "replacementText": "Location",
+    "timestamp": 1556219175282,
+    "replacementText": "Scan Item",
     "actionCode": -1,
     "delayTime": 0,
     "canScrollTo": false,
     "elementDescriptors": [
       {
-        "className": "android.widget.Button",
+        "className": "android.support.v7.widget.AppCompatButton",
         "recyclerViewChildPosition": -1,
         "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 10,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/map_button",
+        "groupViewChildPosition": 3,
+        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/scan_button2",
         "contentDescription": "",
-        "text": "Location"
+        "text": "Scan Item"
       },
       {
         "className": "android.support.constraint.ConstraintLayout",
         "recyclerViewChildPosition": -1,
         "adapterViewChildPosition": -1,
         "groupViewChildPosition": 0,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/relativeLayout",
+        "resourceId": "",
         "contentDescription": "",
         "text": ""
       },
       {
-        "className": "android.widget.FrameLayout",
+        "className": "android.support.v7.widget.ContentFrameLayout",
         "recyclerViewChildPosition": -1,
         "adapterViewChildPosition": -1,
         "groupViewChildPosition": 1,
@@ -126,7 +91,26 @@
   },
   {
     "eventType": "DELAYED_MESSAGE_POSTED",
-    "timestamp": 1555461878775,
+    "timestamp": 1556219177256,
+    "actionCode": -1,
+    "delayTime": 7000,
+    "canScrollTo": false,
+    "elementDescriptors": []
+  },
+  {
+    "eventType": "PERMISSIONS_REQUEST",
+    "timestamp": 1556219178077,
+    "actionCode": -1,
+    "delayTime": 0,
+    "requestedPermissions": [
+      "android.permission.CAMERA"
+    ],
+    "canScrollTo": false,
+    "elementDescriptors": []
+  },
+  {
+    "eventType": "DELAYED_MESSAGE_POSTED",
+    "timestamp": 1556219178178,
     "actionCode": -1,
     "delayTime": 7000,
     "canScrollTo": false,
@@ -134,7 +118,7 @@
   },
   {
     "eventType": "PRESSED_BACK",
-    "timestamp": 1555461883964,
+    "timestamp": 1556219187345,
     "actionCode": -1,
     "delayTime": 0,
     "canScrollTo": false,
@@ -142,7 +126,7 @@
   },
   {
     "eventType": "DELAYED_MESSAGE_POSTED",
-    "timestamp": 1555461884022,
+    "timestamp": 1556219187396,
     "actionCode": -1,
     "delayTime": 7000,
     "canScrollTo": false,
@@ -150,7 +134,7 @@
   },
   {
     "eventType": "VIEW_CLICKED",
-    "timestamp": 1555461888159,
+    "timestamp": 1556219217526,
     "replacementText": "Share",
     "actionCode": -1,
     "delayTime": 0,
@@ -160,7 +144,7 @@
         "className": "android.widget.Button",
         "recyclerViewChildPosition": -1,
         "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 13,
+        "groupViewChildPosition": 14,
         "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/share_button",
         "contentDescription": "",
         "text": "Share"
@@ -187,163 +171,15 @@
   },
   {
     "eventType": "DELAYED_MESSAGE_POSTED",
-    "timestamp": 1555461890611,
+    "timestamp": 1556219219625,
     "actionCode": -1,
     "delayTime": 7000,
     "canScrollTo": false,
     "elementDescriptors": []
   },
   {
-    "eventType": "VIEW_TEXT_CHANGED",
-    "timestamp": 1555461896814,
-    "replacementText": "Hello Friend",
-    "actionCode": -1,
-    "delayTime": 0,
-    "canScrollTo": false,
-    "elementDescriptors": [
-      {
-        "className": "android.support.v7.widget.AppCompatEditText",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 0,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/message",
-        "contentDescription": "",
-        "text": ""
-      },
-      {
-        "className": "android.widget.RelativeLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 0,
-        "resourceId": "",
-        "contentDescription": "",
-        "text": ""
-      },
-      {
-        "className": "android.support.v7.widget.ContentFrameLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "android:id/content",
-        "contentDescription": "",
-        "text": ""
-      }
-    ]
-  },
-  {
-    "eventType": "VIEW_TEXT_CHANGED",
-    "timestamp": 1555461969835,
-    "replacementText": "(714) 837-3861",
-    "actionCode": -1,
-    "delayTime": 0,
-    "canScrollTo": false,
-    "elementDescriptors": [
-      {
-        "className": "android.support.v7.widget.AppCompatEditText",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/phoneText",
-        "contentDescription": "",
-        "text": ""
-      },
-      {
-        "className": "android.widget.LinearLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "",
-        "contentDescription": "",
-        "text": ""
-      },
-      {
-        "className": "android.widget.LinearLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 0,
-        "resourceId": "",
-        "contentDescription": "",
-        "text": ""
-      }
-    ]
-  },
-  {
-    "eventType": "PRESSED_EDITOR_ACTION",
-    "timestamp": 1555462025431,
-    "replacementText": "(714) 837-3861",
-    "actionCode": 6,
-    "delayTime": 0,
-    "canScrollTo": false,
-    "elementDescriptors": [
-      {
-        "className": "android.support.v7.widget.AppCompatEditText",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/phoneText",
-        "contentDescription": "",
-        "text": "(714) 837-3861"
-      },
-      {
-        "className": "android.widget.LinearLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "",
-        "contentDescription": "",
-        "text": ""
-      },
-      {
-        "className": "android.widget.LinearLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 0,
-        "resourceId": "",
-        "contentDescription": "",
-        "text": ""
-      }
-    ]
-  },
-  {
     "eventType": "VIEW_CLICKED",
-    "timestamp": 1555462029494,
-    "replacementText": "Send",
-    "actionCode": -1,
-    "delayTime": 0,
-    "canScrollTo": false,
-    "elementDescriptors": [
-      {
-        "className": "android.support.v7.widget.AppCompatButton",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 2,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/sendButton",
-        "contentDescription": "",
-        "text": "Send"
-      },
-      {
-        "className": "android.widget.RelativeLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 0,
-        "resourceId": "",
-        "contentDescription": "",
-        "text": ""
-      },
-      {
-        "className": "android.support.v7.widget.ContentFrameLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "android:id/content",
-        "contentDescription": "",
-        "text": ""
-      }
-    ]
-  },
-  {
-    "eventType": "VIEW_CLICKED",
-    "timestamp": 1555462035550,
+    "timestamp": 1556219224080,
     "replacementText": "OK",
     "actionCode": -1,
     "delayTime": 0,
@@ -380,18 +216,18 @@
   },
   {
     "eventType": "PERMISSIONS_REQUEST",
-    "timestamp": 1555462037772,
+    "timestamp": 1556219225892,
     "actionCode": -1,
     "delayTime": 0,
     "requestedPermissions": [
-      "android.permission.SEND_SMS"
+      "android.permission.READ_CONTACTS"
     ],
     "canScrollTo": false,
     "elementDescriptors": []
   },
   {
     "eventType": "DELAYED_MESSAGE_POSTED",
-    "timestamp": 1555462037916,
+    "timestamp": 1556219226025,
     "actionCode": -1,
     "delayTime": 7000,
     "canScrollTo": false,
@@ -399,8 +235,8 @@
   },
   {
     "eventType": "VIEW_CLICKED",
-    "timestamp": 1555462043902,
-    "replacementText": "Send",
+    "timestamp": 1556219233724,
+    "replacementText": "Choose Contact",
     "actionCode": -1,
     "delayTime": 0,
     "canScrollTo": false,
@@ -409,17 +245,17 @@
         "className": "android.support.v7.widget.AppCompatButton",
         "recyclerViewChildPosition": -1,
         "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 2,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/sendButton",
+        "groupViewChildPosition": 4,
+        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/btnload",
         "contentDescription": "",
-        "text": "Send"
+        "text": "Choose Contact"
       },
       {
-        "className": "android.widget.RelativeLayout",
+        "className": "android.support.constraint.ConstraintLayout",
         "recyclerViewChildPosition": -1,
         "adapterViewChildPosition": -1,
         "groupViewChildPosition": 0,
-        "resourceId": "",
+        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/relativeLayout3",
         "contentDescription": "",
         "text": ""
       },
@@ -435,45 +271,16 @@
     ]
   },
   {
-    "eventType": "VIEW_CLICKED",
-    "timestamp": 1555462065420,
-    "replacementText": "Send",
+    "eventType": "DELAYED_MESSAGE_POSTED",
+    "timestamp": 1556219235747,
     "actionCode": -1,
-    "delayTime": 0,
+    "delayTime": 7000,
     "canScrollTo": false,
-    "elementDescriptors": [
-      {
-        "className": "android.support.v7.widget.AppCompatButton",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 2,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/sendButton",
-        "contentDescription": "",
-        "text": "Send"
-      },
-      {
-        "className": "android.widget.RelativeLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 0,
-        "resourceId": "",
-        "contentDescription": "",
-        "text": ""
-      },
-      {
-        "className": "android.support.v7.widget.ContentFrameLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "android:id/content",
-        "contentDescription": "",
-        "text": ""
-      }
-    ]
+    "elementDescriptors": []
   },
   {
     "eventType": "PRESSED_BACK",
-    "timestamp": 1555462074802,
+    "timestamp": 1556219263508,
     "actionCode": -1,
     "delayTime": 0,
     "canScrollTo": false,
@@ -481,7 +288,7 @@
   },
   {
     "eventType": "DELAYED_MESSAGE_POSTED",
-    "timestamp": 1555462074861,
+    "timestamp": 1556219263572,
     "actionCode": -1,
     "delayTime": 7000,
     "canScrollTo": false,
@@ -489,7 +296,219 @@
   },
   {
     "eventType": "VIEW_CLICKED",
-    "timestamp": 1555462085211,
+    "timestamp": 1556219267964,
+    "replacementText": "Reviews",
+    "actionCode": -1,
+    "delayTime": 0,
+    "canScrollTo": false,
+    "elementDescriptors": [
+      {
+        "className": "android.widget.Button",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 0,
+        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/review_button",
+        "contentDescription": "",
+        "text": "Reviews"
+      },
+      {
+        "className": "android.support.constraint.ConstraintLayout",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 0,
+        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/relativeLayout",
+        "contentDescription": "",
+        "text": ""
+      },
+      {
+        "className": "android.widget.FrameLayout",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 1,
+        "resourceId": "android:id/content",
+        "contentDescription": "",
+        "text": ""
+      }
+    ]
+  },
+  {
+    "eventType": "DELAYED_MESSAGE_POSTED",
+    "timestamp": 1556219269984,
+    "actionCode": -1,
+    "delayTime": 7000,
+    "canScrollTo": false,
+    "elementDescriptors": []
+  },
+  {
+    "eventType": "PRESSED_BACK",
+    "timestamp": 1556219273208,
+    "actionCode": -1,
+    "delayTime": 0,
+    "canScrollTo": false,
+    "elementDescriptors": []
+  },
+  {
+    "eventType": "DELAYED_MESSAGE_POSTED",
+    "timestamp": 1556219273282,
+    "actionCode": -1,
+    "delayTime": 7000,
+    "canScrollTo": false,
+    "elementDescriptors": []
+  },
+  {
+    "eventType": "VIEW_CLICKED",
+    "timestamp": 1556219276360,
+    "replacementText": "Location",
+    "actionCode": -1,
+    "delayTime": 0,
+    "canScrollTo": false,
+    "elementDescriptors": [
+      {
+        "className": "android.widget.Button",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 11,
+        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/map_button",
+        "contentDescription": "",
+        "text": "Location"
+      },
+      {
+        "className": "android.support.constraint.ConstraintLayout",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 0,
+        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/relativeLayout",
+        "contentDescription": "",
+        "text": ""
+      },
+      {
+        "className": "android.widget.FrameLayout",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 1,
+        "resourceId": "android:id/content",
+        "contentDescription": "",
+        "text": ""
+      }
+    ]
+  },
+  {
+    "eventType": "DELAYED_MESSAGE_POSTED",
+    "timestamp": 1556219278263,
+    "actionCode": -1,
+    "delayTime": 7000,
+    "canScrollTo": false,
+    "elementDescriptors": []
+  },
+  {
+    "eventType": "PRESSED_BACK",
+    "timestamp": 1556219286493,
+    "actionCode": -1,
+    "delayTime": 0,
+    "canScrollTo": false,
+    "elementDescriptors": []
+  },
+  {
+    "eventType": "DELAYED_MESSAGE_POSTED",
+    "timestamp": 1556219286563,
+    "actionCode": -1,
+    "delayTime": 7000,
+    "canScrollTo": false,
+    "elementDescriptors": []
+  },
+  {
+    "eventType": "VIEW_CLICKED",
+    "timestamp": 1556219288746,
+    "replacementText": "Menu",
+    "actionCode": -1,
+    "delayTime": 0,
+    "canScrollTo": false,
+    "elementDescriptors": [
+      {
+        "className": "android.widget.Button",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 12,
+        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/menu_button",
+        "contentDescription": "",
+        "text": "Menu"
+      },
+      {
+        "className": "android.support.constraint.ConstraintLayout",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 0,
+        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/relativeLayout",
+        "contentDescription": "",
+        "text": ""
+      },
+      {
+        "className": "android.widget.FrameLayout",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 1,
+        "resourceId": "android:id/content",
+        "contentDescription": "",
+        "text": ""
+      }
+    ]
+  },
+  {
+    "eventType": "DELAYED_MESSAGE_POSTED",
+    "timestamp": 1556219290665,
+    "actionCode": -1,
+    "delayTime": 7000,
+    "canScrollTo": false,
+    "elementDescriptors": []
+  },
+  {
+    "eventType": "VIEW_CLICKED",
+    "timestamp": 1556219293034,
+    "replacementText": "History",
+    "actionCode": -1,
+    "delayTime": 0,
+    "canScrollTo": false,
+    "elementDescriptors": [
+      {
+        "className": "android.support.v7.widget.AppCompatButton",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 1,
+        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/history_button",
+        "contentDescription": "",
+        "text": "History"
+      },
+      {
+        "className": "android.support.constraint.ConstraintLayout",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 0,
+        "resourceId": "",
+        "contentDescription": "",
+        "text": ""
+      },
+      {
+        "className": "android.support.v7.widget.ContentFrameLayout",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 1,
+        "resourceId": "android:id/content",
+        "contentDescription": "",
+        "text": ""
+      }
+    ]
+  },
+  {
+    "eventType": "DELAYED_MESSAGE_POSTED",
+    "timestamp": 1556219294906,
+    "actionCode": -1,
+    "delayTime": 7000,
+    "canScrollTo": false,
+    "elementDescriptors": []
+  },
+  {
+    "eventType": "VIEW_CLICKED",
+    "timestamp": 1556219297399,
     "replacementText": "",
     "actionCode": -1,
     "delayTime": 0,
@@ -525,37 +544,37 @@
     ]
   },
   {
-    "eventType": "VIEW_CLICKED",
-    "timestamp": 1555462089285,
-    "replacementText": "",
+    "eventType": "LIST_ITEM_CLICKED",
+    "timestamp": 1556219301440,
+    "replacementText": "Google Pixel, 5\" 32GB (Verizon Wireless) - Very Silver\n2019-04-25 12:06:44",
     "actionCode": -1,
     "delayTime": 0,
     "canScrollTo": false,
     "elementDescriptors": [
       {
-        "className": "android.support.v7.widget.AppCompatSpinner",
+        "className": "android.widget.CheckedTextView",
         "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/spinner3",
+        "adapterViewChildPosition": 1,
+        "groupViewChildPosition": -1,
+        "resourceId": "android:id/text1",
         "contentDescription": "",
-        "text": ""
+        "text": "Google Pixel, 5\" 32GB (Verizon Wireless) - Very Silver\n2019-04-25 12:06:44"
       },
       {
-        "className": "android.support.constraint.ConstraintLayout",
+        "className": "android.widget.DropDownListView",
         "recyclerViewChildPosition": -1,
         "adapterViewChildPosition": -1,
         "groupViewChildPosition": 0,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/relativeLayout2",
+        "resourceId": "",
         "contentDescription": "",
         "text": ""
       },
       {
-        "className": "android.support.v7.widget.ContentFrameLayout",
+        "className": "android.widget.PopupWindow$PopupBackgroundView",
         "recyclerViewChildPosition": -1,
         "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "android:id/content",
+        "groupViewChildPosition": 0,
+        "resourceId": "",
         "contentDescription": "",
         "text": ""
       }
@@ -563,36 +582,36 @@
   },
   {
     "eventType": "VIEW_CLICKED",
-    "timestamp": 1555462091737,
-    "replacementText": "",
+    "timestamp": 1556219308029,
+    "replacementText": "OK",
     "actionCode": -1,
     "delayTime": 0,
-    "canScrollTo": false,
+    "canScrollTo": true,
     "elementDescriptors": [
       {
-        "className": "android.support.v7.widget.AppCompatSpinner",
+        "className": "android.support.v7.widget.AppCompatButton",
         "recyclerViewChildPosition": -1,
         "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/spinner3",
+        "groupViewChildPosition": 3,
+        "resourceId": "android:id/button1",
         "contentDescription": "",
-        "text": ""
+        "text": "OK"
       },
       {
-        "className": "android.support.constraint.ConstraintLayout",
+        "className": "com.android.internal.widget.ButtonBarLayout",
         "recyclerViewChildPosition": -1,
         "adapterViewChildPosition": -1,
         "groupViewChildPosition": 0,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/relativeLayout2",
+        "resourceId": "",
         "contentDescription": "",
         "text": ""
       },
       {
-        "className": "android.support.v7.widget.ContentFrameLayout",
+        "className": "android.widget.ScrollView",
         "recyclerViewChildPosition": -1,
         "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "android:id/content",
+        "groupViewChildPosition": 3,
+        "resourceId": "android:id/buttonPanel",
         "contentDescription": "",
         "text": ""
       }
@@ -600,118 +619,7 @@
   },
   {
     "eventType": "VIEW_CLICKED",
-    "timestamp": 1555462094267,
-    "replacementText": "",
-    "actionCode": -1,
-    "delayTime": 0,
-    "canScrollTo": false,
-    "elementDescriptors": [
-      {
-        "className": "android.support.v7.widget.AppCompatSpinner",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/spinner3",
-        "contentDescription": "",
-        "text": ""
-      },
-      {
-        "className": "android.support.constraint.ConstraintLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 0,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/relativeLayout2",
-        "contentDescription": "",
-        "text": ""
-      },
-      {
-        "className": "android.support.v7.widget.ContentFrameLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "android:id/content",
-        "contentDescription": "",
-        "text": ""
-      }
-    ]
-  },
-  {
-    "eventType": "VIEW_CLICKED",
-    "timestamp": 1555462096798,
-    "replacementText": "",
-    "actionCode": -1,
-    "delayTime": 0,
-    "canScrollTo": false,
-    "elementDescriptors": [
-      {
-        "className": "android.support.v7.widget.AppCompatSpinner",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/spinner3",
-        "contentDescription": "",
-        "text": ""
-      },
-      {
-        "className": "android.support.constraint.ConstraintLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 0,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/relativeLayout2",
-        "contentDescription": "",
-        "text": ""
-      },
-      {
-        "className": "android.support.v7.widget.ContentFrameLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "android:id/content",
-        "contentDescription": "",
-        "text": ""
-      }
-    ]
-  },
-  {
-    "eventType": "VIEW_CLICKED",
-    "timestamp": 1555462099268,
-    "replacementText": "",
-    "actionCode": -1,
-    "delayTime": 0,
-    "canScrollTo": false,
-    "elementDescriptors": [
-      {
-        "className": "android.support.v7.widget.AppCompatSpinner",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/spinner3",
-        "contentDescription": "",
-        "text": ""
-      },
-      {
-        "className": "android.support.constraint.ConstraintLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 0,
-        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/relativeLayout2",
-        "contentDescription": "",
-        "text": ""
-      },
-      {
-        "className": "android.support.v7.widget.ContentFrameLayout",
-        "recyclerViewChildPosition": -1,
-        "adapterViewChildPosition": -1,
-        "groupViewChildPosition": 1,
-        "resourceId": "android:id/content",
-        "contentDescription": "",
-        "text": ""
-      }
-    ]
-  },
-  {
-    "eventType": "VIEW_CLICKED",
-    "timestamp": 1555462118646,
+    "timestamp": 1556219316725,
     "replacementText": "",
     "actionCode": -1,
     "delayTime": 0,
@@ -748,7 +656,97 @@
   },
   {
     "eventType": "DELAYED_MESSAGE_POSTED",
-    "timestamp": 1555462120600,
+    "timestamp": 1556219318172,
+    "actionCode": -1,
+    "delayTime": 7000,
+    "canScrollTo": false,
+    "elementDescriptors": []
+  },
+  {
+    "eventType": "VIEW_CLICKED",
+    "timestamp": 1556219323198,
+    "replacementText": "Log Out",
+    "actionCode": -1,
+    "delayTime": 0,
+    "canScrollTo": false,
+    "elementDescriptors": [
+      {
+        "className": "android.support.v7.widget.AppCompatButton",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 0,
+        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/profile_button",
+        "contentDescription": "",
+        "text": "Log Out"
+      },
+      {
+        "className": "android.support.constraint.ConstraintLayout",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 0,
+        "resourceId": "",
+        "contentDescription": "",
+        "text": ""
+      },
+      {
+        "className": "android.support.v7.widget.ContentFrameLayout",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 1,
+        "resourceId": "android:id/content",
+        "contentDescription": "",
+        "text": ""
+      }
+    ]
+  },
+  {
+    "eventType": "DELAYED_MESSAGE_POSTED",
+    "timestamp": 1556219325075,
+    "actionCode": -1,
+    "delayTime": 7000,
+    "canScrollTo": false,
+    "elementDescriptors": []
+  },
+  {
+    "eventType": "VIEW_CLICKED",
+    "timestamp": 1556219327972,
+    "replacementText": "Log Out",
+    "actionCode": -1,
+    "delayTime": 0,
+    "canScrollTo": false,
+    "elementDescriptors": [
+      {
+        "className": "android.support.v7.widget.AppCompatButton",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 2,
+        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/logOut",
+        "contentDescription": "",
+        "text": "Log Out"
+      },
+      {
+        "className": "android.support.constraint.ConstraintLayout",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 0,
+        "resourceId": "d.tonyandfriends.thirdtimesthecharm:id/linearLayout",
+        "contentDescription": "",
+        "text": ""
+      },
+      {
+        "className": "android.support.v7.widget.ContentFrameLayout",
+        "recyclerViewChildPosition": -1,
+        "adapterViewChildPosition": -1,
+        "groupViewChildPosition": 1,
+        "resourceId": "android:id/content",
+        "contentDescription": "",
+        "text": ""
+      }
+    ]
+  },
+  {
+    "eventType": "DELAYED_MESSAGE_POSTED",
+    "timestamp": 1556219330239,
     "actionCode": -1,
     "delayTime": 7000,
     "canScrollTo": false,

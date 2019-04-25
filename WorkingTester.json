@@ -3,7 +3,7 @@
     "eventType": "DELAYED_MESSAGE_POSTED",
     "timestamp": 1555622816290,
     "actionCode": -1,
-    "delayTime": 7000,
+    "delayTime": 2000,
     "canScrollTo": false,
     "elementDescriptors": []
   },
@@ -48,7 +48,7 @@
     "eventType": "DELAYED_MESSAGE_POSTED",
     "timestamp": 1555622825844,
     "actionCode": -1,
-    "delayTime": 7000,
+    "delayTime": 2000,
     "canScrollTo": false,
     "elementDescriptors": []
   },
@@ -93,7 +93,7 @@
     "eventType": "DELAYED_MESSAGE_POSTED",
     "timestamp": 1555622840646,
     "actionCode": -1,
-    "delayTime": 7000,
+    "delayTime": 2000,
     "canScrollTo": false,
     "elementDescriptors": []
   },
@@ -112,7 +112,7 @@
     "eventType": "DELAYED_MESSAGE_POSTED",
     "timestamp": 1555622841726,
     "actionCode": -1,
-    "delayTime": 7000,
+    "delayTime": 2000,
     "canScrollTo": false,
     "elementDescriptors": []
   },
@@ -128,7 +128,7 @@
     "eventType": "DELAYED_MESSAGE_POSTED",
     "timestamp": 1555622850913,
     "actionCode": -1,
-    "delayTime": 7000,
+    "delayTime": 2000,
     "canScrollTo": false,
     "elementDescriptors": []
   },
@@ -173,7 +173,7 @@
     "eventType": "DELAYED_MESSAGE_POSTED",
     "timestamp": 1555622869511,
     "actionCode": -1,
-    "delayTime": 7000,
+    "delayTime": 2000,
     "canScrollTo": false,
     "elementDescriptors": []
   },
@@ -189,7 +189,7 @@
     "eventType": "DELAYED_MESSAGE_POSTED",
     "timestamp": 1555622886019,
     "actionCode": -1,
-    "delayTime": 7000,
+    "delayTime": 2000,
     "canScrollTo": false,
     "elementDescriptors": []
   },
@@ -234,7 +234,7 @@
     "eventType": "DELAYED_MESSAGE_POSTED",
     "timestamp": 1555622890843,
     "actionCode": -1,
-    "delayTime": 7000,
+    "delayTime": 2000,
     "canScrollTo": false,
     "elementDescriptors": []
   },
@@ -250,7 +250,7 @@
     "eventType": "DELAYED_MESSAGE_POSTED",
     "timestamp": 1555622897968,
     "actionCode": -1,
-    "delayTime": 7000,
+    "delayTime": 2000,
     "canScrollTo": false,
     "elementDescriptors": []
   },
@@ -295,7 +295,7 @@
     "eventType": "DELAYED_MESSAGE_POSTED",
     "timestamp": 1555622911126,
     "actionCode": -1,
-    "delayTime": 7000,
+    "delayTime": 2000,
     "canScrollTo": false,
     "elementDescriptors": []
   }

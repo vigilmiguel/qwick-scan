@@ -636,7 +636,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     //Testing Purpose Code Only
 
 
-                    String testUPC = "821793049157";
+                    String testUPC = "811571018420";
                     String [] container = new String[1]; // Here we are passing String, so we need a String Array
                     container[0] = testUPC; // one day I may make this a legit name, we assign our ID we get from barcode into our Array
                     productBarode = testUPC;
