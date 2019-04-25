@@ -459,6 +459,12 @@ class Spider extends AsyncTask<String,Void,SpiderData> {
                 Log.d("myshit", tempName);
                 Log.d("myshit", tempStar);
             }
+            for(i = 0; i<myInfo.getReviewSitesName().size(); i++)
+            {
+                Log.d("myloop",myInfo.getReviewSitesName().get(i).toString());
+                Log.d("myloop",myInfo.getReviewSitesURl().get(i).toString());
+                Log.d("myloop",myInfo.getStarRating().get(i).toString());
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

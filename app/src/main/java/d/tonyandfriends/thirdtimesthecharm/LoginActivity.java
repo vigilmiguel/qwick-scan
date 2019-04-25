@@ -58,8 +58,8 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity {
 
     // Create variables for the email and password text boxes.
-    private EditText signInEmailText;
-    private EditText signInPasswordText;
+    public EditText signInEmailText;
+    public EditText signInPasswordText;
 
     // Create a variable for the sign in button.
     Button signInButton;
@@ -76,6 +76,11 @@ public class LoginActivity extends AppCompatActivity {
 
     //And also a Firebase Auth object
     FirebaseAuth mAuth;
+    boolean isCreated = false;
+    boolean isEmpty = false;
+    boolean isBadCombo = false;
+    int poop = 0;
+    boolean iGetHere = false;
 
 
     @Override
@@ -86,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //first we intialized the FirebaseAuth object
         mAuth = FirebaseAuth.getInstance();
+        isCreated = true;
 
         // Set the text and button variables to the desired objects defined in activity_login.xml
         signInEmailText = findViewById(R.id.sign_in_email_text);
@@ -207,36 +213,50 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void signIn() {
+    public void signIn() {
         // Store what the user entered as email and password.
         String emailInput = signInEmailText.getText().toString();
         String passwordInput = signInPasswordText.getText().toString();
+        Log.d("myTest",emailInput);
+        Log.d("myTest",passwordInput);
+        //iGetHere = true;
 
         // If either email or password are empty...
         if(TextUtils.isEmpty(emailInput) || TextUtils.isEmpty(passwordInput))
         {
-            Toast.makeText(LoginActivity.this, "ERROR: E-mail and/or password are empty",
-                    Toast.LENGTH_SHORT).show();
+            poop = 3;
+            isBadCombo = true;
+            isEmpty = true;
+            //Toast.makeText(LoginActivity.this, "ERROR: E-mail and/or password are empty",
+                   // Toast.LENGTH_SHORT).show();
         }
         else
         {
             // Stores the sign in result.
             Task<AuthResult> signInResult;
             signInResult = mAuth.signInWithEmailAndPassword(emailInput, passwordInput);
+            Log.d("mySign",signInResult.toString());
 
+            iGetHere = true;
             signInResult.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-
+                    Log.d("myActuallygethere","ehe");
                     // If sign in fails...
                     if(!task.isSuccessful())
                     {
+                        Log.d("myShoydl","really should get here");
+                        poop = 1;
+                        isBadCombo = true;
                         Toast.makeText(LoginActivity.this,
-                                "ERROR: E-mail and password do not match", Toast.LENGTH_SHORT)
+                               "ERROR: E-mail and password do not match", Toast.LENGTH_SHORT)
                                 .show();
                     }
                     else
                     {
+                        Log.d("myShoydl","really shouldnt get here");
+                        poop = 2;
+                        isBadCombo = false;
                         startActivity(new Intent(LoginActivity.this,
                                 MenuActivity.class));
                         finish();

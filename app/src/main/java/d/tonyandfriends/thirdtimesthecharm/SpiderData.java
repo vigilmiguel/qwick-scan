@@ -46,7 +46,8 @@ public class SpiderData implements Serializable {
     public void addLatitude(Double x) {latitude.add(x);}
     public void addReviewURL(String url) {reviewSitesURl.add(url);}
     public void addReviewName(String name) {reviewSitesName.add(name);}
-    public void addStarRating(String x) {starRating.add(x);}public void addLongitude(Double x) {longitude.add(x);}
+    public void addStarRating(String x) {starRating.add(x);}
+    public void addLongitude(Double x) {longitude.add(x);}
     public ArrayList<String> getPrices(){ return prices;}
     public ArrayList<String> getURLS(){ return priceURL;}
     public ArrayList<String> getStores(){ return stores;}
