@@ -649,7 +649,13 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     }
 
                     spidey.myVessel = this; // Assign the our instance to Spider
-                    spidey.execute(container); // Jesus take the wheel
+                    try {
+                        spidey.execute(container); // Jesus take the wheel
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();;
+                    }
 
 
                     //End of Testing Code
