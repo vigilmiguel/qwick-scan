@@ -15,7 +15,7 @@ Android 9.0 Pie
 
 Navigate to the desired project directory on your system, then follow these commands in your Bash terminal.
 
-'''
+```
 git init
 
 git remote add origin https://github.com/vigilmiguel/cecs-491a-project-4
@@ -24,7 +24,7 @@ git remote update
 
 git pull origin master
 
-'''
+```
 
 
 
