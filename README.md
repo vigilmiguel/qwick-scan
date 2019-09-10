@@ -9,6 +9,7 @@ For development and testing purposes, the project can be retrieved from this res
 ## Prerequisites 
 
 Android Studio: Version 3.3.1
+
 Android 9.0 Pie
 
 ## Git Installation 
