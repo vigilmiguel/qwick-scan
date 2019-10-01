@@ -47,32 +47,6 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
                 .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.logout);
 
         circleMenu.setOnMenuSelectedListener(this);
-
-
-        //Testing Button for Auto Testers
-
-        Button scanButton2 = (Button)findViewById(R.id.scan_button2);
-
-        scanButton2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(MenuActivity.this, ScannerStartActivity.class));            }
-        });
-
-        Button historyButton = (Button)findViewById(R.id.history_button);
-
-        historyButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(MenuActivity.this, HistoryActivity.class));            }
-        });
-
-        Button logoutButton = (Button)findViewById(R.id.profile_button);
-
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(MenuActivity.this, ProfileActivity.class));            }
-        });
-
-        //End of Testing
     }
 
 
