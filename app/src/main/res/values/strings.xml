@@ -29,6 +29,10 @@
     <string name="title_activity_maps">Map</string>
     <string name="open_map">Find Locations</string>
     <string name="logo_description">An image view meant to store company logos.</string>
+    <string name="title_activity_bottom_nav">BottomNavActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 
 </resources>
