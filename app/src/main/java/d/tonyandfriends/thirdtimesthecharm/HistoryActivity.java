@@ -3,9 +3,11 @@ package d.tonyandfriends.thirdtimesthecharm;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -60,6 +62,28 @@ public class HistoryActivity extends AppCompatActivity {
                 startActivity(new Intent(HistoryActivity.this, MenuActivity.class));
             }
         });
+
+        //Bottom Navigation bar
+
+        BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+                = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_menu:
+                        startActivity(new Intent(HistoryActivity.this, MenuActivity.class));
+                        return true;
+                    case R.id.navigation_profile:
+                        startActivity(new Intent(HistoryActivity.this, ProfileActivity.class));
+                        return true;
+                    case R.id.navigation_history:
+                        startActivity(new Intent(HistoryActivity.this, HistoryActivity.class));
+                        return true;
+                }
+                return false;
+            }
+        };
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //s = findViewById(R.id.spinner3);
