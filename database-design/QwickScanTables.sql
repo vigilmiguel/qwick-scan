@@ -104,7 +104,11 @@ CONSTRAINT ratings(
 
 
 
+INSERT INTO users   (firebaseUID, userName)
+  VALUES            ('randomUID', 'miguelangel'),
+                    ('jafarsUID', 'jafar');
 
+SELECT * FROM users;
 
 
 

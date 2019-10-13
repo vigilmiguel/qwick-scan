@@ -26,11 +26,9 @@
             extract($row);
 
             $user_item = array(
-                'userid' => $userid,
-                'username' => $username,
-                'hashpass' => $hashpass,
-                'longitude' => $longitude,
-                'latitude' => $latitude
+                'userid' => $userid, // $variables must match the column names retured by the literal query and should be lowercase.
+                'firebaseUID' => $firebaseuid,
+                'userName' => $username
             );
 
             array_push($users_arr['data'], $user_item);
@@ -46,4 +44,4 @@
     }
     
 
-    ?>
+?>
