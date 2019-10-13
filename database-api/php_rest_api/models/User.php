@@ -33,13 +33,18 @@
         {
             $query = "  SELECT * 
                             FROM users
-                        WHERE firebaseUID=?";
+                        WHERE firebaseuid=?";
 
             $stmt = $this->conn->prepare($query);
 
-            $stmt->bindParam(1, $this->id);
+            $stmt->bindParam(1, $this->firebaseUID);
 
             $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $this->userid = $row['userid'];
+            $this->firebaseUID = $row['firebaseuid'];
+            $this->userName = $row['username'];
         }
 
         public function create()
