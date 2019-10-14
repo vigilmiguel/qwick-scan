@@ -2,9 +2,12 @@ package d.tonyandfriends.thirdtimesthecharm;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -45,6 +48,27 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
         ratingTexts.add((TextView)findViewById(R.id.ratingText4));
         ratingTexts.add((TextView)findViewById(R.id.ratingText5));
 
+        //Bottom Navigation bar
+
+        BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+                = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_menu:
+                        startActivity(new Intent(ReviewActivity.this, MenuActivity.class));
+                        return true;
+                    case R.id.navigation_profile:
+                        startActivity(new Intent(ReviewActivity.this, ProfileActivity.class));
+                        return true;
+                    case R.id.navigation_history:
+                        startActivity(new Intent(ReviewActivity.this, HistoryActivity.class));
+                        return true;
+                }
+                return false;
+            }
+        };
 
         for(int i = 0; i < imageButtons.size(); i++)
         {
