@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +21,7 @@ import com.hitomi.cmlibrary.OnMenuSelectedListener;
 
 
 
-public class MenuActivity extends AppCompatActivity implements OnMenuSelectedListener{
+public class MenuActivity extends AppCompatActivity {
 
     public static final int MENU_SCAN = 0;
     public static final int MENU_HISTORY = 1;
@@ -28,7 +29,7 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
 
 
     String menuNames[] = {"Scan", "History", "Logout"};
-    CircleMenu circleMenu;
+    //CircleMenu circleMenu;
 
     // To handle delays.
     Handler handler = new Handler();
@@ -42,15 +43,15 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
 
 
 
-        circleMenu = findViewById(R.id.circleMenu);
-        circleMenu.setMainMenu(Color.parseColor("#1e1f26"), R.drawable.openmenu,
-                R.drawable.closemenu)
-                .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.barcode)
-                //.addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.maps)
-                .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.history)
-                .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.logout);
-
-        circleMenu.setOnMenuSelectedListener(this);
+//        circleMenu = findViewById(R.id.circleMenu);
+//        circleMenu.setMainMenu(Color.parseColor("#1e1f26"), R.drawable.openmenu,
+//                R.drawable.closemenu)
+//                .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.barcode)
+//                //.addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.maps)
+//                .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.history)
+//                .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.logout);
+//
+//        circleMenu.setOnMenuSelectedListener(this);
 
         //Bottom Navigation bar
 
@@ -76,7 +77,7 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
 
         //Testing Button for Auto Testers
 
-        Button scanButton2 = (Button)findViewById(R.id.scan_button2);
+        ImageButton scanButton2 = (ImageButton)findViewById(R.id.imageButton);
 
         scanButton2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -102,55 +103,55 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
 
 
     // Separate function so it looks cleaner.
-    @Override
-    public void onMenuSelected(int i) {
-        Toast.makeText(getApplicationContext(), "You Selected: " +
-                menuNames[i], Toast.LENGTH_SHORT).show();
-
-        // start activities based on what was selected.
-        switch (i) {
-            case MENU_SCAN:
-                // Wait 1 second  to complete menu animation.
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuActivity.this,
-                                ScannerStartActivity.class));
-                    }
-                }, 1000);
-                break;
-            /*
-            case MENU_MAPS:
-                // Wait 1 second  to complete menu animation.
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuActivity.this,
-                                MapsActivity.class));
-                    }
-                }, 1000);
-                break;
-            */
-            case MENU_HISTORY:
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuActivity.this,
-                                HistoryActivity.class));
-                    }
-                }, 1000);
-                break;
-
-            case MENU_LOGOUT:
-                // Wait 1 second  to complete menu animation.
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuActivity.this,
-                                ProfileActivity.class));
-                    }
-                }, 1000);
-                break;
-        }
-    }
+//    @Override
+//    public void onMenuSelected(int i) {
+//        Toast.makeText(getApplicationContext(), "You Selected: " +
+//                menuNames[i], Toast.LENGTH_SHORT).show();
+//
+//        // start activities based on what was selected.
+//        switch (i) {
+//            case MENU_SCAN:
+//                // Wait 1 second  to complete menu animation.
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        startActivity(new Intent(MenuActivity.this,
+//                                ScannerStartActivity.class));
+//                    }
+//                }, 1000);
+//                break;
+//            /*
+//            case MENU_MAPS:
+//                // Wait 1 second  to complete menu animation.
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        startActivity(new Intent(MenuActivity.this,
+//                                MapsActivity.class));
+//                    }
+//                }, 1000);
+//                break;
+//            */
+//            case MENU_HISTORY:
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        startActivity(new Intent(MenuActivity.this,
+//                                HistoryActivity.class));
+//                    }
+//                }, 1000);
+//                break;
+//
+//            case MENU_LOGOUT:
+//                // Wait 1 second  to complete menu animation.
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        startActivity(new Intent(MenuActivity.this,
+//                                ProfileActivity.class));
+//                    }
+//                }, 1000);
+//                break;
+//        }
+//    }
 }
