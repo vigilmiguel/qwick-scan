@@ -50,12 +50,14 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
 
         //Bottom Navigation bar
 
-        BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-                = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        //Bottom Navigation bar
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.nav_view);
 
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
                     case R.id.navigation_menu:
                         startActivity(new Intent(ReviewActivity.this, MenuActivity.class));
                         return true;
@@ -66,9 +68,8 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
                         startActivity(new Intent(ReviewActivity.this, HistoryActivity.class));
                         return true;
                 }
-                return false;
-            }
-        };
+                return false;            }
+        });
 
         for(int i = 0; i < imageButtons.size(); i++)
         {

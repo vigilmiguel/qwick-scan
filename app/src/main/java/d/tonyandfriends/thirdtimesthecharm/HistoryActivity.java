@@ -65,12 +65,13 @@ public class HistoryActivity extends AppCompatActivity {
 
         //Bottom Navigation bar
 
-        BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-                = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.nav_view);
 
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
                     case R.id.navigation_menu:
                         startActivity(new Intent(HistoryActivity.this, MenuActivity.class));
                         return true;
@@ -81,9 +82,8 @@ public class HistoryActivity extends AppCompatActivity {
                         startActivity(new Intent(HistoryActivity.this, HistoryActivity.class));
                         return true;
                 }
-                return false;
-            }
-        };
+                return false;            }
+        });
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //s = findViewById(R.id.spinner3);

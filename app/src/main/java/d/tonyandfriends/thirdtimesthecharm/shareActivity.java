@@ -63,13 +63,13 @@ public class shareActivity extends AppCompatActivity {
         ccp.registerCarrierNumberEditText(phoneText);
 
         //Bottom Navigation bar
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.nav_view);
 
-        BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-                = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
                     case R.id.navigation_menu:
                         startActivity(new Intent(shareActivity.this, MenuActivity.class));
                         return true;
@@ -80,9 +80,8 @@ public class shareActivity extends AppCompatActivity {
                         startActivity(new Intent(shareActivity.this, HistoryActivity.class));
                         return true;
                 }
-                return false;
-            }
-        };
+                return false;            }
+        });
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
