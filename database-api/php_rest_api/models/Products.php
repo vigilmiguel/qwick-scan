@@ -24,7 +24,7 @@
             return $stmt;
         }
 
-        publc function readBarcode()
+        public function readSingleByBarcode()
         {
             $query = "  SELECT * 
                             FROM products
@@ -43,7 +43,7 @@
             $this->imageurl = $row['imageurl'];
         }
 
-        publc function productName()
+        public function readSingleByProductName()
         {
             $query = "  SELECT * 
                             FROM products
@@ -84,7 +84,7 @@
             $stmt->bindParam(':barcode', $this->barcode);
             $stmt->bindParam(':productname', $this->productname);
             $stmt->bindParam(':imageurl', $this->imageurl);
-            $stmt->bindParam(':imageurl', $this->productid);
+            $stmt->bindParam(':productid', $this->productid);
 
             if($stmt->execute())
                 return true;
@@ -93,6 +93,30 @@
 
             return false;
 
+        }
+
+        public function create()
+        {
+            $query = "  INSERT INTO products    (barcode, productname, imageurl)
+                            VALUES 
+                                                (:barcode, :productname, :imageurl)";
+
+            $stmt = $this->conn->prepare($query);
+
+            $this->barcode = htmlspecialchars(strip_tags($this->barcode));
+            $this->productname = htmlspecialchars(strip_tags($this->productname));
+            $this->imageurl = htmlspecialchars(strip_tags($this->imageurl));
+
+            $stmt->bindParam(':barcode', $this->barcode);
+            $stmt->bindParam(':productname', $this->productname);
+            $stmt->bindParam(':imageurl', $this->imageurl);
+
+            if($stmt->execute())
+                return true;
+            
+            printf("Error: %s.\n", $stmt->error);
+
+            return false;
         }
 
 
@@ -105,4 +129,4 @@
         //public function editProduct() // Edit an existing row, (maybe based on Barcode, or productName)
     }
 
-?
+?>

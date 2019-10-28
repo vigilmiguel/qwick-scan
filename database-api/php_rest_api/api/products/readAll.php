@@ -24,7 +24,7 @@
             $products_item = array(
                 'productid' => $productid, // $variables must match the column names retured by the literal query and should be lowercase.
                 'barcode' => $barcode,
-                'productname' => $productname
+                'productname' => $productname,
                 'imageurl' => $imageurl
             );
             array_push($products_arr['data'], $products_item);

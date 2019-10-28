@@ -14,14 +14,15 @@
 
     $product->productname = isset($_GET['productname']) ? $_GET['productname'] : die();
 
-    $product->readSingle();
+    $product->readSingleByProductName();
 
     $product = array(
                 'productname' => $product->productname, // $variables must match the column names retured by the literal query and should be lowercase.
                 'barcode' => $product->barcode,
-                'productid' => $product->productid
+                'productid' => $product->productid,
                 'imageurl' => $product->imageurl
             );
 
     print_r(json_encode($product));
     
+?>
