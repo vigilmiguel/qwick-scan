@@ -25,14 +25,15 @@ CREATE TABLE products(
   productName         VARCHAR(150),
   imageURL            VARCHAR(500),
   CONSTRAINT products_pk PRIMARY KEY(productID),
-  CONSTRAINT products_ck UNIQUE(barcode)
+  CONSTRAINT products_ck_1 UNIQUE(barcode),
+  CONSTRAINT products_ck_2 UNIQUE(productName)
 );
 
 CREATE TABLE scans(
   userID              BIGINT            NOT NULL,
   productID           BIGINT            NOT NULL,
   dateTimeScanned     TIMESTAMP         NOT NULL,
-  CONSTRAINT scans_pk PRIMARY KEY(userID, productID),
+  CONSTRAINT scans_pk PRIMARY KEY(userID, productID, dateTimeScanned),
   CONSTRAINT scans_fk_1 FOREIGN KEY(userID) REFERENCES users(userID)
     ON UPDATE CASCADE ON DELETE NO ACTION,
   CONSTRAINT scans_fk_2 FOREIGN KEY(productID) REFERENCES products(productID)
@@ -71,7 +72,7 @@ CREATE TABLE location_prices(
   locationID          BIGINT            NOT NULL,
   price               DOUBLE PRECISION  NOT NULL,
   priceDate           DATE              NOT NULL,
-  CONSTRAINT location_prices_pk PRIMARY KEY(productID, locationID),
+  CONSTRAINT location_prices_pk PRIMARY KEY(productID, locationID, priceDate),
   CONSTRAINT location_prices_fk_1 FOREIGN KEY(productID) REFERENCES products(productID)
     ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT location_prices_fk_2 FOREIGN KEY(locationID) REFERENCES store_locations(locationID)
@@ -83,20 +84,20 @@ CREATE TABLE web_prices(
   addressID           BIGINT            NOT NULL,
   price               DOUBLE PRECISION  NOT NULL,
   priceDate           DATE              NOT NULL,
-  CONSTRAINT web_prices_pk PRIMARY KEY(productID, addressID),
+  CONSTRAINT web_prices_pk PRIMARY KEY(productID, addressID, priceDate),
   CONSTRAINT web_prices_fk_1 FOREIGN KEY(productID) REFERENCES products(productID)
     ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT web_prices_fk_2 FOREIGN KEY(addressID) REFERENCES url_addresses(addressID)
     ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CONSTRAINT ratings(
+CREATE TABLE ratings(
   productID           BIGINT            NOT NULL,
   storeID             BIGINT            NOT NULL,
   rating              DOUBLE PRECISION  NOT NULL,
   ratingDate          DATE              NOT NULL,
-  CONSTRAINT ratings_pk PRIMARY KEY(productID, storeID),
-  CONSTRAINT ratings_fk_1 FOREIGN KEY(productID) REFERENCES product(productID)
+  CONSTRAINT ratings_pk PRIMARY KEY(productID, storeID, ratingDate),
+  CONSTRAINT ratings_fk_1 FOREIGN KEY(productID) REFERENCES products(productID)
     ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT ratings_fk_2 FOREIGN KEY(storeID) REFERENCES stores(storeID)
     ON UPDATE CASCADE ON DELETE CASCADE
@@ -109,6 +110,9 @@ INSERT INTO users   (firebaseUID, userName)
                     ('jafarsUID', 'jafar');
 
 SELECT * FROM users;
+
+INSERT INTO scans   (userid, productid, datetimescanned)
+    VALUES          (1, 1, CURRENT_TIMESTAMP);
 
 
 
