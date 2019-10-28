@@ -53,6 +53,7 @@ CREATE TABLE store_locations(
   CONSTRAINT store_locations_pk PRIMARY KEY(locationID),
   CONSTRAINT store_locations_ck UNIQUE(point),
   CONSTRAINT store_locations_fk FOREIGN KEY(storeID) REFERENCES stores(storeID)
+    ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
 CREATE TABLE url_addresses(
@@ -62,6 +63,7 @@ CREATE TABLE url_addresses(
   CONSTRAINT url_addresses_pk PRIMARY KEY(addressID),
   CONSTRAINT url_addresses_ck UNIQUE(address),
   CONSTRAINT url_addresses_fk FOREIGN KEY(storeID) REFERENCES stores(storeID)
+    ON UPDATE CASCADE ON DELETE NO ACTION
 );
 
 CREATE TABLE location_prices(
@@ -102,7 +104,11 @@ CONSTRAINT ratings(
 
 
 
+INSERT INTO users   (firebaseUID, userName)
+  VALUES            ('randomUID', 'miguelangel'),
+                    ('jafarsUID', 'jafar');
 
+SELECT * FROM users;
 
 
 
