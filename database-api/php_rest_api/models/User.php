@@ -33,13 +33,18 @@
         {
             $query = "  SELECT * 
                             FROM users
-                        WHERE firebaseUID=?";
+                        WHERE firebaseuid=?";
 
             $stmt = $this->conn->prepare($query);
 
-            $stmt->bindParam(1, $this->id);
+            $stmt->bindParam(1, $this->firebaseUID);
 
             $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $this->userid = $row['userid'];
+            $this->firebaseUID = $row['firebaseuid'];
+            $this->userName = $row['username'];
         }
 
         public function create()
@@ -63,6 +68,55 @@
 
             return false;
         }
+
+        public function update()
+        {
+
+            $query = "UPDATE users
+                SET
+                  firebaseUID = :firebaseUID,
+                  userName = :userName
+                  WHERE
+                    userid = :userid";
+
+            $stmt = $this->conn->prepare($query);
+
+            // Clean the data.
+            $this->firebaseUID = htmlspecialchars(strip_tags($this->firebaseUID));
+            $this->userName = htmlspecialchars(strip_tags($this->userName));
+            $this->userid = htmlspecialchars(strip_tags($this->userid));
+
+            $stmt->bindParam(':firebaseUID', $this->firebaseUID);
+            $stmt->bindParam(':userName', $this->userName);
+            $stmt->bindParam(':userid', $this->userid);
+
+            if($stmt->execute())
+                return true;
+            
+            printf("Error: %s.\n", $stmt->error);
+
+            return false;
+        }
+
+        public function delete()
+        {
+            $query = "DELETE FROM USERS 
+                WHERE userid = :userid";
+
+            $stmt = $this->conn->prepare($query);
+
+            $this->userid = htmlspecialchars(strip_tags($this->userid));
+            $stmt->bindParam(':userid', $this->userid);
+
+            if($stmt->execute())
+                return true;
+            
+            printf("Error: %s.\n", $stmt->error);
+
+            return false;
+        }
+
+
     }
 
 
