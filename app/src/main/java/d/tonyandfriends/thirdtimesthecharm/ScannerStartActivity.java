@@ -148,8 +148,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         //Title = (TextView)findViewById(R.id.Title);
         pBar = (ProgressBar)findViewById(R.id.progressBar);
         mapButton = (Button)findViewById(R.id.map_button);
-        scanButton = (Button)findViewById(R.id.scan_button);
-        menuButton = (Button)findViewById(R.id.menu_button);
+        //scanButton = (Button)findViewById(R.id.scan_button);
+        //menuButton = (Button)findViewById(R.id.menu_button);
         shareButton = (Button)findViewById(R.id.share_button);
         reviewButton = findViewById(R.id.review_button);
 
