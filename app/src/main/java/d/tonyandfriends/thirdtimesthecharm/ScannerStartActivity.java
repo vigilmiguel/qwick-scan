@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -80,8 +82,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     Spider spidey = new Spider();
     ImageView productImageView;
     Button mapButton;
-    Button scanButton;
-    Button menuButton;
+    //Button scanButton;
+    //Button menuButton;
     Button shareButton;
     Button reviewButton;
 
@@ -154,8 +156,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         reviewButton = findViewById(R.id.review_button);
 
 
-        menuButton.setVisibility(Button.INVISIBLE);
-        scanButton.setVisibility(Button.INVISIBLE);
+        //menuButton.setVisibility(Button.INVISIBLE);
+        //scanButton.setVisibility(Button.INVISIBLE);
         pBar.setVisibility(ProgressBar.VISIBLE);
         //Title.setVisibility(TextView.INVISIBLE);
         mapButton.setVisibility(Button.INVISIBLE);
@@ -282,32 +284,41 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             // Store it in the database
             storeInDatabase(product);
 
-            menuButton.setVisibility(Button.VISIBLE);
+            //menuButton.setVisibility(Button.VISIBLE);
             mapButton.setVisibility(Button.VISIBLE);
-            scanButton.setVisibility(Button.VISIBLE);
+            //scanButton.setVisibility(Button.VISIBLE);
             shareButton.setVisibility(Button.VISIBLE);
             reviewButton.setVisibility(Button.VISIBLE);
 
 
+            BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.nav_view);
 
-            menuButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    finish();
-                    startActivity(new Intent(ScannerStartActivity.this, MenuActivity.class));
-                }
+            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                    switch (menuItem.getItemId()) {
+                        case R.id.navigation_menu:
+                            startActivity(new Intent(ScannerStartActivity.this, MenuActivity.class));
+                            return true;
+                        case R.id.navigation_profile:
+                            startActivity(new Intent(ScannerStartActivity.this, ProfileActivity.class));
+                            return true;
+                        case R.id.navigation_history:
+                            startActivity(new Intent(ScannerStartActivity.this, HistoryActivity.class));
+                            return true;
+                    }
+                    return false;            }
             });
+
+
             mapButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(ScannerStartActivity.this, MapsActivity.class));
                 }
             });
-            scanButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    finish();
-                    startActivity(new Intent(ScannerStartActivity.this, ScannerStartActivity.class));
-                }
-            });
+
             shareButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent intent = new Intent(ScannerStartActivity.this, shareActivity.class);

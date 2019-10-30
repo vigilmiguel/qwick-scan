@@ -54,13 +54,13 @@ public class MenuActivity extends AppCompatActivity {
 //        circleMenu.setOnMenuSelectedListener(this);
 
         //Bottom Navigation bar
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.nav_view);
 
-        BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-                = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
                     case R.id.navigation_menu:
                         startActivity(new Intent(MenuActivity.this, MenuActivity.class));
                         return true;
@@ -71,9 +71,8 @@ public class MenuActivity extends AppCompatActivity {
                         startActivity(new Intent(MenuActivity.this, HistoryActivity.class));
                         return true;
                 }
-                return false;
-            }
-        };
+                return false;            }
+        });
 
         //Testing Button for Auto Testers
 
@@ -84,12 +83,12 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(new Intent(MenuActivity.this, ScannerStartActivity.class));            }
         });
 
-        Button historyButton = (Button)findViewById(R.id.history_button);
+        //Button historyButton = (Button)findViewById(R.id.history_button);
 
-        historyButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(MenuActivity.this, HistoryActivity.class));            }
-        });
+//        historyButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                startActivity(new Intent(MenuActivity.this, HistoryActivity.class));            }
+//        });
 
         Button logoutButton = (Button)findViewById(R.id.profile_button);
 
