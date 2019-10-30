@@ -42,25 +42,25 @@
         app:layout_constraintTop_toBottomOf="@+id/S3"
         app:layout_constraintVertical_bias="0.937" />
 
-    <Button
-        android:id="@+id/history_button"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="center"
-        android:text="History"
-        android:focusable="true"
-        android:clickable="true"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.383"
-        app:layout_constraintStart_toEndOf="@+id/scan_button"
-        app:layout_constraintTop_toBottomOf="@+id/P3"
-        app:layout_constraintVertical_bias="0.946"
+    <!--<Button-->
+        <!--android:id="@+id/history_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:gravity="center"-->
+        <!--android:text="History"-->
+        <!--android:focusable="true"-->
+        <!--android:clickable="true"-->
+        <!--android:visibility="invisible"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.383"-->
+        <!--app:layout_constraintStart_toEndOf="@+id/scan_button"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/P3"-->
+        <!--app:layout_constraintVertical_bias="0.946"-->
 
         />
 
