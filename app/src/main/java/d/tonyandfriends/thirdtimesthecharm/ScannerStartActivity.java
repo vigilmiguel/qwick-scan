@@ -41,6 +41,23 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
+import android.content.Context;
+import android.os.AsyncTask;
+import android.widget.TextView;
+
+import org.json.*;
+
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 
 import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
 
@@ -84,6 +101,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     Button menuButton;
     Button shareButton;
     Button reviewButton;
+    Button apiButton;
 
     String productName = "";
     String productImage = "";
@@ -101,10 +119,6 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner_start);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        ContactAPI testAsyncTask = new ContactAPI(ScannerStartActivity.this,
-                "qwickscandb.copnww0vhd9s.us-east-2.rds.amazonaws.com");
-        testAsyncTask.execute();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -156,6 +170,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         menuButton = (Button)findViewById(R.id.menu_button);
         shareButton = (Button)findViewById(R.id.share_button);
         reviewButton = findViewById(R.id.review_button);
+        apiButton = findViewById(R.id.api_button);
 
 
         menuButton.setVisibility(Button.INVISIBLE);
@@ -165,6 +180,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         mapButton.setVisibility(Button.INVISIBLE);
         shareButton.setVisibility(Button.INVISIBLE);
         reviewButton.setVisibility(Button.INVISIBLE);
+        apiButton.setVisibility(Button.INVISIBLE);
 
         for(int i = 0; i < storeTextViews.size() && i < priceTextViews.size(); i++) {
             storeTextViews.get(i).setVisibility(TextView.INVISIBLE);
@@ -291,6 +307,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             scanButton.setVisibility(Button.VISIBLE);
             shareButton.setVisibility(Button.VISIBLE);
             reviewButton.setVisibility(Button.VISIBLE);
+            apiButton.setVisibility(Button.VISIBLE);
 
 
 
@@ -333,6 +350,12 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
                     // Fire her up!!
                     startActivity(intent);
+                }
+            });
+            apiButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/users/readAll.php");
+                    statusMessage.setText("blah");
                 }
             });
             reviewButton.setOnClickListener(new View.OnClickListener() {

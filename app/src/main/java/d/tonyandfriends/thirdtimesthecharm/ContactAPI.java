@@ -1,46 +1,67 @@
 package d.tonyandfriends.thirdtimesthecharm;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Button;
 import android.widget.TextView;
 
-import org.json.simple.parser.JSONParser;
 import org.json.*;
 
 
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 // String url = "qwickscandb.copnww0vhd9s.us-east-2.rds.amazonaws.com"
 
-public class ContactAPI extends AsyncTask<Void, Void, String> {
-    private Context mContext;
-    private String mUrl;
-    public ContactAPI(Context context, String url) {
-        mContext = context;
-        mUrl = url;
-    }
+public class ContactAPI extends AsyncTask<String, String, String> {
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
+    protected String doInBackground(String... params) {
+        HttpURLConnection connection = null;
+        BufferedReader reader = null;
+        try {
+            URL url = new URL(params[0]);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+            InputStream stream = connection.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(stream));
+            StringBuffer buffer = new StringBuffer();
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line);
+            }
+            return buffer.toString();
+        }
+        catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
+
     @Override
-    protected String doInBackground(Void... params) {
-        String resultString = null;
-        resultString = getJSON(mUrl);
-
-        return resultString;
-    }
-
-    @Override
-    protected void onPostExecute(String strings) {
-        super.onPostExecute(strings);
-    }
-
-    private String getJSON(String url) {
-        JSONParser jParser = new JSONParser();
-        // getting JSON string from URL
-        JSONObject json = jParser.getJSONObject("sys");
-        return json;
+    protected void onPostExecute(String result) {
+        super.onPostExecute(result);
     }
 
 }
