@@ -102,6 +102,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         setContentView(R.layout.activity_scanner_start);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        ContactAPI testAsyncTask = new ContactAPI(ScannerStartActivity.this,
+                "qwickscandb.copnww0vhd9s.us-east-2.rds.amazonaws.com");
+        testAsyncTask.execute();
+
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 

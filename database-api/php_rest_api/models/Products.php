@@ -24,7 +24,7 @@
             return $stmt;
         }
 
-        publc function readBarcode()
+        public function readBarcode()
         {
             $query = "  SELECT * 
                             FROM products
@@ -43,7 +43,7 @@
             $this->imageurl = $row['imageurl'];
         }
 
-        publc function productName()
+        public function readProductName()
         {
             $query = "  SELECT * 
                             FROM products
@@ -94,11 +94,11 @@
             return false;
 
         }
-
-
-
-        //public function readBarcode() //Return Row based on Barcode
-        //public function readProductName() // Return Row Based on Product Name
+        
+        public function createProduct()
+        {
+            
+        }
 
         //Write Functions
         //public function createProduct() // Create Row 
