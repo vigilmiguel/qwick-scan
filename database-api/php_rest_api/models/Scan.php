@@ -33,6 +33,23 @@
             return false;
         }
 
+        public function getRecentScans($numberOfScans)
+        {
+
+            $query = "  SELECT productname, imageurl, datetimescanned
+                            FROM scans s INNER JOIN products p ON s.productid = p.productid
+                        ORDER BY datetimescanned DESC
+                        LIMIT ?;";
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->bindParam(1, $numberOfScans);
+            
+            $stmt->execute();
+
+            return $stmt;
+        }
+
     }
 
 ?>
