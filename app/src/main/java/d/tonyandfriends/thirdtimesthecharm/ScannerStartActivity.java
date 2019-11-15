@@ -362,7 +362,9 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             });
             apiButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/users/readAll.php");
+                    Log.d("CheckDisOut", productBarode);
+                    //new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/users/readAll.php");
+                    new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/products/readBarcode.php?barcode="+productBarode);
 
                 }
             });
@@ -722,12 +724,29 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                 while ((line = reader.readLine()) != null) {
                     buffer.append(line);
                 }
-                return buffer.toString();
+                String finalJson = buffer.toString();
+                JSONObject parentObject = new JSONObject(finalJson);
+                String productName = parentObject.getString("productname");
+                int barcode = parentObject.getInt("barcode");
+                int productID = parentObject.getInt("productid");
+                String imageURL = parentObject.getString("imageurl");
+                String result = productName + " " + barcode + " " + productID + " " + imageURL;
+                Log.d("whaHappen", result);
+                return result;
+                /*JSONArray parentArray = parentObject.getJSONArray("data");
+                JSONObject finalObject = parentArray.getJSONObject(0);
+                int userID = finalObject.getInt("userid");
+                String firebaseUID = finalObject.getString("firebaseUID");
+                String userName = finalObject.getString("userName");
+                return userID + " " + firebaseUID + " " + userName;*/
             }
             catch (MalformedURLException e) {
                 e.printStackTrace();
             }
             catch (IOException e) {
+                e.printStackTrace();
+            }
+            catch (JSONException e) {
                 e.printStackTrace();
             }
             finally {
