@@ -731,14 +731,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                 int productID = parentObject.getInt("productid");
                 String imageURL = parentObject.getString("imageurl");
                 String result = productName + " " + barcode + " " + productID + " " + imageURL;
-                Log.d("whaHappen", result);
+                //Log.d("whaHappen", result);
                 return result;
-                /*JSONArray parentArray = parentObject.getJSONArray("data");
-                JSONObject finalObject = parentArray.getJSONObject(0);
-                int userID = finalObject.getInt("userid");
-                String firebaseUID = finalObject.getString("firebaseUID");
-                String userName = finalObject.getString("userName");
-                return userID + " " + firebaseUID + " " + userName;*/
             }
             catch (MalformedURLException e) {
                 e.printStackTrace();
