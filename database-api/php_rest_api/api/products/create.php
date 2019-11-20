@@ -21,6 +21,7 @@
     $product->productname = $data->productname;
     $product->imageurl = $data->imageurl;
 
+    
     if($product->create())
     {
         echo json_encode(
@@ -33,5 +34,6 @@
             array('message' => 'ERROR: Product Not Created')
         );
     }
+    
 
 ?>

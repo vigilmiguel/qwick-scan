@@ -41,7 +41,7 @@ CREATE TABLE scans(
 );
 
 CREATE TABLE stores(
-  storeID             BIGINT            NOT NULL,
+  storeID             BIGSERIAL         NOT NULL,
   storeName           VARCHAR(30)       NOT NULL,
   CONSTRAINT stores_pk PRIMARY KEY(storeID),
   CONSTRAINT stores_ck UNIQUE(storeName)
