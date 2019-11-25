@@ -109,7 +109,6 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     Button menuButton;
     Button shareButton;
     Button reviewButton;
-    Button apiButton;
 
     String productName = "";
     String productImage = "";
@@ -178,7 +177,6 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         menuButton = (Button)findViewById(R.id.menu_button);
         shareButton = (Button)findViewById(R.id.share_button);
         reviewButton = findViewById(R.id.review_button);
-        apiButton = findViewById(R.id.api_button);
 
 
         menuButton.setVisibility(Button.INVISIBLE);
@@ -188,7 +186,6 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         mapButton.setVisibility(Button.INVISIBLE);
         shareButton.setVisibility(Button.INVISIBLE);
         reviewButton.setVisibility(Button.INVISIBLE);
-        apiButton.setVisibility(Button.INVISIBLE);
 
         for(int i = 0; i < storeTextViews.size() && i < priceTextViews.size(); i++) {
             storeTextViews.get(i).setVisibility(TextView.INVISIBLE);
@@ -315,9 +312,6 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             scanButton.setVisibility(Button.VISIBLE);
             shareButton.setVisibility(Button.VISIBLE);
             reviewButton.setVisibility(Button.VISIBLE);
-            apiButton.setVisibility(Button.VISIBLE);
-
-
 
             menuButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -360,14 +354,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     startActivity(intent);
                 }
             });
-            apiButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Log.d("CheckDisOut", productBarode);
-                    //new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/users/readAll.php");
-                    new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/products/readBarcode.php?barcode="+productBarode);
 
-                }
-            });
             reviewButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -444,9 +431,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         {
             Glide.with(this ).load(purl).into(productImageView);
         }
-
-
-        statusMessage.setText(productName);
+        //new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/products/readBarcode.php?barcode="+"0787364460199");
+        new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/products/readBarcode.php?barcode="+productName);
     }
 
 
@@ -727,10 +713,11 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                 String finalJson = buffer.toString();
                 JSONObject parentObject = new JSONObject(finalJson);
                 String productName = parentObject.getString("productname");
+                if (productName.equals("null")) return "Product not in database!";
                 int barcode = parentObject.getInt("barcode");
                 int productID = parentObject.getInt("productid");
                 String imageURL = parentObject.getString("imageurl");
-                String result = productName + " " + barcode + " " + productID + " " + imageURL;
+                String result = productName + "  " + imageURL + "  " + barcode + "  " + productID;
                 //Log.d("whaHappen", result);
                 return result;
             }
@@ -762,7 +749,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            statusMessage.setText(result);
+            String arr[] = result.split("  ", 2);
+            statusMessage.setText(arr[0]);
         }
     }
 }
