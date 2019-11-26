@@ -14,11 +14,9 @@
 
         public function create()
         {
-            /*
-                FINISH THIS SHIT!!!!
-            */
             $query = "  INSERT INTO store_locations 
-                            (storeID, point) VALUES (:storeid, :point);";
+                            (storeID, point) VALUES (:storeid, :point)
+                        ON CONFLICT DO NOTHING;";
 
             $stmt = $this->conn->prepare($query);
 

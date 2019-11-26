@@ -17,7 +17,8 @@
             $query = "  INSERT INTO location_prices 
                             (productid, locationid, price, pricedate) 
                             VALUES 
-                            (:productid, :locationid, :price, NOW() );";
+                            (:productid, :locationid, :price, NOW() )
+                        ON CONFLICT DO NOTHING;";
 
             $stmt = $this->conn->prepare($query);
 

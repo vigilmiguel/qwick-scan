@@ -1,4 +1,18 @@
 <?php
+    /*
+        POST request JSON input format
+        
+        {
+            "barcode" : String,
+            "productname" : String,
+            "imageurl" : String,
+            "storename" : String,
+            "longitude" : Float/Double,
+            "latitude" : Float/Double,
+            "price" : Float/Double
+        }
+    */
+
     ini_set('display_errors', 1);
 
     header('Access-Control-Allow-Origin: *');

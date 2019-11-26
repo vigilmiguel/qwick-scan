@@ -62,6 +62,7 @@
             $this->imageurl = $row['imageurl'];
         }
 
+
         public function delete()
         {
             $query = "  DELETE 
@@ -122,7 +123,8 @@
         {
             $query = "  INSERT INTO products    (barcode, productname, imageurl)
                             VALUES 
-                                                (:barcode, :productname, :imageurl);";
+                                                (:barcode, :productname, :imageurl)
+                        ON CONFLICT DO NOTHING;";
 
             $stmt = $this->conn->prepare($query);
 

@@ -12,7 +12,8 @@
 
         public function create()
         {
-            $query = "  INSERT INTO stores (storename) VALUES (:storename);";
+            $query = "  INSERT INTO stores (storename) VALUES (:storename)
+                        ON CONFLICT DO NOTHING;";
 
             $stmt = $this->conn->prepare($query);
 
