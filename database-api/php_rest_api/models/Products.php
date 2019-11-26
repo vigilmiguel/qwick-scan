@@ -62,6 +62,30 @@
             $this->imageurl = $row['imageurl'];
         }
 
+
+        public function delete()
+        {
+            $query = "  DELETE 
+                            FROM products
+                        WHERE barcode = ?";
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->bindParam(1, $this->barcode);
+
+            if($stmt->execute())
+            {
+                return true;
+            }
+            else
+            {
+                printf("Error: %s.\n", $stmt->error);
+
+                return false;
+            }
+            
+        }
+
         public function update()
         {
             $query = "UPDATE products
@@ -99,7 +123,8 @@
         {
             $query = "  INSERT INTO products    (barcode, productname, imageurl)
                             VALUES 
-                                                (:barcode, :productname, :imageurl)";
+                                                (:barcode, :productname, :imageurl)
+                        ON CONFLICT DO NOTHING;";
 
             $stmt = $this->conn->prepare($query);
 
@@ -118,6 +143,27 @@
 
             return false;
         }
+
+        public function queryProductID()
+        {
+            $query = "  SELECT productid 
+                            FROM products
+                        WHERE barcode = :barcode";
+
+            $stmt = $this->conn->prepare($query);
+
+            $this->barcode = htmlspecialchars(strip_tags($this->barcode));
+            
+
+            $stmt->bindParam(':barcode', $this->barcode);
+
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $this->productid = $row['productid'];
+        }
+
+        
 
 
 
