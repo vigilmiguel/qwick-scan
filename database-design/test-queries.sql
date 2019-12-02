@@ -5,7 +5,10 @@ DELETE FROM stores WHERE storename = 'Testing store for test data!!!';
 
 DELETE FROM users WHERE userid <> 1 AND userid <> 2;
 
+<<<<<<< HEAD
 DELETE FROM web_prices;
+=======
+>>>>>>> preventative maintenance.
 
 SELECT * FROM users;
 SELECT * FROM products;
