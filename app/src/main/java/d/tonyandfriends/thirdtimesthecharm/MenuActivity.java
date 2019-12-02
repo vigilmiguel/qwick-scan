@@ -60,7 +60,7 @@ public class MenuActivity extends AppCompatActivity {
         //Testing Button for Auto Testers
 
         ImageButton scanButton2 = (ImageButton)findViewById(R.id.imageButton);
-
+        
         scanButton2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 AlphaAnimation buttonClick = new AlphaAnimation(0.2F, 1F);
@@ -80,5 +80,10 @@ public class MenuActivity extends AppCompatActivity {
         });
 
         //End of Testing
+
+
+
+        // Send GET request to API and check if their firebase UID is in the database.
+
     }
 }
