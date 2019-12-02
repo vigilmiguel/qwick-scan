@@ -3,6 +3,8 @@ DELETE FROM store_locations WHERE locationid = 6 AND storeid = (SELECT storeid F
 DELETE FROM products WHERE barcode='1';
 DELETE FROM stores WHERE storename = 'Testing store for test data!!!';
 
+DELETE FROM users WHERE userid <> 1 AND userid <> 2;
+
 
 SELECT * FROM users;
 SELECT * FROM products;
