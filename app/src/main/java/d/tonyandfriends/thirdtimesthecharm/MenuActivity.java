@@ -5,10 +5,18 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hitomi.cmlibrary.CircleMenu;
@@ -16,15 +24,7 @@ import com.hitomi.cmlibrary.OnMenuSelectedListener;
 
 
 
-public class MenuActivity extends AppCompatActivity implements OnMenuSelectedListener{
-
-    public static final int MENU_SCAN = 0;
-    public static final int MENU_HISTORY = 1;
-    public static final int MENU_LOGOUT = 2;
-
-
-    String menuNames[] = {"Scan", "History", "Logout"};
-    CircleMenu circleMenu;
+public class MenuActivity extends AppCompatActivity {
 
     // To handle delays.
     Handler handler = new Handler();
@@ -36,70 +36,49 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
+        //Bottom Navigation bar
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.nav_view);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_menu:
+                        startActivity(new Intent(MenuActivity.this, MenuActivity.class));
+                        return true;
+                    case R.id.navigation_profile:
+                        startActivity(new Intent(MenuActivity.this, ProfileActivity.class));
+                        return true;
+                    case R.id.navigation_history:
+                        startActivity(new Intent(MenuActivity.this, HistoryActivity.class));
+                        return true;
+                }
+                return false;            }
+        });
+
+        //Testing Button for Auto Testers
+
+        ImageButton scanButton2 = (ImageButton)findViewById(R.id.imageButton);
+
+        scanButton2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                AlphaAnimation buttonClick = new AlphaAnimation(0.2F, 1F);
+                buttonClick.setDuration(1000);
+                buttonClick.setStartOffset(2000);
+                buttonClick.setFillAfter(true);
+                v.startAnimation(buttonClick);
+                startActivity(new Intent(MenuActivity.this, ScannerStartActivity.class));            }
+        });
 
 
-        circleMenu = findViewById(R.id.circleMenu);
-        circleMenu.setMainMenu(Color.parseColor("#1e1f26"), R.drawable.openmenu,
-                R.drawable.closemenu)
-                .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.barcode)
-                //.addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.maps)
-                .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.history)
-                .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.logout);
+        Button logoutButton = (Button)findViewById(R.id.profile_button);
 
-        circleMenu.setOnMenuSelectedListener(this);
-    }
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this, ProfileActivity.class));            }
+        });
 
-
-    // Separate function so it looks cleaner.
-    @Override
-    public void onMenuSelected(int i) {
-        Toast.makeText(getApplicationContext(), "You Selected: " +
-                menuNames[i], Toast.LENGTH_SHORT).show();
-
-        // start activities based on what was selected.
-        switch (i) {
-            case MENU_SCAN:
-                // Wait 1 second  to complete menu animation.
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuActivity.this,
-                                ScannerStartActivity.class));
-                    }
-                }, 1000);
-                break;
-            /*
-            case MENU_MAPS:
-                // Wait 1 second  to complete menu animation.
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuActivity.this,
-                                MapsActivity.class));
-                    }
-                }, 1000);
-                break;
-            */
-            case MENU_HISTORY:
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuActivity.this,
-                                HistoryActivity.class));
-                    }
-                }, 1000);
-                break;
-
-            case MENU_LOGOUT:
-                // Wait 1 second  to complete menu animation.
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuActivity.this,
-                                ProfileActivity.class));
-                    }
-                }, 1000);
-                break;
-        }
+        //End of Testing
     }
 }
