@@ -1,5 +1,13 @@
 package d.tonyandfriends.thirdtimesthecharm;
 
+import android.os.AsyncTask;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -42,6 +50,23 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+
+import android.content.Context;
+import android.os.AsyncTask;
+import android.widget.TextView;
+
+import org.json.*;
+
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
@@ -291,6 +316,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             reviewButton.setVisibility(Button.VISIBLE);
 
 
+
             BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.nav_view);
 
             bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -309,6 +335,15 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                             return true;
                     }
                     return false;            }
+
+            /*
+            menuButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    finish();
+                    startActivity(new Intent(ScannerStartActivity.this, MenuActivity.class));
+                }
+            */
+
             });
 
 
@@ -342,6 +377,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     startActivity(intent);
                 }
             });
+
             reviewButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -418,9 +454,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         {
             Glide.with(this ).load(purl).into(productImageView);
         }
-
-
-        statusMessage.setText(productName);
+        //new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/products/readBarcode.php?barcode="+"0787364460199");
+        new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/products/readBarcode.php?barcode="+productName);
     }
 
 
@@ -682,6 +717,66 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+    public class ContactAPI extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                StringBuffer buffer = new StringBuffer();
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+                String finalJson = buffer.toString();
+                JSONObject parentObject = new JSONObject(finalJson);
+                String productName = parentObject.getString("productname");
+                if (productName.equals("null")) return "Product not in database!";
+                int barcode = parentObject.getInt("barcode");
+                int productID = parentObject.getInt("productid");
+                String imageURL = parentObject.getString("imageurl");
+                String result = productName + "  " + imageURL + "  " + barcode + "  " + productID;
+                //Log.d("whaHappen", result);
+                return result;
+            }
+            catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+            finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+      
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            String arr[] = result.split("  ", 2);
+            statusMessage.setText(arr[0]);
+        }
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -692,5 +787,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 //        finish();
     }
 
-
+   
 }
+
+
