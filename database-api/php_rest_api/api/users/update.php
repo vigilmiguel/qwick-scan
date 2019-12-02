@@ -18,8 +18,8 @@
     $data = json_decode(file_get_contents("php://input"));
 
     $user->userid = $data->userid;
-    $user->firebaseUID = $data->firebaseuid;
-    $user->userName = $data->username;
+    $user->firebaseuid = $data->firebaseuid;
+    $user->username = $data->username;
 
     if($user->update())
     {
