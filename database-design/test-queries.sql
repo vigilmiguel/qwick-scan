@@ -44,7 +44,7 @@ LIMIT 30;
 
 
 -- Get all stores and their locations that sell the given barcode.
-SELECT productname, barcode, storename, ST_X(point::geometry) AS "longitude", ST_Y(point::geometry) AS "latitude"
+SELECT productname, barcode, storename, price, ST_X(point::geometry) AS "longitude", ST_Y(point::geometry) AS "latitude"
   FROM stores s INNER JOIN store_locations sl ON s.storeid = sl.storeid
                 INNER JOIN location_prices lp ON lp.locationid = sl.locationid
                 INNER JOIN products p ON p.productid = lp.productid
