@@ -80,5 +80,10 @@ public class MenuActivity extends AppCompatActivity {
         });
 
         //End of Testing
+
+
+
+        // Send GET request to API and check if their firebase UID is in the database.
+
     }
 }
