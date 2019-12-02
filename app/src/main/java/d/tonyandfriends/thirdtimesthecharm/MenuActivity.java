@@ -5,29 +5,47 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.hitomi.cmlibrary.CircleMenu;
 import com.hitomi.cmlibrary.OnMenuSelectedListener;
 
+import java.util.concurrent.Callable;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class MenuActivity extends AppCompatActivity implements OnMenuSelectedListener{
-
-    public static final int MENU_SCAN = 0;
-    public static final int MENU_HISTORY = 1;
-    public static final int MENU_LOGOUT = 2;
-
-
-    String menuNames[] = {"Scan", "History", "Logout"};
-    CircleMenu circleMenu;
+public class MenuActivity extends AppCompatActivity {
 
     // To handle delays.
     Handler handler = new Handler();
+
+    Retrofit retrofit;
+    DatabaseAPI databaseAPI;
+
+    FirebaseAuth mAuth;
+    FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,70 +54,155 @@ public class MenuActivity extends AppCompatActivity implements OnMenuSelectedLis
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
+        //Bottom Navigation bar
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.nav_view);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_menu:
+                        startActivity(new Intent(MenuActivity.this, MenuActivity.class));
+                        return true;
+                    case R.id.navigation_profile:
+                        startActivity(new Intent(MenuActivity.this, ProfileActivity.class));
+                        return true;
+                    case R.id.navigation_history:
+                        startActivity(new Intent(MenuActivity.this, HistoryActivity.class));
+                        return true;
+                }
+                return false;            }
+        });
+
+        //Testing Button for Auto Testers
+
+        ImageButton scanButton2 = (ImageButton)findViewById(R.id.imageButton);
+
+        scanButton2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                AlphaAnimation buttonClick = new AlphaAnimation(0.2F, 1F);
+                buttonClick.setDuration(1000);
+                buttonClick.setStartOffset(2000);
+                buttonClick.setFillAfter(true);
+                v.startAnimation(buttonClick);
+                startActivity(new Intent(MenuActivity.this, ScannerStartActivity.class));            }
+        });
 
 
-        circleMenu = findViewById(R.id.circleMenu);
-        circleMenu.setMainMenu(Color.parseColor("#1e1f26"), R.drawable.openmenu,
-                R.drawable.closemenu)
-                .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.barcode)
-                //.addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.maps)
-                .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.history)
-                .addSubMenu(Color.parseColor("#d0e1f9"), R.drawable.logout);
+        Button logoutButton = (Button)findViewById(R.id.profile_button);
 
-        circleMenu.setOnMenuSelectedListener(this);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this, ProfileActivity.class));            }
+        });
+
+        //End of Testing
+
+
+        Log.i("heawhaer", "hereherehereh");
+
+        mAuth = FirebaseAuth.getInstance();
+        firebaseUser = mAuth.getCurrentUser();
+
+        // API Setup
+        /*
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+                */
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://18.216.191.20/php_rest_api/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        databaseAPI = retrofit.create(DatabaseAPI.class);
+
+        // If the user is not in the database, it puts them in the db.
+        checkIfUserInDatabase();
+
+
     }
 
+    public void checkIfUserInDatabase()
+    {
+        Log.i("DB Check for", "UID: " + firebaseUser.getUid());
 
-    // Separate function so it looks cleaner.
-    @Override
-    public void onMenuSelected(int i) {
-        Toast.makeText(getApplicationContext(), "You Selected: " +
-                menuNames[i], Toast.LENGTH_SHORT).show();
+        Call<User> call = databaseAPI.getUser(firebaseUser.getUid());
 
-        // start activities based on what was selected.
-        switch (i) {
-            case MENU_SCAN:
-                // Wait 1 second  to complete menu animation.
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuActivity.this,
-                                ScannerStartActivity.class));
-                    }
-                }, 1000);
-                break;
-            /*
-            case MENU_MAPS:
-                // Wait 1 second  to complete menu animation.
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuActivity.this,
-                                MapsActivity.class));
-                    }
-                }, 1000);
-                break;
-            */
-            case MENU_HISTORY:
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuActivity.this,
-                                HistoryActivity.class));
-                    }
-                }, 1000);
-                break;
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                Log.i("API Response Code:", "" + response.code());
 
-            case MENU_LOGOUT:
-                // Wait 1 second  to complete menu animation.
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(MenuActivity.this,
-                                ProfileActivity.class));
+                if(response.isSuccessful())
+                {
+                    // Success
+                    User user = new User();
+
+                    if(response.body() != null)
+                        user = response.body();
+
+
+                    if(!user.exists())
+                    {
+                        Log.i("User Info", "Does not exist!");
+                        createUserInDB();
                     }
-                }, 1000);
-                break;
-        }
+                    else
+                    {
+                        Log.i("User Info", "Username: " + user.getUserName() + " UID: " + user.getFirebaseUID());
+                        createToast("Welcome back, " + user.getUserName(), Toast.LENGTH_SHORT);
+                    }
+
+                }
+                else
+                {
+                    createToast("ERROR: API Response Code: " + response.code(), Toast.LENGTH_LONG);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void createUserInDB()
+    {
+        User user = new User(firebaseUser.getUid(), firebaseUser.getEmail());
+
+        Call<Void> call = databaseAPI.createUser(user);
+
+        Log.i("heawhaer", "hereherehereh");
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.i("API Response Code:", "" + response.code());
+
+                if(response.isSuccessful())
+                {
+                    // Success
+                    createToast("New user created!", Toast.LENGTH_SHORT);
+
+                }
+                else
+                {
+                    createToast("ERROR: API Response Code: " + response.code(), Toast.LENGTH_LONG);
+                    ///Log.i("Error", response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.i("FAIL", "" + t.getMessage());
+            }
+        });
+    }
+
+    public void createToast(String text, int duration)
+    {
+        Toast.makeText(MenuActivity.this, text, duration).show();
     }
 }

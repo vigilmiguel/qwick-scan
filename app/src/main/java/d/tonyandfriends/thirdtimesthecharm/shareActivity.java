@@ -12,11 +12,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,6 +61,26 @@ public class shareActivity extends AppCompatActivity {
 
         ccp = (CountryCodePicker) findViewById(R.id.ccp); // For international calls (who would do this?)
         ccp.registerCarrierNumberEditText(phoneText);
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.nav_view);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_menu:
+                        startActivity(new Intent(shareActivity.this, MenuActivity.class));
+                        return true;
+                    case R.id.navigation_profile:
+                        startActivity(new Intent(shareActivity.this, ProfileActivity.class));
+                        return true;
+                    case R.id.navigation_history:
+                        startActivity(new Intent(shareActivity.this, HistoryActivity.class));
+                        return true;
+                }
+                return false;            }
+        });
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
