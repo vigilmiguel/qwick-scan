@@ -53,15 +53,14 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        imageButton = findViewById(R.id.imageButton4);
-        imageButton.setBackgroundDrawable(null);
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Open the RegisterActivity page.
-                startActivity(new Intent(HistoryActivity.this, MenuActivity.class));
-            }
-        });
+//        imageButton.setBackgroundDrawable(null);
+//        imageButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Open the RegisterActivity page.
+//                startActivity(new Intent(HistoryActivity.this, MenuActivity.class));
+//            }
+//        });
 
         //Bottom Navigation bar
 
@@ -180,6 +179,7 @@ public class HistoryActivity extends AppCompatActivity {
                 userProductHistory.clear();
 
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
+
                     Product product = data.getValue(Product.class);
 
                     userProductHistory.add(product);
