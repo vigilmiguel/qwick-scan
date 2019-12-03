@@ -7,6 +7,7 @@ DELETE FROM users WHERE userid <> 1 AND userid <> 2;
 
 DELETE FROM web_prices;
 
+
 SELECT * FROM users;
 SELECT * FROM products;
 SELECT * FROM stores;
