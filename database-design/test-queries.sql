@@ -5,6 +5,7 @@ DELETE FROM stores WHERE storename = 'Testing store for test data!!!';
 
 DELETE FROM users WHERE userid <> 1 AND userid <> 2;
 
+DELETE FROM web_prices;
 
 SELECT * FROM users;
 SELECT * FROM products;
@@ -46,6 +47,15 @@ WHERE barcode = '2'
 ORDER BY ST_Distance(sl.point, 'POINT(1.1 1.0)')
 LIMIT 30;
 
+-- Get the websites that sell a given barcode for the cheapest price.
+SELECT productname, storename, price, imageurl, address
+  FROM products p INNER JOIN web_prices wp ON p.productid = wp.productid
+                  INNER JOIN url_addresses ua ON ua.addressid = wp.addressid
+                  INNER JOIN stores s ON s.storeid = ua.storeid
+WHERE barcode = '10'
+ORDER BY price
+LIMIT 20;
+
 
 -- Get all stores and their locations that sell the given barcode.
 SELECT productname, barcode, storename, price, ST_X(point::geometry) AS "longitude", ST_Y(point::geometry) AS "latitude"
@@ -56,8 +66,8 @@ WHERE barcode = '2';
 
 -- Get all stores and web addresses that sell this product.
 SELECT productname, barcode, storename, price, address
-  FROM stores s INNER JOIN url_addresses wa ON s.storeid = wa.storeid
-                INNER JOIN web_prices wp ON wp.addressid = wa.addressid
+  FROM stores s INNER JOIN url_addresses ua ON s.storeid = ua.storeid
+                INNER JOIN web_prices wp ON wp.addressid = ua.addressid
                 INNER JOIN products p ON p.productid = wp.productid
 WHERE barcode = '10';
 
@@ -77,5 +87,32 @@ INSERT INTO products (barcode, productname, imageurl)
  ON CONFLICT DO NOTHING;
  
 
+DROP TABLE barcode_queue;
 
+CREATE TABLE barcode_queue(
+  queueid         BIGSERIAL         NOT NULL,
+  barcode         VARCHAR(30)       NOT NULL,
+  longitude       DOUBLE PRECISION  NOT NULL,
+  latitude        DOUBLE PRECISION  NOT NULL,
+  dateTime        TIMESTAMP         NOT NULL,
+  CONSTRAINT barcode_queue_pk PRIMARY KEY(queueid)
+);
+
+SELECT * FROM barcode_queue;
+
+INSERT INTO barcode_queue (barcode, longitude, latitude, dateTime) VALUES ('100', 12.31, 122.3, CURRENT_TIMESTAMP);
+
+-- Get the row with the least value in queueid
+SELECT *
+  FROM barcode_queue bq
+WHERE NOT EXISTS( SELECT * 
+                    FROM barcode_queue bq1
+                  WHERE bq1.queueid < bq.queueid );
+                  
+-- Pop off the row with the least queueid value.
+DELETE FROM barcode_queue WHERE queueid = ( SELECT queueid
+                                              FROM barcode_queue bq
+                                            WHERE NOT EXISTS( SELECT * 
+                                                                FROM barcode_queue bq1
+                                                              WHERE bq1.queueid < bq.queueid ));
 
