@@ -79,7 +79,6 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton autoFocus;
-    private CompoundButton useFlash;
     private TextView statusMessage;
     private TextView contactname, contacttitle, contactorganization;
     private ProgressBar pBar;
@@ -305,7 +304,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             Product product = new Product(productBarode, productName, purl, currentTime, 1);
 
             // Store it in the database
-            storeInDatabase(product);
+            // storeInDatabase(product);
 
             menuButton.setVisibility(Button.VISIBLE);
             mapButton.setVisibility(Button.VISIBLE);
