@@ -11,6 +11,8 @@ SELECT * FROM products;
 SELECT * FROM stores;
 SELECT * FROM store_locations;
 SELECT * FROM location_prices;
+SELECT * FROM url_addresses;
+SELECT * FROM web_prices;
 
 SELECT *
   FROM products
@@ -52,11 +54,23 @@ SELECT productname, barcode, storename, price, ST_X(point::geometry) AS "longitu
                 INNER JOIN products p ON p.productid = lp.productid
 WHERE barcode = '2';
 
+-- Get all stores and web addresses that sell this product.
+SELECT productname, barcode, storename, price, address
+  FROM stores s INNER JOIN url_addresses wa ON s.storeid = wa.storeid
+                INNER JOIN web_prices wp ON wp.addressid = wa.addressid
+                INNER JOIN products p ON p.productid = wp.productid
+WHERE barcode = '10';
+
 
 INSERT INTO location_prices
   (productid, locationid, price, pricedate)
   VALUES
   (9, 1, 13.79, NOW());
+  
+INSERT INTO web_prices
+  (productid, addressid, price, pricedate)
+  VALUES
+  (50, 23, 34.32, NOW() );
   
 INSERT INTO products (barcode, productname, imageurl)
   VALUES ('1', '.:Headphones Test:.', NULL)
