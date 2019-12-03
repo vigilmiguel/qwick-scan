@@ -115,6 +115,14 @@ INSERT INTO scans   (userid, productid, datetimescanned)
     VALUES          (1, 1, CURRENT_TIMESTAMP);
 
 
+CREATE TABLE barcode_queue(
+  queueid         BIGSERIAL         NOT NULL,
+  barcode         VARCHAR(30)       NOT NULL,
+  longitude       DOUBLE PRECISION  NOT NULL,
+  latitude        DOUBLE PRECISION  NOT NULL,
+  dateTime        TIMESTAMP         NOT NULL,
+  CONSTRAINT barcode_queue_pk PRIMARY KEY(queueid)
+);
 
 
 

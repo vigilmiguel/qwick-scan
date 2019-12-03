@@ -62,5 +62,51 @@
 
             return $stmt;
         }
+
+        public function getLowestOnlinePrice($barcode, $numberOfStores)
+        {
+            // Get the websites that sell the given barcode for the cheapest price.
+            $query = "  SELECT productname, storename, price, imageurl, address
+                            FROM products p INNER JOIN web_prices wp ON p.productid = wp.productid
+                                            INNER JOIN url_addresses ua ON ua.addressid = wp.addressid
+                                            INNER JOIN stores s ON s.storeid = ua.storeid
+                        WHERE barcode = :barcode
+                        ORDER BY price
+                        LIMIT :numstores;";
+
+            $stmt = $this->conn->prepare($query);
+
+            // Clean the data.
+            $barcode = htmlspecialchars(strip_tags($barcode));
+            $numstores = htmlspecialchars(strip_tags($numberOfStores));
+
+            $stmt->bindParam(':barcode', $barcode);
+            $stmt->bindParam(':numstores', $numstores);
+            
+            $stmt->execute();
+
+            return $stmt;
+        }
+
+        public function getAllBarcodeWebAddresses($barcode)
+        {
+            // Given a barcode, get all stores and web addresses that sell this product.
+            $query = "  SELECT productname, barcode, storename, price, address
+                            FROM stores s   INNER JOIN url_addresses ua ON s.storeid = ua.storeid
+                                            INNER JOIN web_prices wp ON wp.addressid = ua.addressid
+                                            INNER JOIN products p ON p.productid = wp.productid
+                        WHERE barcode = :barcode;";
+
+            $stmt = $this->conn->prepare($query);
+
+            // Clean the data.
+            $barcode = htmlspecialchars(strip_tags($barcode));
+
+            $stmt->bindParam(':barcode', $barcode);
+
+            $stmt->execute();
+
+            return $stmt;
+        }
     }
 ?>
