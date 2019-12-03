@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -19,15 +20,32 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.hitomi.cmlibrary.CircleMenu;
 import com.hitomi.cmlibrary.OnMenuSelectedListener;
 
+import java.util.concurrent.Callable;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class MenuActivity extends AppCompatActivity {
 
     // To handle delays.
     Handler handler = new Handler();
+
+    Retrofit retrofit;
+    DatabaseAPI databaseAPI;
+
+    FirebaseAuth mAuth;
+    FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,5 +98,111 @@ public class MenuActivity extends AppCompatActivity {
         });
 
         //End of Testing
+
+
+        Log.i("heawhaer", "hereherehereh");
+
+        mAuth = FirebaseAuth.getInstance();
+        firebaseUser = mAuth.getCurrentUser();
+
+        // API Setup
+        /*
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+                */
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://18.216.191.20/php_rest_api/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        databaseAPI = retrofit.create(DatabaseAPI.class);
+
+        // If the user is not in the database, it puts them in the db.
+        checkIfUserInDatabase();
+
+
+    }
+
+    public void checkIfUserInDatabase()
+    {
+        Log.i("DB Check for", "UID: " + firebaseUser.getUid());
+
+        Call<User> call = databaseAPI.getUser(firebaseUser.getUid());
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                Log.i("API Response Code:", "" + response.code());
+
+                if(response.isSuccessful())
+                {
+                    // Success
+                    User user = new User();
+
+                    if(response.body() != null)
+                        user = response.body();
+
+
+                    if(!user.exists())
+                    {
+                        Log.i("User Info", "Does not exist!");
+                        createUserInDB();
+                    }
+                    else
+                    {
+                        Log.i("User Info", "Username: " + user.getUserName() + " UID: " + user.getFirebaseUID());
+                        createToast("Welcome back, " + user.getUserName(), Toast.LENGTH_SHORT);
+                    }
+
+                }
+                else
+                {
+                    createToast("ERROR: API Response Code: " + response.code(), Toast.LENGTH_LONG);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void createUserInDB()
+    {
+        User user = new User(firebaseUser.getUid(), firebaseUser.getEmail());
+
+        Call<Void> call = databaseAPI.createUser(user);
+
+        Log.i("heawhaer", "hereherehereh");
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.i("API Response Code:", "" + response.code());
+
+                if(response.isSuccessful())
+                {
+                    // Success
+                    createToast("New user created!", Toast.LENGTH_SHORT);
+
+                }
+                else
+                {
+                    createToast("ERROR: API Response Code: " + response.code(), Toast.LENGTH_LONG);
+                    ///Log.i("Error", response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.i("FAIL", "" + t.getMessage());
+            }
+        });
+    }
+
+    public void createToast(String text, int duration)
+    {
+        Toast.makeText(MenuActivity.this, text, duration).show();
     }
 }

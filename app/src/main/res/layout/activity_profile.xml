@@ -58,6 +58,7 @@
         android:background="@drawable/button"
         android:text="Logout"
         android:textAllCaps="false"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
