@@ -69,8 +69,13 @@ WHERE barcode = '2';
 
 -- Get all stores and web addresses that sell this product.
 SELECT productname, barcode, storename, price, address
+<<<<<<< HEAD
   FROM stores s INNER JOIN url_addresses ua ON s.storeid = ua.storeid
                 INNER JOIN web_prices wp ON wp.addressid = ua.addressid
+=======
+  FROM stores s INNER JOIN url_addresses wa ON s.storeid = wa.storeid
+                INNER JOIN web_prices wp ON wp.addressid = wa.addressid
+>>>>>>> Added API functionality to post web prices for each product and retrieve the top lowest prices sold online.
                 INNER JOIN products p ON p.productid = wp.productid
 WHERE barcode = '10';
 
