@@ -1,5 +1,9 @@
 package d.tonyandfriends.thirdtimesthecharm;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +23,8 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,6 +75,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
 
 
@@ -114,12 +123,16 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
     String productName = "";
     String productImage = "";
-    String productBarode = "";
+    String productBarcode = "";
 
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     DatabaseReference databaseUserScanHistory;
     DatabaseReference databaseProductsScanned;
+
+    Retrofit retrofit;
+    DatabaseAPI databaseAPI;
+
     
 
 
@@ -205,6 +218,13 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         Progress.setVisibility(Progress.VISIBLE);
         Intent intent = new Intent(this, BarcodeCaptureActivity.class);
         startActivityForResult(intent, RC_BARCODE_CAPTURE);
+
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://18.216.191.20/php_rest_api/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        databaseAPI = retrofit.create(DatabaseAPI.class);
     }
 
 
@@ -304,7 +324,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
             productName = pname;
 
-            Product product = new Product(productBarode, productName, purl, currentTime, 1);
+            Product product = new Product(productBarcode, productName, purl, currentTime, 1);
 
             // Store it in the database
             storeInDatabase(product);
@@ -660,7 +680,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     //Field one will be for data we want to pass, field 2 is unimporant as far as I know, keep it void. Field 3 is our return data
                     String [] container = new String[1]; // Here we are passing String, so we need a String Array
                     container[0] = poop; // one day I may make this a legit name, we assign our ID we get from barcode into our Array
-                    productBarode = poop;
+                    productBarcode = poop;
                     try { // Async threads can only run once, so if we want multiple scans we need new objects. This may not be the best way, but it works for now
                         spidey = spidey.getClass().newInstance();
                     } catch (InstantiationException e) {
@@ -685,7 +705,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     String testUPC = "811571018420";
                     String [] container = new String[1]; // Here we are passing String, so we need a String Array
                     container[0] = testUPC; // one day I may make this a legit name, we assign our ID we get from barcode into our Array
-                    productBarode = testUPC;
+                    productBarcode = testUPC;
                     try { // Async threads can only run once, so if we want multiple scans we need new objects. This may not be the best way, but it works for now
                         spidey = spidey.getClass().newInstance();
                     } catch (InstantiationException e) {
@@ -716,7 +736,52 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+        
+        
+        // Up until this point, we have the barcode we have scanned.
+        
+        Log.i("barcode value:", "" + productBarcode);
+
+
+        getBarcodeInfoFromDatabase();
+        
     }
+
+    // Finish this shit.
+    public void getBarcodeInfoFromDatabase()
+    {
+        // Check if we have ACCESS_FINE/COARSE_LOCATION permissions.
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED) {
+
+            // Get the user's gps coordinates.
+            LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            double longitude = location.getLongitude();
+            double latitude = location.getLatitude();
+
+
+            // Check to see if the barcode is in the database.
+
+            // If not, add it to the queue so the crawler scans it.
+
+            // Get the cheapest online prices.
+        }
+        else // If we don't we request permission.
+        {
+            ActivityCompat.requestPermissions(this, new String[] {
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION },
+                    0);
+
+        }
+
+
+    }
+
+
     public class ContactAPI extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -772,8 +837,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            String arr[] = result.split("  ", 2);
-            statusMessage.setText(arr[0]);
+            //String arr[] = result.split("  ", 2);
+            //statusMessage.setText(arr[0]);
         }
     }
 
