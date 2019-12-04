@@ -98,7 +98,8 @@ CREATE TABLE barcode_queue(
   CONSTRAINT barcode_queue_pk PRIMARY KEY(queueid)
 );
 
-SELECT * FROM barcode_queue;
+SELECT * FROM barcode_queue
+ORDER BY queueid DESC;
 
 INSERT INTO barcode_queue (barcode, longitude, latitude, dateTime) VALUES ('100', 12.31, 122.3, CURRENT_TIMESTAMP);
 

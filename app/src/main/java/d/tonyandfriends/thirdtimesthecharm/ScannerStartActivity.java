@@ -905,6 +905,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                         {
                             // Product exists but no prices found...
                             Log.i("Product Info", "Exists but no prices.");
+                            showError("Found barcode but no prices.");
                         }
                         else
                         {
@@ -921,12 +922,17 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                             showResults(result);
                         }
                     }
+                    else
+                    {
+                        showError("No API Response");
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<List<ProductWebPrices>> call, Throwable t) {
                     t.printStackTrace();
                     Log.i("Product Info", "FAIL prices");
+                    showError("Price query failed.");
 
                 }
             });
@@ -1059,6 +1065,11 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     public void createToast(String text, int duration)
     {
         Toast.makeText(ScannerStartActivity.this, text, duration).show();
+    }
+
+    public void showError(String text)
+    {
+        createToast("ERROR: " + text, Toast.LENGTH_LONG);
     }
 
    
