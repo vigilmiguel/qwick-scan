@@ -7,6 +7,7 @@ public class User {
     @SerializedName("firebaseuid")
     private String firebaseUID;
 
+
     @SerializedName("username")
     private String userName;
 
@@ -21,6 +22,7 @@ public class User {
         this.firebaseUID = firebaseUID;
         this.userName = userName;
     }
+
 
     public String getFirebaseUID() {
         return firebaseUID;

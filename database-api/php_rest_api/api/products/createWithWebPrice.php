@@ -35,8 +35,7 @@
 
     $data = json_decode(file_get_contents("php://input"));
 
-    $product->barcode 
-    = $data->barcode;
+    $product->barcode = $data->barcode;
     $product->productname = $data->productname;
     $product->imageurl = $data->imageurl;
 

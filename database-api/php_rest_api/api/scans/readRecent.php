@@ -1,4 +1,12 @@
 <?php
+
+    /*
+        JSON Input:
+        {
+            "numscans" : Integer
+        }
+    */
+
     ini_set('display_errors', 1);
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
@@ -10,7 +18,9 @@
     
     $scan = new Scan($db);
 
-    $numberOfScans = isset($_GET['numScans']) ? $_GET['numScans'] : die();
+    $data = json_decode(file_get_contents("php://input"));
+
+    $numberOfScans = $data->numscans;
     
     $result = $scan->getRecentScans($numberOfScans);
     

@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,9 +25,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.hitomi.cmlibrary.CircleMenu;
 import com.hitomi.cmlibrary.OnMenuSelectedListener;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import retrofit2.Call;
@@ -128,45 +134,60 @@ public class MenuActivity extends AppCompatActivity {
     {
         Log.i("DB Check for", "UID: " + firebaseUser.getUid());
 
-        Call<User> call = databaseAPI.getUser(firebaseUser.getUid());
 
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                Log.i("API Response Code:", "" + response.code());
+        User user = new User(firebaseUser.getUid(), null);
 
-                if(response.isSuccessful())
-                {
-                    // Success
-                    User user = new User();
+        try
+        {
+            //Call<Void> c = databaseAPI.createUser(user);
+            Call<User> call = databaseAPI.getUser(user);
 
-                    if(response.body() != null)
-                        user = response.body();
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    Log.i("API Response Code:", "" + response.code());
 
-
-                    if(!user.exists())
+                    if(response.isSuccessful())
                     {
-                        Log.i("User Info", "Does not exist!");
-                        createUserInDB();
+                        // Success
+                        User user = new User();
+
+                        if(response.body() != null)
+                            user = response.body();
+
+
+                        if(!user.exists())
+                        {
+                            Log.i("User Info", "Does not exist!");
+                            createUserInDB();
+                        }
+                        else
+                        {
+                            Log.i("User Info", "Username: " + user.getUserName() + " UID: " + user.getFirebaseUID());
+                            createToast("Welcome back, " + user.getUserName(), Toast.LENGTH_SHORT);
+                        }
+
                     }
                     else
                     {
-                        Log.i("User Info", "Username: " + user.getUserName() + " UID: " + user.getFirebaseUID());
-                        createToast("Welcome back, " + user.getUserName(), Toast.LENGTH_SHORT);
+                        createToast("ERROR: API Response Code: " + response.code(), Toast.LENGTH_LONG);
                     }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
 
                 }
-                else
-                {
-                    createToast("ERROR: API Response Code: " + response.code(), Toast.LENGTH_LONG);
-                }
-            }
+            });
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
+        //jsonInput.put("firebaseuid", firebaseUser.getUid());
 
-            }
-        });
+
     }
 
     public void createUserInDB()
