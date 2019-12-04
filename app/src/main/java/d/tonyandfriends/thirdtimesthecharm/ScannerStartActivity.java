@@ -762,12 +762,19 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                         PackageManager.PERMISSION_GRANTED) {
 
             // Get the user's gps coordinates.
-            LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
+            try {
+                LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                longitude = location.getLongitude();
+                latitude = location.getLatitude();
+                findBarcodeInDatabase();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            findBarcodeInDatabase();
+
+
         }
         else // IF we don't request permission.
         {
