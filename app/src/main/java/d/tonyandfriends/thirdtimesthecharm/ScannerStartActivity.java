@@ -75,6 +75,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -97,8 +100,9 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     private TextView Progress;
     //private TextView Title;
 
-    private ArrayList<TextView> priceTextViews;
+    //private ArrayList<TextView> priceButtons;
     private ArrayList<TextView> storeTextViews;
+    private ArrayList<Button> priceButtons;
 
     /*
     private TextView P1;
@@ -133,6 +137,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     Retrofit retrofit;
     DatabaseAPI databaseAPI;
 
+    double longitude, latitude;
+
     
 
 
@@ -161,16 +167,18 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
         statusMessage = (TextView)findViewById(R.id.status_message);
 
+        productImageView = findViewById(R.id.ProductPicture);
+
         storeTextViews = new ArrayList<>();
-        priceTextViews = new ArrayList<>();
+        priceButtons = new ArrayList<>();
 
         storeTextViews.add((TextView)findViewById(R.id.S1));
         storeTextViews.add((TextView)findViewById(R.id.S2));
         storeTextViews.add((TextView)findViewById(R.id.S3));
 
-        priceTextViews.add((TextView)findViewById(R.id.P1));
-        priceTextViews.add((TextView)findViewById(R.id.P2));
-        priceTextViews.add((TextView)findViewById(R.id.P3));
+        priceButtons.add((Button)findViewById(R.id.P1));
+        priceButtons.add((Button)findViewById(R.id.P2));
+        priceButtons.add((Button)findViewById(R.id.P3));
 
 
 
@@ -202,9 +210,9 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         shareButton.setVisibility(Button.INVISIBLE);
         reviewButton.setVisibility(Button.INVISIBLE);
 
-        for(int i = 0; i < storeTextViews.size() && i < priceTextViews.size(); i++) {
+        for(int i = 0; i < storeTextViews.size() && i < priceButtons.size(); i++) {
             storeTextViews.get(i).setVisibility(TextView.INVISIBLE);
-            priceTextViews.get(i).setVisibility(TextView.INVISIBLE);
+            priceButtons.get(i).setVisibility(TextView.INVISIBLE);
         }
 
         /*
@@ -232,7 +240,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     // This is our Adapter implementation
     // We take the result from the instance of our Spider object, which is a Name string that we parsed from some HTML
     public void onProcessDone(final SpiderData result) {
-      
+
         Log.d("mymymymymymymym",Integer.toString(result.prices.size()));
         // Using sharedPreferences and json/gson files, I can transfer an object from one activity to another.
         //this is one of the only ways to transfer an object between activites
@@ -254,7 +262,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         final ArrayList<String> store = result.getStores();
         final ArrayList<String> price = result.getPrices();
         ArrayList<String> links = result.getURLS();
-
+        /*
         for(int k =0; k < store.size() && k < storeTextViews.size(); k++)
         {
             if(store.get(k) == NULL || store.get(k)== "")
@@ -264,14 +272,14 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
             storeTextViews.get(k).setText(store.get(k));
         }
-        for(int j =0; j < price.size() && j < priceTextViews.size(); j++)
+        for(int j =0; j < price.size() && j < priceButtons.size(); j++)
         {
             if(price.get(j) == NULL || price.get(j)== "")
             {
                 price.set(j,"");
             }
 
-            priceTextViews.get(j).setText(price.get(j));
+            priceButtons.get(j).setText(price.get(j));
         }
         for(int j =0; j < links.size(); j++)
         {
@@ -280,6 +288,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                 links.set(j,"");
             }
         }
+        */
 
         /*
         S1.setText(store.get(0));
@@ -291,14 +300,16 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         */
 
 
-        pBar.setVisibility(ProgressBar.INVISIBLE);
-        Progress.setVisibility(Progress.INVISIBLE);
+        //pBar.setVisibility(ProgressBar.INVISIBLE);
+        //Progress.setVisibility(Progress.INVISIBLE);
         //Title.setVisibility(TextView.VISIBLE);
 
-        for(int i = 0; i < storeTextViews.size() && i < priceTextViews.size(); i++) {
+        /*
+        for(int i = 0; i < storeTextViews.size() && i < priceButtons.size(); i++) {
             storeTextViews.get(i).setVisibility(TextView.VISIBLE);
-            priceTextViews.get(i).setVisibility(TextView.VISIBLE);
+            priceButtons.get(i).setVisibility(TextView.VISIBLE);
         }
+        */
 
         spidey.cancel(true); // May not be needed, someday I may even test it
         /*
@@ -311,7 +322,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         */
 
         productName = "";
-        productImageView = findViewById(R.id.ProductPicture);
+
         // The name will return "Description $itemName", I dont want it to say Description, so this is a quickfix until we find a better way to parse the HTML
         // If we find a result...
         String pname = result.getProductName();
@@ -459,7 +470,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             productName = "Sorry, we could not find that product!";
         }
 
-
+        /*
         if(purl.compareTo("https://www.barcodelookup.com/assets/images/no-image-available.jpg") == 0
                 || purl.isEmpty())
         {
@@ -474,6 +485,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         {
             Glide.with(this ).load(purl).into(productImageView);
         }
+        */
         //new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/products/readBarcode.php?barcode="+"0787364460199");
         new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/products/readBarcode.php?barcode="+productName);
     }
@@ -743,13 +755,6 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         Log.i("barcode value:", "" + productBarcode);
 
 
-        getBarcodeInfoFromDatabase();
-        
-    }
-
-    // Finish this shit.
-    public void getBarcodeInfoFromDatabase()
-    {
         // Check if we have ACCESS_FINE/COARSE_LOCATION permissions.
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED &&
@@ -759,26 +764,225 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             // Get the user's gps coordinates.
             LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            double longitude = location.getLongitude();
-            double latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            latitude = location.getLatitude();
 
-
-            // Check to see if the barcode is in the database.
-
-            // If not, add it to the queue so the crawler scans it.
-
-            // Get the cheapest online prices.
+            findBarcodeInDatabase();
         }
-        else // If we don't we request permission.
+        else // IF we don't request permission.
         {
             ActivityCompat.requestPermissions(this, new String[] {
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION },
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION },
                     0);
+        }
+    }
 
+    // Finish this shit.
+    public void findBarcodeInDatabase()
+    {
+        //productBarcode = "10";
+
+
+        // Check to see if the barcode is in the database.
+        Product product = new Product(productBarcode, null, null, null, 0);
+
+        try
+        {
+            Call<Product> call = databaseAPI.getProduct(product);
+
+            call.enqueue(new Callback<Product>() {
+                @Override
+                public void onResponse(Call<Product> call, Response<Product> response) {
+                    Log.i("API Response Code:", "" + response.code());
+
+                    if(response.isSuccessful())
+                    {
+                        Product p = new Product();
+
+                        if(response.body() != null)
+                            p = response.body();
+
+                        if(!p.exists())
+                        {
+                            // The barcode returned from the db is null.
+                            Log.i("Product Info", "Not in database!");
+
+                            // Now, we need to enqueue the barcode onto the queue so that Jame's
+                            // crawler scans it and adds it to the DB.
+
+                            enqueueToDB();
+
+                        }
+                        else
+                        {
+                            // The barcode was found and we need to display it.
+                            Log.i("Product Info", "Found in database!");
+
+                            findLowestPrices();
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Product> call, Throwable t) {
+                    t.printStackTrace();
+                    Log.i("Product Info", "FAIL products");
+                }
+            });
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
 
 
+        // If not, add it to the queue so the crawler scans it.
+
+        // Get the cheapest online prices.
+
+
+
+    }
+
+    public void enqueueToDB()
+    {
+        ProductEnqueue product = new ProductEnqueue(productBarcode, longitude, latitude);
+
+        try
+        {
+            Call<Void> call = databaseAPI.enqueueDB(product);
+
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+
+                    if(response.isSuccessful())
+                    {
+                        createToast("Could not find this product. Please " +
+                                "try again later...", Toast.LENGTH_LONG);
+
+                        showResults(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    t.printStackTrace();
+                    Log.i("Product Info", "FAIL enqueue");
+                }
+            });
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void findLowestPrices()
+    {
+        ProductWebPrices input = new ProductWebPrices(productBarcode, 3);
+
+        try
+        {
+            Call<List<ProductWebPrices>> callWeb = databaseAPI.getLowestWebPrices(input);
+
+            callWeb.enqueue(new Callback<List<ProductWebPrices>>() {
+                @Override
+                public void onResponse(Call<List<ProductWebPrices>> call, Response<List<ProductWebPrices>> response) {
+                    if(response.isSuccessful())
+                    {
+                        List<ProductWebPrices> result = new ArrayList<>();
+
+                        if(response.body() != null)
+                            result = response.body();
+
+                        if(!result.get(0).exists())
+                        {
+                            // Product exists but no prices found...
+                            Log.i("Product Info", "Exists but no prices.");
+                        }
+                        else
+                        {
+                            // Display the prices.
+                            Log.i("Product Info", "Found product and prices!");
+                            /*
+                            Log.i("Product Info", "Name: " + result.get(0).getProductName()
+                                        + "Store: " + result.get(0).getStoreName()
+                                        + "Price: " + result.get(0).getPrice()
+                                        + "address " + result.get(0).getUrlAddress());
+
+                             */
+
+                            showResults(result);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<ProductWebPrices>> call, Throwable t) {
+                    t.printStackTrace();
+                    Log.i("Product Info", "FAIL prices");
+
+                }
+            });
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void showResults(List<ProductWebPrices> result)
+    {
+        pBar.setVisibility(ProgressBar.INVISIBLE);
+        Progress.setVisibility(Progress.INVISIBLE);
+
+        // Set to no image found by default.
+        Glide.with(ScannerStartActivity.this)
+                .load("https://www.barcodelookup.com/assets/images/no-image-available.jpg")
+                .into(productImageView);
+
+        String notFoundText = "Product Not Found: Try again later.";
+        statusMessage.setText(notFoundText);
+
+
+
+        for(int i = 0; result != null && i < result.size(); i++)
+        {
+            // If there is at least 1 result...
+            if(i == 0)
+            {
+                // Get the image url of the first result.
+                String purl = result.get(i).getImageURL();
+
+                if(purl.compareTo("https://www.barcodelookup.com/assets/images/no-image-available.jpg") != 0
+                        && !purl.isEmpty())
+                {
+                    // Set the imageurl to whatever is in the db.
+                    Glide.with(ScannerStartActivity.this)
+                            .load(purl)
+                            .into(productImageView);
+
+
+                }
+
+                statusMessage.setText(result.get(i).getProductName());
+
+            }
+
+            storeTextViews.get(i).setText(result.get(i).getStoreName());
+            priceButtons.get(i).setText(String.valueOf(result.get(i).getPrice()));
+            priceButtons.get(i).setTag(result.get(i).getUrlAddress());
+
+            storeTextViews.get(i).setVisibility(TextView.VISIBLE);
+            priceButtons.get(i).setVisibility(TextView.VISIBLE);
+        }
     }
 
 
@@ -846,10 +1050,15 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-//        Intent i = new Intent(ScannerStartActivity.this, MenuActivity.class);
-//        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivity(i);
-//        finish();
+        Intent i = new Intent(ScannerStartActivity.this, MenuActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+        finish();
+    }
+
+    public void createToast(String text, int duration)
+    {
+        Toast.makeText(ScannerStartActivity.this, text, duration).show();
     }
 
    

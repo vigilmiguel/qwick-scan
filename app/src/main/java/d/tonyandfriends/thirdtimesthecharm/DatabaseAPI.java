@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -25,4 +26,13 @@ public interface DatabaseAPI {
 
     @POST("users/create.php")
     Call<Void> createUser(@Body User user);
+
+    @POST("products/readBarcode.php")
+    Call<Product> getProduct(@Body Product product);
+
+    @POST("queries/readLowestOnlinePrice.php")
+    Call<List<ProductWebPrices>> getLowestWebPrices(@Body ProductWebPrices productWebPrices);
+
+    @POST("queue/enqueue.php")
+    Call<Void> enqueueDB(@Body ProductEnqueue product);
 }

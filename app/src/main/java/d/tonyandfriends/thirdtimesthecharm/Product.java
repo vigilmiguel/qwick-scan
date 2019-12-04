@@ -1,15 +1,27 @@
 package d.tonyandfriends.thirdtimesthecharm;
 
+import com.google.gson.annotations.SerializedName;
+
 @SuppressWarnings("WeakerAccess")
 public class Product {
+    @SerializedName("productid")
+    private int productID;
+
+    @SerializedName("barcode")
     private String barcode;
+
+    @SerializedName("productname")
     private String name;
+
+    @SerializedName("imageurl")
     private String pictureURL;
+
+
     private String dateRecentlyScanned;
     private int scanCount;
 
     public Product() {
-
+        this.barcode = null;
     }
 
     public Product(String barcode, String name, String pictureURL, String dateRecentlyScanned,
@@ -62,6 +74,14 @@ public class Product {
 
     public void setScanCount(int scanCount) {
         this.scanCount = scanCount;
+    }
+
+    public boolean exists()
+    {
+        if(barcode == null)
+            return false;
+        else
+            return true;
     }
 
 

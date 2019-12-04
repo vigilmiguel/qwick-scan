@@ -31,7 +31,7 @@
     if($numRows > 0)
     {
         $arr = array();
-        $arr['data'] = array();
+        //$arr['data'] = array();
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
@@ -42,14 +42,14 @@
                 'imageurl' => $imageurl,
                 'address' => $address
             );
-            array_push($arr['data'], $item);
+            array_push($arr, $item);
         }
         echo json_encode($arr);
     }
     else
     {
         echo json_encode(
-            array('message' => 'No rows returned')
+            array('productname' => null)
         );
     }
     

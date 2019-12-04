@@ -65,11 +65,11 @@ SELECT productname, barcode, storename, price, ST_X(point::geometry) AS "longitu
 WHERE barcode = '2';
 
 -- Get all stores and web addresses that sell this product.
-SELECT productname, barcode, storename, price, address
+SELECT *--productname, barcode, storename, price, address
   FROM stores s INNER JOIN url_addresses ua ON s.storeid = ua.storeid
                 INNER JOIN web_prices wp ON wp.addressid = ua.addressid
                 INNER JOIN products p ON p.productid = wp.productid
-WHERE barcode = '10';
+WHERE barcode = '814855028825';
 
 
 INSERT INTO location_prices
@@ -115,4 +115,10 @@ DELETE FROM barcode_queue WHERE queueid = ( SELECT queueid
                                             WHERE NOT EXISTS( SELECT * 
                                                                 FROM barcode_queue bq1
                                                               WHERE bq1.queueid < bq.queueid ));
+                                                              
+
+SELECT * 
+  FROM products p INNER JOIN web_prices wp ON p.productid = wp.productid
+                  INNER JOIN url_addresses ua ON wp.addressid = ua.addressid
+                  INNER JOIN stores s ON ua.storeid = s.storeid;
 
