@@ -139,6 +139,9 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
     double longitude, latitude;
 
+    User userInfo;
+    Product productInfo;
+
     
 
 
@@ -233,6 +236,13 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         databaseAPI = retrofit.create(DatabaseAPI.class);
+
+
+        // We need the user's info in order to store their scan history.
+        // All we really need is their userid in the DB.
+        getUserInfo();
+
+
     }
 
 
@@ -341,10 +351,9 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             storeInDatabase(product);
 
             //menuButton.setVisibility(Button.VISIBLE);
-            mapButton.setVisibility(Button.VISIBLE);
+
             //scanButton.setVisibility(Button.VISIBLE);
-            shareButton.setVisibility(Button.VISIBLE);
-            reviewButton.setVisibility(Button.VISIBLE);
+
 
 
 
@@ -767,6 +776,9 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                 Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 longitude = location.getLongitude();
                 latitude = location.getLatitude();
+
+
+
                 findBarcodeInDatabase();
             }
             catch (Exception e) {
@@ -785,7 +797,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         }
     }
 
-    // Finish this shit.
+
     public void findBarcodeInDatabase()
     {
         //productBarcode = "10";
@@ -798,6 +810,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         {
             Call<Product> call = databaseAPI.getProduct(product);
 
+            productInfo = new Product();
+
             call.enqueue(new Callback<Product>() {
                 @Override
                 public void onResponse(Call<Product> call, Response<Product> response) {
@@ -805,12 +819,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
                     if(response.isSuccessful())
                     {
-                        Product p = new Product();
-
                         if(response.body() != null)
-                            p = response.body();
+                            productInfo = response.body();
 
-                        if(!p.exists())
+                        if(!productInfo.exists())
                         {
                             // The barcode returned from the db is null.
                             Log.i("Product Info", "Not in database!");
@@ -826,12 +838,15 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                             // The barcode was found and we need to display it.
                             Log.i("Product Info", "Found in database!");
 
+                            // Add to user scan history.
+                            addProductToUserHistory();
+
                             findLowestPrices();
                         }
                     }
                     else
                     {
-
+                        showError("No API Response.");
                     }
                 }
 
@@ -847,13 +862,40 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             e.printStackTrace();
         }
 
+    }
 
-        // If not, add it to the queue so the crawler scans it.
+    public void addProductToUserHistory()
+    {
+        if(userInfo.getUserID() == null)
+            Log.i("Product Info", "userID = null");
 
-        // Get the cheapest online prices.
+        if(productInfo.getProductID() == null)
+            Log.i("Product Info", "productID = null");
 
 
+        UserScan userScan = new UserScan(userInfo.getUserID(), productInfo.getProductID());
 
+        try
+        {
+            Call<Void> call = databaseAPI.createScan(userScan);
+
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if(!response.isSuccessful())
+                        showError("No API Response.");
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    showError("Create Scan Query Failed.");
+                }
+            });
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void enqueueToDB()
@@ -875,12 +917,65 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
                         showResults(null);
                     }
+                    else
+                    {
+                        showError("No API Response.");
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
                     t.printStackTrace();
                     Log.i("Product Info", "FAIL enqueue");
+                    showError("Enqueue query failed.");
+                }
+            });
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void getUserInfo()
+    {
+        userInfo = new User(firebaseUser.getUid(), firebaseUser.getEmail());
+
+        try
+        {
+            Call<User> call = databaseAPI.getUser(userInfo);
+
+
+
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+
+                    if(response.isSuccessful()) {
+                        Log.i("Product Info", "Response Successful");
+                        if (response.body() != null)
+                        {
+                            userInfo = new User();
+                            Log.i("Product Info", "Emoty user");
+
+                            Log.i("Product Info", "Response Body not empty");
+                            userInfo = response.body();
+                        }
+                        else
+                            Log.i("Product Info", "Response Body empty.");
+
+                    }
+                    else
+                    {
+                        Log.i("Product Info", "Response Unsuccessful");
+                        showError("No API Response.");
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    showError("User query failed.");
                 }
             });
         }
@@ -951,10 +1046,12 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
     }
 
+
+
     public void showResults(List<ProductWebPrices> result)
     {
         pBar.setVisibility(ProgressBar.INVISIBLE);
-        Progress.setVisibility(Progress.INVISIBLE);
+        Progress.setVisibility(TextView.INVISIBLE);
 
         // Set to no image found by default.
         Glide.with(ScannerStartActivity.this)
@@ -995,6 +1092,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
             storeTextViews.get(i).setVisibility(TextView.VISIBLE);
             priceButtons.get(i).setVisibility(TextView.VISIBLE);
+
+            mapButton.setVisibility(Button.VISIBLE);
+            shareButton.setVisibility(Button.VISIBLE);
+            reviewButton.setVisibility(Button.VISIBLE);
         }
     }
 

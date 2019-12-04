@@ -108,5 +108,43 @@
 
             return $stmt;
         }
+
+        public function getUserScanHistory($firebaseuid)
+        {
+            // Get the user's scanned barcodes with the number of scans and the most recent date scanned for each unique barcode.
+
+            $query = "  SELECT t1.barcode, t1.numscans, t2.datetimescanned, t1.productname, t1.imageurl
+                            FROM(   SELECT barcode, productname, imageurl, COUNT(barcode) AS numscans
+                                        FROM users u    INNER JOIN scans s ON u.userid = s.userid
+                                                        INNER JOIN products p ON p.productid = s.productid
+                                        WHERE u.firebaseuid = :firebaseuid
+                                    GROUP BY barcode, productname, imageurl
+                                ) t1
+                                
+                            INNER JOIN
+                        
+                                (   SELECT p.barcode, p.productname, s.datetimescanned
+                                        FROM users u    INNER JOIN scans s ON u.userid = s.userid
+                                                        INNER JOIN products p ON p.productid = s.productid
+                                    WHERE u.firebaseuid = :firebaseuid 
+                                        AND NOT EXISTS( SELECT *
+                                                            FROM users u1 INNER JOIN scans s1 ON u1.userid = s1.userid
+                                                                        INNER JOIN products p1 ON p1.productid = s1.productid
+                                                        WHERE s1.datetimescanned > s.datetimescanned AND p1.barcode = p.barcode)
+                                ) t2
+                            ON t1.barcode = t2.barcode
+                        ORDER BY t2.datetimescanned DESC;";
+
+            $stmt = $this->conn->prepare($query);
+
+            // Clean the data.
+            $firebaseuid = htmlspecialchars(strip_tags($firebaseuid));
+
+            $stmt->bindParam(':firebaseuid', $firebaseuid);
+
+            $stmt->execute();
+
+            return $stmt;
+        }
     }
 ?>

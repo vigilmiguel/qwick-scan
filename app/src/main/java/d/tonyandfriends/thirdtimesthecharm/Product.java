@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 @SuppressWarnings("WeakerAccess")
 public class Product {
     @SerializedName("productid")
-    private int productID;
+    private Integer productID;
 
     @SerializedName("barcode")
     private String barcode;
@@ -21,6 +21,7 @@ public class Product {
     private int scanCount;
 
     public Product() {
+        this.productID = null;
         this.barcode = null;
     }
 
@@ -34,6 +35,12 @@ public class Product {
     }
 
     // Database uses these functions when storing and receiving products.
+
+
+    public Integer getProductID() {
+        return productID;
+    }
+
     public String getBarcode() {
         return barcode;
     }

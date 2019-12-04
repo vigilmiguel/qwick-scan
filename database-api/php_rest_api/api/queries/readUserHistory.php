@@ -3,14 +3,12 @@
         GET request JSON input format
         
         {
-            "barcode" : String,
+            "firebaseuid" : String
         }
     */
     ini_set('display_errors', 1);
-
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
-    
     include_once '../../config/Database.php';
     include_once '../../models/Query.php';
     
@@ -22,35 +20,40 @@
     // Get the JSON input data.
     $data = json_decode(file_get_contents("php://input"));
 
-    $barcode = $data->barcode;
+    $firebaseuid = $data->firebaseuid;
     
-    $result = $query->getAllBarcodeLocations($barcode);
+    $result = $query->getUserScanHistory($firebaseuid);
     
     $numRows = $result->rowCount();
     
     if($numRows > 0)
     {
         $arr = array();
-        $arr['data'] = array();
+        
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);
             $item = array(
+                'barcode' => $barcode, 
                 'productname' => $productname,
-                'barcode' => $barcode,
-                'storename' => $storename,
-                'price' => $price,
-                'longitude' => $longitude,
-                'latitude' => $latitude
+                'imageurl' => $imageurl,
+                'numscans' => $numscans,
+                'datetimescanned' => $datetimescanned
             );
-            array_push($arr['data'], $item);
+            array_push($arr, $item);
         }
         echo json_encode($arr);
     }
     else
     {
         echo json_encode(
-            array('message' => 'No rows returned')
+            array(
+                'barcode' => null,
+                'productname' => null,
+                'imageurl' => null,
+                'numscans' => null,
+                'datetimescanned' => null
+                )
         );
     }
     
