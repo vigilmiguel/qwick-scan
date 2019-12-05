@@ -4,6 +4,8 @@ import json
 import os
 import barcodeScraper 
 
+
+
 def returnPageNames(index):
     pageNames = ['']
 
@@ -43,7 +45,7 @@ def findURL2():
     return finalString
 
 
-def parseName(barcode):
+def parseName(barcode,barHashTable):
     
     with open('poop-0.html', 'r') as f:
         data = f.read()
@@ -54,6 +56,9 @@ def parseName(barcode):
     ProductName = soup.find("div", { "id" : "images" }).find('img')['alt']
 
 
+
+    #barHashAdd(barHash,barcode,ProductName,imageURL)
+    barHashTable[barcode] = [ProductName,imageURL]
     packageInfo = []
     packageInfo.append(barcode)
     packageInfo.append(ProductName)
@@ -62,7 +67,8 @@ def parseName(barcode):
     cleanUP('poop-0.html')
 
 
-def getPrices(barcode):
+
+def getPrices(barcode,barHash):
 
     storeNames = []
     storePrices = []
@@ -87,11 +93,12 @@ def getPrices(barcode):
         storePrices.append(query1[0])
 
     if len(storeNames) == len(storePrices):
-        print('poop')
         for i  in range(len(storeNames)):
-            print(storeNames[i])
-            print(storePrices[i])
-    
+            tempPackage = [barcode,barHash.get(barcode)[0],barHash.get(barcode)[1],storeNames[i],storePrices[i]]
+            dataBaseWritePrice(tempPackage)
+            #print(storeNames[i])
+            #print(storePrices[i])
+
     cleanUP('PricePage.html')
 
 def getReviews(barcode):
@@ -163,7 +170,7 @@ def cleanUP(fileTermination):
 
 def readTxtFile():
     barcodes = []
-    with open('barcodeIDS2.txt','r') as f:
+    with open('barcodeID.txt','r') as f:
         for line in f:
             for word in line.split():
                 barcodes.append(word)
@@ -171,9 +178,26 @@ def readTxtFile():
     return barcodes
 
 
-       
+def dataBaseWritePrice(DBpackage):
 
-#findURL()
+    #DBpackage = ['0784343943111','poop','pooop.com','poopInc', -.563, .717, 5000.55]
+    url = 'http://18.216.191.20/php_rest_api/api/products/createWithWebPrice.php'
+    payload = { 
+        "barcode": DBpackage[0],
+        "productname": DBpackage[1],
+        "imageurl": DBpackage[2],
+        "storename": DBpackage[3],
+        "address": "NoAddress",
+        "price": float(DBpackage[4])
+        }
+    headers = {'content-type': 'application/json'}
+
+    response = requests.post(url, data=json.dumps(payload))
+
+    print(response.text)
+
+
+
+#dataBaseWritePrice(['11','cat','cat.com','catstore',50])
 runScrapy()
-#runScrapy('811571018420')
-#readTxtFile()
+

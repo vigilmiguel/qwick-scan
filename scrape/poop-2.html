@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="no-js">
 <head>
-<meta charset="UTF-8"><script type="text/javascript">(window.NREUM||(NREUM={})).loader_config={licenseKey:"3283ea3d17",applicationID:"282536246"};window.NREUM||(NREUM={}),__nr_require=function(e,n,t){function r(t){if(!n[t]){var o=n[t]={exports:{}};e[t][0].call(o.exports,function(n){var o=e[t][1][n];return r(o||n)},o,o.exports)}return n[t].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<t.length;o++)r(t[o]);return r}({1:[function(e,n,t){function r(){}function o(e,n,t){return function(){return i(e,[c.now()].concat(u(arguments)),n?null:this,t),n?void 0:this}}var i=e("handle"),a=e(3),u=e(4),f=e("ee").get("tracer"),c=e("loader"),s=NREUM;"undefined"==typeof window.newrelic&&(newrelic=s);var p=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],d="api-",l=d+"ixn-";a(p,function(e,n){s[n]=o(d+n,!0,"api")}),s.addPageAction=o(d+"addPageAction",!0),s.setCurrentRouteName=o(d+"routeName",!0),n.exports=newrelic,s.interaction=function(){return(new r).get()};var m=r.prototype={createTracer:function(e,n){var t={},r=this,o="function"==typeof n;return i(l+"tracer",[c.now(),e,t],r),function(){if(f.emit((o?"":"no-")+"fn-start",[c.now(),r,o],t),o)try{return n.apply(this,arguments)}catch(e){throw f.emit("fn-err",[arguments,this,e],t),e}finally{f.emit("fn-end",[c.now()],t)}}}};a("actionText,setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(e,n){m[n]=o(l+n)}),newrelic.noticeError=function(e,n){"string"==typeof e&&(e=new Error(e)),i("err",[e,c.now(),!1,n])}},{}],2:[function(e,n,t){function r(e,n){if(!o)return!1;if(e!==o)return!1;if(!n)return!0;if(!i)return!1;for(var t=i.split("."),r=n.split("."),a=0;a<r.length;a++)if(r[a]!==t[a])return!1;return!0}var o=null,i=null,a=/Version\/(\S+)\s+Safari/;if(navigator.userAgent){var u=navigator.userAgent,f=u.match(a);f&&u.indexOf("Chrome")===-1&&u.indexOf("Chromium")===-1&&(o="Safari",i=f[1])}n.exports={agent:o,version:i,match:r}},{}],3:[function(e,n,t){function r(e,n){var t=[],r="",i=0;for(r in e)o.call(e,r)&&(t[i]=n(r,e[r]),i+=1);return t}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],4:[function(e,n,t){function r(e,n,t){n||(n=0),"undefined"==typeof t&&(t=e?e.length:0);for(var r=-1,o=t-n||0,i=Array(o<0?0:o);++r<o;)i[r]=e[n+r];return i}n.exports=r},{}],5:[function(e,n,t){n.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(e,n,t){function r(){}function o(e){function n(e){return e&&e instanceof r?e:e?f(e,u,i):i()}function t(t,r,o,i){if(!d.aborted||i){e&&e(t,r,o);for(var a=n(o),u=v(t),f=u.length,c=0;c<f;c++)u[c].apply(a,r);var p=s[y[t]];return p&&p.push([b,t,r,a]),a}}function l(e,n){h[e]=v(e).concat(n)}function m(e,n){var t=h[e];if(t)for(var r=0;r<t.length;r++)t[r]===n&&t.splice(r,1)}function v(e){return h[e]||[]}function g(e){return p[e]=p[e]||o(t)}function w(e,n){c(e,function(e,t){n=n||"feature",y[t]=n,n in s||(s[n]=[])})}var h={},y={},b={on:l,addEventListener:l,removeEventListener:m,emit:t,get:g,listeners:v,context:n,buffer:w,abort:a,aborted:!1};return b}function i(){return new r}function a(){(s.api||s.feature)&&(d.aborted=!0,s=d.backlog={})}var u="nr@context",f=e("gos"),c=e(3),s={},p={},d=n.exports=o();d.backlog=s},{}],gos:[function(e,n,t){function r(e,n,t){if(o.call(e,n))return e[n];var r=t();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,n,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return e[n]=r,r}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],handle:[function(e,n,t){function r(e,n,t,r){o.buffer([e],r),o.emit(e,n,t)}var o=e("ee").get("handle");n.exports=r,r.ee=o},{}],id:[function(e,n,t){function r(e){var n=typeof e;return!e||"object"!==n&&"function"!==n?-1:e===window?0:a(e,i,function(){return o++})}var o=1,i="nr@id",a=e("gos");n.exports=r},{}],loader:[function(e,n,t){function r(){if(!E++){var e=x.info=NREUM.info,n=l.getElementsByTagName("script")[0];if(setTimeout(s.abort,3e4),!(e&&e.licenseKey&&e.applicationID&&n))return s.abort();c(y,function(n,t){e[n]||(e[n]=t)}),f("mark",["onload",a()+x.offset],null,"api");var t=l.createElement("script");t.src="https://"+e.agent,n.parentNode.insertBefore(t,n)}}function o(){"complete"===l.readyState&&i()}function i(){f("mark",["domContent",a()+x.offset],null,"api")}function a(){return O.exists&&performance.now?Math.round(performance.now()):(u=Math.max((new Date).getTime(),u))-x.offset}var u=(new Date).getTime(),f=e("handle"),c=e(3),s=e("ee"),p=e(2),d=window,l=d.document,m="addEventListener",v="attachEvent",g=d.XMLHttpRequest,w=g&&g.prototype;NREUM.o={ST:setTimeout,SI:d.setImmediate,CT:clearTimeout,XHR:g,REQ:d.Request,EV:d.Event,PR:d.Promise,MO:d.MutationObserver};var h=""+location,y={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1130.min.js"},b=g&&w&&w[m]&&!/CriOS/.test(navigator.userAgent),x=n.exports={offset:u,now:a,origin:h,features:{},xhrWrappable:b,userAgent:p};e(1),l[m]?(l[m]("DOMContentLoaded",i,!1),d[m]("load",r,!1)):(l[v]("onreadystatechange",o),d[v]("onload",r)),f("mark",["firstbyte",u],null,"api");var E=0,O=e(5)},{}]},{},["loader"]);</script>
+<meta charset="UTF-8"><script type="text/javascript">(window.NREUM||(NREUM={})).loader_config={licenseKey:"3283ea3d17",applicationID:"282536246"};window.NREUM||(NREUM={}),__nr_require=function(n,e,t){function r(t){if(!e[t]){var i=e[t]={exports:{}};n[t][0].call(i.exports,function(e){var i=n[t][1][e];return r(i||e)},i,i.exports)}return e[t].exports}if("function"==typeof __nr_require)return __nr_require;for(var i=0;i<t.length;i++)r(t[i]);return r}({1:[function(n,e,t){function r(){}function i(n,e,t){return function(){return o(n,[u.now()].concat(f(arguments)),e?null:this,t),e?void 0:this}}var o=n("handle"),a=n(4),f=n(5),c=n("ee").get("tracer"),u=n("loader"),s=NREUM;"undefined"==typeof window.newrelic&&(newrelic=s);var p=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],d="api-",l=d+"ixn-";a(p,function(n,e){s[e]=i(d+e,!0,"api")}),s.addPageAction=i(d+"addPageAction",!0),s.setCurrentRouteName=i(d+"routeName",!0),e.exports=newrelic,s.interaction=function(){return(new r).get()};var m=r.prototype={createTracer:function(n,e){var t={},r=this,i="function"==typeof e;return o(l+"tracer",[u.now(),n,t],r),function(){if(c.emit((i?"":"no-")+"fn-start",[u.now(),r,i],t),i)try{return e.apply(this,arguments)}catch(n){throw c.emit("fn-err",[arguments,this,n],t),n}finally{c.emit("fn-end",[u.now()],t)}}}};a("actionText,setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(n,e){m[e]=i(l+e)}),newrelic.noticeError=function(n,e){"string"==typeof n&&(n=new Error(n)),o("err",[n,u.now(),!1,e])}},{}],2:[function(n,e,t){function r(n,e){var t=n.getEntries();t.forEach(function(n){"first-paint"===n.name?a("timing",["fp",Math.floor(n.startTime)]):"first-contentful-paint"===n.name&&a("timing",["fcp",Math.floor(n.startTime)])})}function i(n){if(n instanceof c&&!s){var e,t=Math.round(n.timeStamp);e=t>1e12?Date.now()-t:f.now()-t,s=!0,a("timing",["fi",t,{type:n.type,fid:e}])}}if(!("init"in NREUM&&"page_view_timing"in NREUM.init&&"enabled"in NREUM.init.page_view_timing&&NREUM.init.page_view_timing.enabled===!1)){var o,a=n("handle"),f=n("loader"),c=NREUM.o.EV;if("PerformanceObserver"in window&&"function"==typeof window.PerformanceObserver){o=new PerformanceObserver(r);try{o.observe({entryTypes:["paint"]})}catch(u){}}if("addEventListener"in document){var s=!1,p=["click","keydown","mousedown","pointerdown","touchstart"];p.forEach(function(n){document.addEventListener(n,i,!1)})}}},{}],3:[function(n,e,t){function r(n,e){if(!i)return!1;if(n!==i)return!1;if(!e)return!0;if(!o)return!1;for(var t=o.split("."),r=e.split("."),a=0;a<r.length;a++)if(r[a]!==t[a])return!1;return!0}var i=null,o=null,a=/Version\/(\S+)\s+Safari/;if(navigator.userAgent){var f=navigator.userAgent,c=f.match(a);c&&f.indexOf("Chrome")===-1&&f.indexOf("Chromium")===-1&&(i="Safari",o=c[1])}e.exports={agent:i,version:o,match:r}},{}],4:[function(n,e,t){function r(n,e){var t=[],r="",o=0;for(r in n)i.call(n,r)&&(t[o]=e(r,n[r]),o+=1);return t}var i=Object.prototype.hasOwnProperty;e.exports=r},{}],5:[function(n,e,t){function r(n,e,t){e||(e=0),"undefined"==typeof t&&(t=n?n.length:0);for(var r=-1,i=t-e||0,o=Array(i<0?0:i);++r<i;)o[r]=n[e+r];return o}e.exports=r},{}],6:[function(n,e,t){e.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(n,e,t){function r(){}function i(n){function e(n){return n&&n instanceof r?n:n?c(n,f,o):o()}function t(t,r,i,o){if(!d.aborted||o){n&&n(t,r,i);for(var a=e(i),f=v(t),c=f.length,u=0;u<c;u++)f[u].apply(a,r);var p=s[y[t]];return p&&p.push([b,t,r,a]),a}}function l(n,e){h[n]=v(n).concat(e)}function m(n,e){var t=h[n];if(t)for(var r=0;r<t.length;r++)t[r]===e&&t.splice(r,1)}function v(n){return h[n]||[]}function g(n){return p[n]=p[n]||i(t)}function w(n,e){u(n,function(n,t){e=e||"feature",y[t]=e,e in s||(s[e]=[])})}var h={},y={},b={on:l,addEventListener:l,removeEventListener:m,emit:t,get:g,listeners:v,context:e,buffer:w,abort:a,aborted:!1};return b}function o(){return new r}function a(){(s.api||s.feature)&&(d.aborted=!0,s=d.backlog={})}var f="nr@context",c=n("gos"),u=n(4),s={},p={},d=e.exports=i();d.backlog=s},{}],gos:[function(n,e,t){function r(n,e,t){if(i.call(n,e))return n[e];var r=t();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(n,e,{value:r,writable:!0,enumerable:!1}),r}catch(o){}return n[e]=r,r}var i=Object.prototype.hasOwnProperty;e.exports=r},{}],handle:[function(n,e,t){function r(n,e,t,r){i.buffer([n],r),i.emit(n,e,t)}var i=n("ee").get("handle");e.exports=r,r.ee=i},{}],id:[function(n,e,t){function r(n){var e=typeof n;return!n||"object"!==e&&"function"!==e?-1:n===window?0:a(n,o,function(){return i++})}var i=1,o="nr@id",a=n("gos");e.exports=r},{}],loader:[function(n,e,t){function r(){if(!x++){var n=E.info=NREUM.info,e=l.getElementsByTagName("script")[0];if(setTimeout(s.abort,3e4),!(n&&n.licenseKey&&n.applicationID&&e))return s.abort();u(y,function(e,t){n[e]||(n[e]=t)}),c("mark",["onload",a()+E.offset],null,"api");var t=l.createElement("script");t.src="https://"+n.agent,e.parentNode.insertBefore(t,e)}}function i(){"complete"===l.readyState&&o()}function o(){c("mark",["domContent",a()+E.offset],null,"api")}function a(){return O.exists&&performance.now?Math.round(performance.now()):(f=Math.max((new Date).getTime(),f))-E.offset}var f=(new Date).getTime(),c=n("handle"),u=n(4),s=n("ee"),p=n(3),d=window,l=d.document,m="addEventListener",v="attachEvent",g=d.XMLHttpRequest,w=g&&g.prototype;NREUM.o={ST:setTimeout,SI:d.setImmediate,CT:clearTimeout,XHR:g,REQ:d.Request,EV:d.Event,PR:d.Promise,MO:d.MutationObserver};var h=""+location,y={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1153.min.js"},b=g&&w&&w[m]&&!/CriOS/.test(navigator.userAgent),E=e.exports={offset:f,now:a,origin:h,features:{},xhrWrappable:b,userAgent:p};n(1),n(2),l[m]?(l[m]("DOMContentLoaded",o,!1),d[m]("load",r,!1)):(l[v]("onreadystatechange",i),d[v]("onload",r)),c("mark",["firstbyte",f],null,"api");var x=0,O=n(6)},{}],"wrap-function":[function(n,e,t){function r(n){return!(n&&n instanceof Function&&n.apply&&!n[a])}var i=n("ee"),o=n(5),a="nr@original",f=Object.prototype.hasOwnProperty,c=!1;e.exports=function(n,e){function t(n,e,t,i){function nrWrapper(){var r,a,f,c;try{a=this,r=o(arguments),f="function"==typeof t?t(r,a):t||{}}catch(u){d([u,"",[r,a,i],f])}s(e+"start",[r,a,i],f);try{return c=n.apply(a,r)}catch(p){throw s(e+"err",[r,a,p],f),p}finally{s(e+"end",[r,a,c],f)}}return r(n)?n:(e||(e=""),nrWrapper[a]=n,p(n,nrWrapper),nrWrapper)}function u(n,e,i,o){i||(i="");var a,f,c,u="-"===i.charAt(0);for(c=0;c<e.length;c++)f=e[c],a=n[f],r(a)||(n[f]=t(a,u?f+i:i,o,f))}function s(t,r,i){if(!c||e){var o=c;c=!0;try{n.emit(t,r,i,e)}catch(a){d([a,t,r,i])}c=o}}function p(n,e){if(Object.defineProperty&&Object.keys)try{var t=Object.keys(n);return t.forEach(function(t){Object.defineProperty(e,t,{get:function(){return n[t]},set:function(e){return n[t]=e,e}})}),e}catch(r){d([r])}for(var i in n)f.call(n,i)&&(e[i]=n[i]);return e}function d(e){try{n.emit("internal-error",e)}catch(t){}}return n||(n=i),t.inPlace=u,t.flag=a,t}},{}]},{},["loader"]);</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="profile" href="https://gmpg.org/xfn/11">
 <script> dataLayer = []; </script>
@@ -21,19 +21,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-MV827XZ');</script>
 
+
+
 <script>
 			(function(html, CSS){
 				html.className = html.className.replace(/\bno-js\b/,'js');
 			})(document.documentElement, CSS);
 		</script>
 <script type="text/javascript" src="//try.abtasty.com/bed7fd6a7f04a37cd8543226887f84aa.js"></script>
-<title>Products  for &#8220;4988064309405&#8221;  &#8211; BrickSeek</title>
+<title>Products  for &#8220;0885909052059&#8221;  &#8211; BrickSeek</title>
 <link rel='dns-prefetch' href='//brickseek.com' />
 <link rel='dns-prefetch' href='//use.typekit.net' />
 <link rel='dns-prefetch' href='//cdn1.brickseek.com' />
 <link rel='dns-prefetch' href='//s.w.org' />
 <link rel='stylesheet' id='mp-theme-css' href='https://brickseek.com/wp-content/plugins/memberpress/css/ui/theme.css?ver=1.3.24' type='text/css' media='all' />
-<link rel='stylesheet' id='wp-block-library-css' href='https://brickseek.com/wp-includes/css/dist/block-library/style.min.css?ver=5.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-block-library-css' href='https://brickseek.com/wp-includes/css/dist/block-library/style.min.css?ver=5.3' type='text/css' media='all' />
 <link rel='stylesheet' id='ugb-style-css-css' href='https://brickseek.com/wp-content/plugins/stackable-ultimate-gutenberg-blocks-premium/dist/frontend_blocks.css?ver=1.15.1' type='text/css' media='all' />
 <style id='ugb-style-css-inline-css' type='text/css'>
 :root {
@@ -41,19 +43,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 		}
 </style>
 <link rel='stylesheet' id='ugb-style-css-premium-css' href='https://brickseek.com/wp-content/plugins/stackable-ultimate-gutenberg-blocks-premium/dist/frontend_blocks__premium_only.css?ver=1.15.1' type='text/css' media='all' />
-<link rel='stylesheet' id='bs-fonts-css' href='https://use.typekit.net/vfn5fxi.css?ver=3.1.1' type='text/css' media='all' />
-<link rel='stylesheet' id='bs-icons-fontawesome-css' href='https://cdn1.brickseek.com/fontawesome/css/all.css?ver=3.1.1' type='text/css' media='all' />
-<link rel='stylesheet' id='bs-theme-css' href='https://brickseek.com/wp-content/themes/brickseek/css/theme.css?ver=3.1.1' type='text/css' media='all' />
+<link rel='stylesheet' id='bs-fonts-css' href='https://use.typekit.net/vfn5fxi.css?ver=3.2.0' type='text/css' media='all' />
+<link rel='stylesheet' id='bs-icons-fontawesome-css' href='https://cdn1.brickseek.com/fontawesome/css/all.css?ver=3.2.0' type='text/css' media='all' />
+<link rel='stylesheet' id='bs-web-app-css' href='https://brickseek.com/wp-content/themes/brickseek/css/web-app.css?ver=3.2.0' type='text/css' media='all' />
+<link rel='stylesheet' id='bs-theme-css' href='https://brickseek.com/wp-content/themes/brickseek/css/theme.css?ver=3.2.0' type='text/css' media='all' />
 <script type='text/javascript' src='https://brickseek.com/wp-content/plugins/stackable-ultimate-gutenberg-blocks-premium/dist/frontend_blocks.js?ver=1.15.1'></script>
 <script type='text/javascript' src='https://brickseek.com/wp-content/plugins/stackable-ultimate-gutenberg-blocks-premium/dist/frontend_blocks__premium_only.js?ver=1.15.1'></script>
-<script type='text/javascript' src='https://brickseek.com/wp-content/themes/brickseek/js/quagga.min.js?ver=3.1.1'></script>
-<script type='text/javascript' src='https://brickseek.com/wp-content/themes/brickseek/js/modernizr.min.js?ver=3.1.1'></script>
+<script type='text/javascript' src='https://brickseek.com/wp-content/themes/brickseek/js/quagga.min.js?ver=3.2.0'></script>
+<script type='text/javascript' src='https://brickseek.com/wp-content/themes/brickseek/js/modernizr.min.js?ver=3.2.0'></script>
 <script type='text/javascript' src='https://brickseek.com/wp-includes/js/jquery/jquery.js?ver=1.12.4-wp'></script>
 <script type='text/javascript' src='https://brickseek.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
 <link rel='https://api.w.org/' href='https://brickseek.com/wp-json/' />
-<meta name="generator" content="WordPress 5.2.2" />
+<meta name="generator" content="WordPress 5.3" />
 <meta name="format-detection" content="telephone=no">
-<link rel="shortcut icon" href="https://cdn1.brickseek.com/images/brickseek-favicon.png?ver=3.1.1" type="image/x-icon">
+<link rel="shortcut icon" href="https://cdn1.brickseek.com/images/brickseek-favicon.png?ver=3.2.0" type="image/x-icon">
 
 <script id="bs-freestar-snippet" data-cfasync="false" type="text/javascript">
 		var freestar = freestar || {};
@@ -74,8 +77,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 		})(window,document,'script','https://dna8twue3dlxq.cloudfront.net/js/profitwell.js','profitwell');
 		profitwell('auth_token', 'd62c460eb96a27a6dc5664ae30a09fe1'); // Your unique Profitwell public API token
 			</script>
-<meta property="og:site_name" content="BrickSeek" /><meta property="og:type" content="website" /><meta property="og:url" content="https://brickseek.com/products/?search=4988064309405" /><meta property="og:title" content="Products  for &quot;4988064309405&quot;  - BrickSeek" /><meta property="og:description" content="Find savings on the things you already buy at the places you already shop. From shampoo and toys to laptops and 4K TVs, BrickSeek helps you make the most of every dollar." /><meta property="og:image" content="https://cdn1.brickseek.com/images/BrickSeek_Facebook_OG_General_Image.png?ver=3.1.1" /> <style type="text/css" id="wp-custom-css">
-			/* [BUG FIX] */
+<meta property="og:site_name" content="BrickSeek" /><meta property="og:type" content="website" /><meta property="og:url" content="https://brickseek.com/products/?search=0885909052059" /><meta property="og:title" content="Products  for &quot;0885909052059&quot;  - BrickSeek" /><meta property="og:description" content="Find savings on the things you already buy at the places you already shop. From shampoo and toys to laptops and 4K TVs, BrickSeek helps you make the most of every dollar." /><meta property="og:image" content="https://cdn1.brickseek.com/images/BrickSeek_Facebook_OG_General_Image.png?ver=3.2.0" /> <style type="text/css" id="wp-custom-css">
+			/* [TEMP CSS] Hides ad containers - LEAVING THIS HERE FOR FUTURE REFERENCE */
+/* .widget--ad,
+.ad--location-header .ad__slot, .ad--location-footer .ad__slot {
+	display: none !important;
+} */
+
+/* [BUG FIX] */
 .aligncenter.wp-block-embed iframe {
 	margin: 0 auto;
 }
@@ -85,18 +94,36 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	display: none !important;
 }
 
-/* [BUG FIX] Hides the sidebar promo for premium users */
-body.user-level-premium #bs-cta-sidebar-promo {
-	display: none;
-}
-
+/* [BUG FIX] Hides quantity numbers from non in stock results in the shopping list */
 .shopping-list-table__availability .availability-status-indicator--stock-1 + .table__cell-quantity,
 .shopping-list-table__availability .availability-status-indicator--stock-0 + .table__cell-quantity {
 	display: none !important;
 }
 
+/* [BUG FIX] Reenables text selection */
+body {
+	-webkit-user-select: initial !important;
+	-webkit-tap-highlight-color: initial !important;
+	-webkit-touch-callout: initial !important;
+}
+
+/* [BUG FIX] makes the submit button within deal edit modals clickable */
+@media all and (max-width:600px) {
+	.iframe-modal .modal__body iframe {
+		padding-bottom: 120px;
+	}
+}
+
 .site-announcement h2 {
 	font-size: 22px;
+}
+
+
+body.page .wp-block-ugb-separator.alignfull {
+width: 100vw;
+left: 50%;
+margin-left: -50vw;
+position: relative;
 }		</style>
 </head>
 <body class="error404 color-scheme-default filters-enabled filters-on-change-use-ajax sidebar-enabled expanded-page banner-active banner-controls-active header-ad-enabled footer-ad-enabled sidebar_1-ad-enabled products">
@@ -111,7 +138,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="header__branding">
 <a href="/">
 <span class="header__title">
-<img class="header__title-symbol" src="https://cdn1.brickseek.com/images/header-logo-icon-transparent.png?ver=3.1.1" alt="BrickSeek" />
+<img class="header__title-symbol" src="https://cdn1.brickseek.com/images/header-logo-icon-transparent.png?ver=3.2.0" alt="BrickSeek" />
 <span class="header__title-brick">Brick</span>
 <span class="header__title-seek">Seek</span>
 </span>
@@ -264,7 +291,7 @@ Tools </a>
 <option value="rewards">Rewards</option>
 </select>
 </div>
-<input id="header-search-query" name="search" autocomplete="off" class="header__search-query" type="text" value="4988064309405" data-current-search="4988064309405" />
+<input id="header-search-query" name="search" autocomplete="off" class="header__search-query" type="text" value="0885909052059" data-current-search="0885909052059" />
 <button type="submit" class="header__search-submit"><span class="far fa-search"></span><span class="screen-reader-text">Search</span></button>
 <span class="header__search-done"><span class="screen-reader-text">Done</span></span>
 </form>
@@ -284,7 +311,7 @@ Tools </a>
 <div class="header__dropdown header__dropdown--wide">
 <div class="header__user-portal">
 <div class="header__dropdown-item header__user-portal-login">
-<a href="/login/">Login</a>
+<a href="/login?redirect_to=https://brickseek.com/products/?search=0885909052059">Login</a>
 </div>
 <div class="header__dropdown-item header__user-portal-sign-up">
 <a href="/sign-up?src=s-h-adsu-0919">Sign Up</a>
@@ -310,7 +337,7 @@ Help Center </a>
 <div class="header__mobile-menu-section">
 <div class="header__user-portal">
 <div class="header__mobile-menu-item header__user-portal-login">
-<a href="/login/">Login</a>
+<a href="/login?redirect_to=https://brickseek.com/products/?search=0885909052059">Login</a>
 </div>
 <div class="header__mobile-menu-item header__user-portal-sign-up">
 <a href="/sign-up?src=s-mm-adsu-0919">Sign Up</a>
@@ -367,10 +394,11 @@ Local Markdown Feed </span>
 Online Markdown Feed </span>
 </div>
 </div>
+
 </div>
 <div class="header__mobile-menu-panel" data-mobile-menu-panel-id="deals">
 <div class="header__mobile-menu-panel-header">
-Deals <div class="header__mobile-menu-panel-done">Back</div>
+Deals <div class="header__mobile-menu-panel-done"><span class="far fa-chevron-left"></span> Back</div>
 </div>
 <div class="header__mobile-menu-section">
 <div class="header__mobile-menu-item">
@@ -392,7 +420,7 @@ Deals <div class="header__mobile-menu-panel-done">Back</div>
 <div class="header__mobile-menu-item">
 <a href="/deals/toys/">Toys</a>
 </div>
-<div class="header__mobile-menu-item">
+ <div class="header__mobile-menu-item">
 <a href="/deals/home-goods/">Home Goods</a>
 </div>
 <div class="header__mobile-menu-item">
@@ -409,7 +437,7 @@ Deals <div class="header__mobile-menu-panel-done">Back</div>
 </div>
 <div class="header__mobile-menu-panel" data-mobile-menu-panel-id="inventory-checkers">
 <div class="header__mobile-menu-panel-header">
-Inventory Checkers <div class="header__mobile-menu-panel-done">Back</div>
+Inventory Checkers <div class="header__mobile-menu-panel-done"><span class="far fa-chevron-left"></span> Back</div>
 </div>
 <div class="header__mobile-menu-store-list">
 <div class="header__mobile-menu-item header__mobile-menu-item--store-logo">
@@ -471,7 +499,7 @@ Inventory Checkers <div class="header__mobile-menu-panel-done">Back</div>
 <div class="header__mobile-menu-panel" data-mobile-menu-panel-id="popular-searches">
 <div class="header__mobile-menu-panel-header">
 <span class="far fa-lock-alt"></span>
-Popular Searches <div class="header__mobile-menu-panel-done">Back</div>
+Popular Searches <div class="header__mobile-menu-panel-done"><span class="far fa-chevron-left"></span> Back</div>
 </div>
 <p>With Popular Searches you can view the most popular items on BrickSeek. If an item is listed here, then it&#039;s there for a reason. Search these items in your area to find out why!</p>
 <p><a href="/sign-up?src=s-h-mmmaps-0919" class="header__dropdown-promo-button">Upgrade to Premium for Access</a>
@@ -479,7 +507,7 @@ Popular Searches <div class="header__mobile-menu-panel-done">Back</div>
 <div class="header__mobile-menu-panel" data-mobile-menu-panel-id="todays-markdowns">
 <div class="header__mobile-menu-panel-header">
 <span class="far fa-lock-alt"></span>
-Today&#039;s Markdowns <div class="header__mobile-menu-panel-done">Back</div>
+Today&#039;s Markdowns <div class="header__mobile-menu-panel-done"><span class="far fa-chevron-left"></span> Back</div>
 </div>
 <p>New day, new markdowns. Today&#039;s Markdowns shows you exactly which items are most commonly being marked down across the nation day to day.</p>
 <p><a href="/sign-up?src=s-h-mmmatm-0919" class="header__dropdown-promo-button">Upgrade to Premium for Access</a>
@@ -487,7 +515,7 @@ Today&#039;s Markdowns <div class="header__mobile-menu-panel-done">Back</div>
 <div class="header__mobile-menu-panel" data-mobile-menu-panel-id="markdowns-by-store">
 <div class="header__mobile-menu-panel-header">
 <span class="far fa-lock-alt"></span>
-Markdowns by Store <div class="header__mobile-menu-panel-done">Back</div>
+Markdowns by Store <div class="header__mobile-menu-panel-done"><span class="far fa-chevron-left"></span> Back</div>
 </div>
 <p>Choose any store near you and view its recently detected markdowns in one convenient place. It&#039;s that easy.</p>
 <p><a href="/sign-up?src=s-h-mmmambs-0919" class="header__dropdown-promo-button">Upgrade to Premium for Access</a>
@@ -495,7 +523,7 @@ Markdowns by Store <div class="header__mobile-menu-panel-done">Back</div>
 <div class="header__mobile-menu-panel" data-mobile-menu-panel-id="local-markdown-feed">
 <div class="header__mobile-menu-panel-header">
 <span class="far fa-lock-alt"></span>
-Local Markdown Feed <div class="header__mobile-menu-panel-done">Back</div>
+Local Markdown Feed <div class="header__mobile-menu-panel-done"><span class="far fa-chevron-left"></span> Back</div>
 </div>
 <p>Local Markdown Feed is an all-in-one page for viewing detected markdowns across all stores near you. Included with each listed markdown is a secondary expandable list of the nearby stores which that markdown was detected in. It&#039;s every deal hunters dream.</p>
 <p><a href="/sign-up?src=s-h-mmmalmf-0919" class="header__dropdown-promo-button">Upgrade to Extreme for Access</a>
@@ -503,7 +531,7 @@ Local Markdown Feed <div class="header__mobile-menu-panel-done">Back</div>
 <div class="header__mobile-menu-panel" data-mobile-menu-panel-id="brickseek-rewards">
 <div class="header__mobile-menu-panel-header">
 <span class="far fa-lock-alt"></span>
-BrickSeek Rewards <div class="header__mobile-menu-panel-done">Back</div>
+BrickSeek Rewards <div class="header__mobile-menu-panel-done"><span class="far fa-chevron-left"></span> Back</div>
 </div>
 <p>Thousands of exclusive offers covering a range of popular categories including travel, dining, wellness, and entertainment.</p>
 <p><a href="/sign-up?src=s-h-mmmabr-0919" class="header__dropdown-promo-button">Upgrade to Premium for Access</a>
@@ -511,7 +539,7 @@ BrickSeek Rewards <div class="header__mobile-menu-panel-done">Back</div>
 <div class="header__mobile-menu-panel" data-mobile-menu-panel-id="online-markdown-feed">
 <div class="header__mobile-menu-panel-header">
 <span class="far fa-lock-alt"></span>
-Online Markdown Feed <div class="header__mobile-menu-panel-done">Back</div>
+Online Markdown Feed <div class="header__mobile-menu-panel-done"><span class="far fa-chevron-left"></span> Back</div>
 </div>
 <p>Prefer to do your deal hunting online? Online Markdown Feed is the most extensive list of recent online markdowns across the web.</p>
 <p><a href="/sign-up?src=s-h-mmmaomf-0919" class="header__dropdown-promo-button">Upgrade to Premium for Access</a>
@@ -542,7 +570,7 @@ Done </span>
 <div class="results-modifiers">
 <a class="results-modifiers__item" data-modifier="search" href="/products/" data-query-args='[]'>
 <span class="fal fa-times results-modifiers__item-icon"></span>
-&quot;4988064309405&quot; </a>
+&quot;0885909052059&quot; </a>
 </div>
 </div>
 </div>
@@ -588,7 +616,7 @@ Brands <span class="filters__section-label-expand"></span>
 </div>
 </div>
 <div class="filters__initial-url-args">
-<input type="hidden" name="search" value="4988064309405" />
+<input type="hidden" name="search" value="0885909052059" />
 </div>
 <div class="filters__footer">
 <button type="submit" class="filters__submit" data-dynamic-label="Show %s products" data-dynamic-singular-label="Show %s product" data-default-label="Apply">
@@ -597,22 +625,23 @@ Brands <span class="filters__section-label-expand"></span>
 </div>
 </div>
 </form> <main id="main" class="main section__main" role="main">
-<div class="section banner ">
+<div class="section banner">
 <div class="wrap">
 <div class="banner__content">
 <h1 class="banner__title">
-<span class="banner__title-text">Products for &quot;4988064309405&quot; </span>
+<span class="banner__title-text  banner__title-text--ajax-ready">
+Products for &quot;0885909052059&quot; </span>
 </h1>
 <div class="banner__controls">
 <div class="banner__controls-group banner__controls-group--filter">
 <span class="banner__controls-button banner__controls-button--filter">
 <span class="banner__controls-button-text">
 <span class="far fa-filter"></span>
-Filter </span>
+Filter <span class="banner-active-filters-count">1</span>
+</span>
 </span>
 </div>
-</div>
-</div>
+</div> </div>
 </div>
 </div>
 <div class="ajax-target" data-ajax-target="main">
@@ -633,57 +662,57 @@ Filter </span>
 <h3 class="widget-title sidebar__widget-title">Online Deals</h3>
 <ul class="item-list-widget__list">
 <li>
-<a href="/p/290114" class="item-list-widget__item">
+<a href="/p/100932" class="item-list-widget__item">
 <div class="item-list-widget__image">
-<img src="https://i5.walmartimages.com/asr/3e324d78-abfd-4416-ba2c-d3b84720390b_1.df3ab137ca3e4f085b6f25813f149b00.jpeg" alt="Coleman 75qt Xtreme Series Wheeled Cooler - Blue" />
+<img src="https://i5.walmartimages.com/asr/a6a452eb-2db3-4261-81d5-5c82b1a3f617_1.b3ceffa90e5388e6f10f59b0ccecc2fa.jpeg" alt="Farberware 15pc Stainless Steel Knife Block Set" />
 </div>
 <div class="item-list-widget__info">
-<span class="item-list-widget__title">Coleman 75qt Xtreme Series Wheeled Cooler - Blue</span>
+<span class="item-list-widget__title">Farberware 15pc Stainless Steel Knife Block Set</span>
 <div class="price-summary">
-<div class="price-summary__featured typography-font-size-normal"><span class="price-formatted price-formatted--style-normal">$35.00</span></div>
-<div class="price-summary__muted price-summary__strike typography-font-size-muted"><span class="price-formatted price-formatted--style-normal">$63.67</span></div>
+<div class="price-summary__featured typography-font-size-normal"><span class="price-formatted price-formatted--style-normal">$19.99</span></div>
+<div class="price-summary__muted price-summary__strike typography-font-size-muted"><span class="price-formatted price-formatted--style-normal">$99.00</span></div>
 </div>
 </div>
 </a>
 </li>
 <li>
-<a href="/p/6390966" class="item-list-widget__item">
+<a href="/p/445789" class="item-list-widget__item">
 <div class="item-list-widget__image">
-<img src="https://images-na.ssl-images-amazon.com/images/I/31D7BcPLOXL.jpg" alt="Geriville Sofa Console Table Brown - Signature Design by Ashley" />
+<img src="https://i5.walmartimages.com/asr/a0b089a1-cdb6-44cb-948e-15cbee4b69dc_1.c760d49a94ba554a9e0900956f9369ad.jpeg" alt="Mainstays Student Desk, Black Oak" />
 </div>
 <div class="item-list-widget__info">
-<span class="item-list-widget__title">Geriville Sofa Console Table Brown - Signature Design by Ashley</span>
+<span class="item-list-widget__title">Mainstays Student Desk, Black Oak</span>
 <div class="price-summary">
-<div class="price-summary__featured typography-font-size-normal"><span class="price-formatted price-formatted--style-normal">$65.22</span></div>
-<div class="price-summary__muted price-summary__strike typography-font-size-muted"><span class="price-formatted price-formatted--style-normal">$292.97</span></div>
+<div class="price-summary__featured typography-font-size-normal"><span class="price-formatted price-formatted--style-normal">$34.99</span></div>
+<div class="price-summary__muted price-summary__strike typography-font-size-muted"><span class="price-formatted price-formatted--style-normal">$79.00</span></div>
 </div>
 </div>
 </a>
 </li>
 <li>
-<a href="/p/6399202" class="item-list-widget__item">
+<a href="/p/8484991" class="item-list-widget__item">
 <div class="item-list-widget__image">
-<img src="https://i5.walmartimages.com/asr/25085381-c16f-4d44-b41b-a57f90c0e066_1.c5fa95593b62cc27deac31135e4815f4.jpeg" alt="Tampax Pocket Radiant Compact Tampons - Regular Absorbency - Plastic - 32ct" />
+<img src="https://i5.walmartimages.com/asr/bc07ef2c-08fd-4606-b819-da47139d130b_1.acb32e7b585b0886fecbd4c99ad5b76e.jpeg" alt="Sharper Image Instant Camera Kit (Compatible with Fujifilm Instax Mini Film) &ndash; Blue" />
 </div>
 <div class="item-list-widget__info">
-<span class="item-list-widget__title">Tampax Pocket Radiant Compact Tampons - Regular Absorbency - Plastic - 32ct</span>
+<span class="item-list-widget__title">Sharper Image Instant Camera Kit (Compatible with Fujifilm Instax Mini Film) &ndash; Blue</span>
 <div class="price-summary">
-<div class="price-summary__featured typography-font-size-normal"><span class="price-formatted price-formatted--style-normal">$3.87</span></div>
-<div class="price-summary__muted price-summary__strike typography-font-size-muted"><span class="price-formatted price-formatted--style-normal">$8.03</span></div>
+<div class="price-summary__featured typography-font-size-normal"><span class="price-formatted price-formatted--style-normal">$19.99</span></div>
+<div class="price-summary__muted price-summary__strike typography-font-size-muted"><span class="price-formatted price-formatted--style-normal">$44.00</span></div>
 </div>
 </div>
 </a>
 </li>
 <li>
-<a href="/p/4563395" class="item-list-widget__item">
+<a href="/p/5757875" class="item-list-widget__item">
 <div class="item-list-widget__image">
-<img src="https://images-na.ssl-images-amazon.com/images/I/51aqI2NYipL.jpg" alt="6V Deluxe Ride On Mack Truck with Trailer in White, Battery Powered" />
+<img src="https://i5.walmartimages.com/asr/555c2140-97c3-4227-b6b3-f83139d758d9_1.3ef8f99f45a9a80d6133433dd989eff9.jpeg" alt="Brother P-touch, PTM95, Handy Label Maker, 9 Type Styles, 8 Deco Mode Patterns, White" />
 </div>
 <div class="item-list-widget__info">
-<span class="item-list-widget__title">6V Deluxe Ride On Mack Truck with Trailer in White, Battery Powered</span>
+<span class="item-list-widget__title">Brother P-touch, PTM95, Handy Label Maker, 9 Type Styles, 8 Deco Mode Patterns, White</span>
 <div class="price-summary">
-<div class="price-summary__featured typography-font-size-normal"><span class="price-formatted price-formatted--style-normal">$91.82</span></div>
-<div class="price-summary__muted price-summary__strike typography-font-size-muted"><span class="price-formatted price-formatted--style-normal">$159.91</span></div>
+<div class="price-summary__featured typography-font-size-normal"><span class="price-formatted price-formatted--style-normal">$9.99</span></div>
+<div class="price-summary__muted price-summary__strike typography-font-size-muted"><span class="price-formatted price-formatted--style-normal">$34.50</span></div>
 </div>
 </div>
 </a>
@@ -709,40 +738,40 @@ View More Deals </a>
 <li>
 <a href="" class="item-list-widget__item">
 <div class="item-list-widget__image">
+<img src="https://cdn1.brickseek.com/wp-content/uploads/2019/11/28065746/my-stores-blog-post-image-2.png" alt="BREAKING NEWS: You Can Now Filter the Deals Page to Only Show Deals Seen in Stores Near You" />
+</div>
+<div class="item-list-widget__info">
+<span class="item-list-widget__title">BREAKING NEWS: You Can Now Filter the Deals Page to Only Show Deals Seen in Stores Near You</span>
+</div>
+</a>
+</li>
+<li>
+<a href="" class="item-list-widget__item">
+<div class="item-list-widget__image">
+<img src="https://cdn1.brickseek.com/wp-content/uploads/2019/11/26065317/spend-black-friday-with-bs-blog.jpg" alt="This Year, Spend Black Friday With BrickSeek — Here&#8217;s How" />
+</div>
+<div class="item-list-widget__info">
+<span class="item-list-widget__title">This Year, Spend Black Friday With BrickSeek — Here&#8217;s How</span>
+</div>
+</a>
+</li>
+<li>
+<a href="" class="item-list-widget__item">
+<div class="item-list-widget__image">
+<img src="https://cdn1.brickseek.com/wp-content/uploads/2019/11/25113906/heidi-sandstrom-2TLREZi7BUg-unsplash-1.jpg" alt="5 Easy Ways to Save Even More on Black Friday" />
+</div>
+<div class="item-list-widget__info">
+<span class="item-list-widget__title">5 Easy Ways to Save Even More on Black Friday</span>
+</div>
+</a>
+</li>
+<li>
+<a href="" class="item-list-widget__item">
+<div class="item-list-widget__image">
 <img src="https://cdn1.brickseek.com/wp-content/uploads/2019/11/08040856/What-to-Buy-in-November.jpg" alt="What to Buy in November" />
 </div>
 <div class="item-list-widget__info">
 <span class="item-list-widget__title">What to Buy in November</span>
-</div>
-</a>
-</li>
-<li>
-<a href="" class="item-list-widget__item">
-<div class="item-list-widget__image">
-<img src="https://cdn1.brickseek.com/wp-content/uploads/2019/11/08033732/featured-image.jpg" alt="Veteran&#8217;s Day Discounts" />
-</div>
-<div class="item-list-widget__info">
-<span class="item-list-widget__title">Veteran&#8217;s Day Discounts</span>
-</div>
-</a>
-</li>
-<li>
-<a href="" class="item-list-widget__item">
-<div class="item-list-widget__image">
-<img src="https://cdn1.brickseek.com/wp-content/uploads/2019/07/25072828/StyledbyBrickSeek2.jpeg" alt="Styled by BrickSeek &#8211; Porch Makeover" />
-</div>
-<div class="item-list-widget__info">
-<span class="item-list-widget__title">Styled by BrickSeek &#8211; Porch Makeover</span>
-</div>
-</a>
-</li>
-<li>
-<a href="" class="item-list-widget__item">
-<div class="item-list-widget__image">
-<img src="https://cdn1.brickseek.com/wp-content/uploads/2019/10/09053942/halloween.jpg" alt="Halloween Steals and Deals" />
-</div>
-<div class="item-list-widget__info">
-<span class="item-list-widget__title">Halloween Steals and Deals</span>
 </div>
 </a>
 </li>
@@ -755,46 +784,46 @@ View More Posts </a>
 <h3 class="widget-title sidebar__widget-title">Top Community Topics</h3>
 <ul class="item-list-widget__list">
 <li>
-<a href="https://talk.brickseek.com/t/tide-pods-spring-renewal-laundry-detergent-pacs-61-ct-at-walmart-9-00-in-8-of-stores/37508" class="item-list-widget__item">
+<a href="https://talk.brickseek.com/t/emerald-5-2l-digital-air-fryer-black-at-best-buy-for-39-99-online/39827" class="item-list-widget__item">
 <div class="item-list-widget__image">
-<img src="//brickseek-talk.s3.dualstack.us-west-2.amazonaws.com/optimized/3X/d/a/dadeebe0fdb62568e6227d7b89a53e4865f9d6d1_2_200x200.jpeg" alt="Tide Pods Spring Renewal Laundry Detergent Pacs 61 ct. at Walmart - $9.00 in 8% of stores" />
+<img src="//brickseek-talk.s3.dualstack.us-west-2.amazonaws.com/optimized/3X/7/3/73e64554f0211350a2d54abb4fb81d0ad360c3b9_2_200x200.jpeg" alt="Emerald - 5.2L Digital Air Fryer - Black at Best Buy for $39.99 Online" />
 </div>
 <div class="item-list-widget__info">
-<span class="item-list-widget__title">Tide Pods Spring Renewal Laundry Detergent Pacs 61 ct. at Walmart - $9.00 in 8% of stores</span>
-<span class="typography-font-size-muted typography-color-muted" title="257 views">257 views</span>
+<span class="item-list-widget__title">Emerald - 5.2L Digital Air Fryer - Black at Best Buy for $39.99 Online</span>
+<span class="typography-font-size-muted typography-color-muted" title="178 views">178 views</span>
 </div>
 </a>
 </li>
 <li>
-<a href="https://talk.brickseek.com/t/pny-technologies-16gb-sdhc-card-class-4-at-walmart-2-50-in-13-of-stores/37419" class="item-list-widget__item">
+<a href="https://talk.brickseek.com/t/instant-pot-smart-wifi-8-in-1-electric-pressure-cooker-slow-cooker-rice-cooker-steamer-saute-yogurt-maker-cake-maker-and-warmer-6-quart-13-one-touch-programs-at-amazon-com-for-89-99-online/39711" class="item-list-widget__item">
 <div class="item-list-widget__image">
-<img src="//brickseek-talk.s3.dualstack.us-west-2.amazonaws.com/optimized/3X/5/c/5c695b8e48f63f2663f468c4369d8335cbb10acb_2_200x200.jpeg" alt="PNY Technologies 16GB SDHC Card Class 4 at Walmart - $2.50 in 13% of stores" />
+<img src="//brickseek-talk.s3.dualstack.us-west-2.amazonaws.com/optimized/3X/1/b/1b3ead2b3854b95d5e3bc1f9e2c96bb2aeb582bc_2_200x200.jpeg" alt="Instant Pot Smart WiFi 8-in-1 Electric Pressure Cooker Slow Cooker Rice Cooker Steamer Saute Yogurt Maker Cake Maker and Warmer|6 Quart|13 One-Touch Programs at Amazon.com for $89.99 Online" />
 </div>
 <div class="item-list-widget__info">
-<span class="item-list-widget__title">PNY Technologies 16GB SDHC Card Class 4 at Walmart - $2.50 in 13% of stores</span>
-<span class="typography-font-size-muted typography-color-muted" title="152 views">152 views</span>
+<span class="item-list-widget__title">Instant Pot Smart WiFi 8-in-1 Electric Pressure Cooker Slow Cooker Rice Cooker Steamer Saute Yogurt Maker Cake Maker and Warmer|6 Quart|13 One-Touch Programs at Amazon.com for $89.99 Online</span>
+<span class="typography-font-size-muted typography-color-muted" title="115 views">115 views</span>
 </div>
 </a>
 </li>
 <li>
-<a href="https://talk.brickseek.com/t/wtb-desktop-gaming-pc/37474" class="item-list-widget__item">
+<a href="https://talk.brickseek.com/t/philips-sonicare-protectiveclean-4100-rechargeable-electric-toothbrush-white-hx6817-01-packaging-may-vary-at-amazon-com-for-29-95-online/39768" class="item-list-widget__item">
 <div class="item-list-widget__image">
-<img src="//brickseek-talk.s3.dualstack.us-west-2.amazonaws.com/optimized/3X/0/8/08d689115b640fd5fbf968eb64aca83b5e875fe5_2_200x200.jpeg" alt="WTB: Desktop Gaming PC" />
+<img src="//brickseek-talk.s3.dualstack.us-west-2.amazonaws.com/optimized/3X/e/2/e2fabbeb5b05ad8fe2dc55e707e4bec11ee1b1ed_2_200x200.jpeg" alt="Philips Sonicare ProtectiveClean 4100 Rechargeable Electric Toothbrush White HX6817/01 (Packaging may Vary) at Amazon.com for $29.95 Online" />
 </div>
 <div class="item-list-widget__info">
-<span class="item-list-widget__title">WTB: Desktop Gaming PC</span>
-<span class="typography-font-size-muted typography-color-muted" title="452 views">452 views</span>
+<span class="item-list-widget__title">Philips Sonicare ProtectiveClean 4100 Rechargeable Electric Toothbrush White HX6817/01 (Packaging may Vary) at Amazon.com for $29.95 Online</span>
+<span class="typography-font-size-muted typography-color-muted" title="219 views">219 views</span>
 </div>
 </a>
 </li>
 <li>
-<a href="https://talk.brickseek.com/t/educational-insights-geosafari-jr-talking-telescope-telescope-for-kids-4-50/37788" class="item-list-widget__item">
+<a href="https://talk.brickseek.com/t/cosco-simple-fold-full-size-high-chair-with-adjustable-tray-zuri-spritz-safari-at-walmart-for-29-88-online/39708" class="item-list-widget__item">
 <div class="item-list-widget__image">
-<img src="//brickseek-talk.s3.dualstack.us-west-2.amazonaws.com/optimized/3X/3/5/358a49bc2e7f97f361f1b64af48608cac4ad53ba_2_200x200.jpeg" alt="Educational Insights GeoSafari Jr. Talking Telescope - Telescope for Kids- $4.50" />
+<img src="//brickseek-talk.s3.dualstack.us-west-2.amazonaws.com/optimized/3X/6/9/692b36c5102d86b0f29bf13dd4101c649bab6034_2_200x200.jpeg" alt="Cosco Simple Fold Full Size High Chair with Adjustable Tray Zuri-Spritz-Safari at Walmart for $29.88 Online" />
 </div>
 <div class="item-list-widget__info">
-<span class="item-list-widget__title">Educational Insights GeoSafari Jr. Talking Telescope - Telescope for Kids- $4.50</span>
-<span class="typography-font-size-muted typography-color-muted" title="53 views">53 views</span>
+<span class="item-list-widget__title">Cosco Simple Fold Full Size High Chair with Adjustable Tray Zuri-Spritz-Safari at Walmart for $29.88 Online</span>
+<span class="typography-font-size-muted typography-color-muted" title="140 views">140 views</span>
 </div>
 </a>
 </li>
@@ -866,9 +895,9 @@ View More Topics </a>
 <h3 class="footer__columns-title">Follow us</h3>
 <div class="footer__columns-content">
 <ul class="footer__columns-content-inner">
-<li><a href="https://facebook.com/brickseek">Facebook</a></li>
-<li><a href="https://instagram.com/brickseek">Instagram</a></li>
-<li><a href="https://twitter.com/brickseek">Twitter</a></li>
+<li><a href="https://facebook.com/brickseek"><span class="fab fa-facebook"></span> Facebook</a></li>
+<li><a href="https://instagram.com/brickseek"><span class="fab fa-instagram"></span> Instagram</a></li>
+<li><a href="https://twitter.com/brickseek"><span class="fab fa-twitter"></span> Twitter</a></li>
 </ul>
 </div>
 </div>
@@ -877,7 +906,8 @@ View More Topics </a>
 <div class="footer__columns-content">
 <ul class="footer__columns-content-inner">
 <li><a href="/about/">Our Story</a></li>
-<li><a href="/contact/">Contact us</a></li>
+<li><a href="/contact/">Contact Us</a></li>
+<li><a href="/media/">Partner With Us / Media</a></li>
 </ul>
 </div>
 <h3 class="footer__columns-title">Support</h3>
@@ -890,19 +920,19 @@ View More Topics </a>
 </div>
 <div class="footer__stats">
 <a href="/products/" class="footer__stats-figure">
-<span class="footer__stats-number">2.5M</span>
+<span class="footer__stats-number"><span class="far fa-database"></span> 2.5M</span>
 <span class="footer__stats-label">Products</span>
 </a>
 <a href="/deals/" class="footer__stats-figure">
-<span class="footer__stats-number">171K</span>
+<span class="footer__stats-number"><span class="far fa-tags"></span> 171K</span>
 <span class="footer__stats-label">Deals Posted</span>
 </a>
 <a href="https://facebook.com/brickseek" target="_blank" rel="noopener noreferrer" class="footer__stats-figure">
-<span class="footer__stats-number">86.0K</span>
+<span class="footer__stats-number"><span class="fab fa-facebook"></span> 89.4K</span>
 <span class="footer__stats-label">Facebook Likes</span>
 </a>
 <a href="https://instagram.com/brickseek" target="_blank" rel="noopener noreferrer" class="footer__stats-figure">
-<span class="footer__stats-number">101K</span>
+<span class="footer__stats-number"><span class="fab fa-instagram"></span> 107K</span>
 <span class="footer__stats-label">Instagram Followers</span>
 </a>
 </div>
@@ -923,11 +953,11 @@ Certain content that appears on this site comes from Amazon Services LLC. This c
 <script type='text/javascript' src='https://brickseek.com/wp-includes/js/underscore.min.js?ver=1.8.3'></script>
 <script type='text/javascript'>
 /* <![CDATA[ */
-var brickseek_theme = {"user_logged_in":"","user_level":"0","user_id":"","config_user_levels":{"2":"free","3":"premium","4":"extreme","5":"elite"},"config_user_capabilities":{"hide-ads":"premium","hide-sidebar":"premium","pricing-info":"premium","popular-searches":"premium","todays-markdowns":"premium","markdowns-by-store":"premium","rewards-program":"premium","dashboard":"premium","map-view-rewards-offer":"premium","map-view-markdowns-by-store":"premium","map-view-inventory-checker":"premium","map-view-product-super":"premium","order-for-pickup":"premium","local-markdown-feed":"extreme","online-markdown-feed":"extreme","online-discounts":"extreme","hide":"extreme","tags-local-alerts":"extreme","shopping-list":"extreme","alerts-deal":"extreme","marketplace-info":"elite","pin":"elite","target-price":"elite","tags-pinned-list":"elite"},"no_image_placeholder":"https:\/\/cdn1.brickseek.com\/img\/no-image.jpg","ajax_api_path":"https:\/\/search.brickseek.com\/ajax","ajax_api_key":"hsaDjw23","ajax_url":"https:\/\/brickseek.com\/wp-admin\/admin-ajax.php","ajax_security":"f1c5afffca","enabled_ad_slots":["brickseek_728x90_300x250_320x50_ATF","brickseek_728x90_300x250_320x50_BTF","brickseek_300x600_320x250_160x600_Right"],"screen":"products","display_site_announcement":"","results_modifiers_includes_search":"1","filters_on_change":"use-ajax","filters_results_distribution":null,"sort_on_change":null,"pagination_uses_ajax_filters":"1","localized_back":"Back","localized_close":"Close","localized_search_no_results":"No results found.","localized_error_invalid":"Please enter a valid value.","localized_error_general":"Something went wrong please try again later or contact us.","localized_error_location":"We could not determine your current location at this time.","localized_error_scanner":"There was a problem with accessing the camera on your device.","localized_error_scanner_not_found":"We could not find a product that matches the scanned UPC.","localized_store_history_no_results":"No availability history was found for this location.","localized_redeem_offer_modal_title_instore_print":"Redeem Offer by Printed Coupon","localized_redeem_offer_modal_title_instore":"Redeem Offer by Mobile Coupon","localized_redeem_offer_modal_title_link":"Redeem Offer Online","localized_redeem_offer_modal_title_call":"Redeem Offer by Phone","integrations_openlayers":"1","integrations_quaggaJS":"1"};
+var brickseek_theme = {"user_logged_in":"","user_level":"0","user_id":"","config_user_levels":{"2":"free","3":"premium","4":"extreme","5":"elite"},"config_user_capabilities":{"alerts-deal":"free","hide-ads":"premium","hide-sidebar":"premium","pricing-info":"premium","popular-searches":"premium","todays-markdowns":"premium","markdowns-by-store":"premium","rewards-program":"premium","dashboard":"premium","map-view-rewards-offer":"premium","map-view-markdowns-by-store":"premium","map-view-inventory-checker":"premium","map-view-product-super":"premium","order-for-pickup":"premium","my-stores":"premium","map-view-account-my-stores":"premium","local-markdown-feed":"extreme","online-markdown-feed":"extreme","online-discounts":"extreme","hide":"extreme","tags-local-alerts":"extreme","shopping-list":"extreme","marketplace-info":"elite","pin":"elite","target-price":"elite","tags-pinned-list":"elite"},"no_image_placeholder":"https:\/\/cdn1.brickseek.com\/img\/no-image.jpg","ajax_api_path":"https:\/\/search.brickseek.com\/ajax","ajax_api_key":"hsaDjw23","ajax_url":"https:\/\/brickseek.com\/wp-admin\/admin-ajax.php","ajax_security":"0e02e28346","enabled_ad_slots":["brickseek_728x90_300x250_320x50_ATF","brickseek_728x90_300x250_320x50_BTF","brickseek_300x600_320x250_160x600_Right"],"screen":"products","current_banner_template_id":"default","display_site_announcement":"","results_modifiers_includes_search":null,"filters_on_change":"use-ajax","filters_results_distribution":null,"sort_on_change":null,"pagination_uses_ajax_filters":"1","localized_back":"Back","localized_close":"Close","localized_search_no_results":"No results found.","localized_error_invalid":"Please enter a valid value.","localized_error_general":"Something went wrong please try again later or contact us.","localized_error_location":"We could not determine your current location at this time.","localized_error_scanner":"There was a problem with accessing the camera on your device.","localized_error_scanner_not_found":"We could not find a product that matches the scanned UPC.","localized_store_history_no_results":"No availability history was found for this location.","localized_redeem_offer_modal_title_instore_print":"Redeem Offer by Printed Coupon","localized_redeem_offer_modal_title_instore":"Redeem Offer by Mobile Coupon","localized_redeem_offer_modal_title_link":"Redeem Offer Online","localized_redeem_offer_modal_title_call":"Redeem Offer by Phone","integrations_openlayers":"1","integrations_quaggaJS":"1","integrations_chargebee":"1"};
 /* ]]> */
 </script>
-<script type='text/javascript' src='https://brickseek.com/wp-content/themes/brickseek/js/theme.min.js?ver=3.1.1'></script>
-<script type='text/javascript' src='https://brickseek.com/wp-includes/js/wp-embed.min.js?ver=5.2.2'></script>
+<script type='text/javascript' src='https://brickseek.com/wp-content/themes/brickseek/js/theme.min.js?ver=3.2.0'></script>
+<script type='text/javascript' src='https://brickseek.com/wp-includes/js/wp-embed.min.js?ver=5.3'></script>
 <script type="text/html" id="js-template-page-overlay">
 			<div class="page-overlay"></div>
 		</script>
@@ -1014,7 +1044,7 @@ var brickseek_theme = {"user_logged_in":"","user_level":"0","user_id":"","config
 		<span class="modal__close">Close</span>
 	</div>
 	<div class="modal__body">
-					<p>You must be <a href="/login/?redirect_to=https://brickseek.com/products/?search=4988064309405">logged in</a> to create a local alert.</p>
+					<p>You must be <a href="/login?redirect_to=https://brickseek.com/products/?search=0885909052059">logged in</a> to create a local alert.</p>
 			</div>
 </div>		</script>
 <script type="text/html" id="js-template-modal-add-deal-alert">
@@ -1025,11 +1055,26 @@ var brickseek_theme = {"user_logged_in":"","user_level":"0","user_id":"","config
 	</div>
 	<div class="modal__body">
 		<div class="modal__body-inner-scroller">
-							<p>You must be <a href="/login/?redirect_to=https://brickseek.com/products/?search=4988064309405">logged in</a> to create a subcategory alert.</p>
+							<p>You must be <a href="/login?redirect_to=https://brickseek.com/products/?search=0885909052059">logged in</a> to create a subcategory alert.</p>
 					</div>
 	</div>
 	<div class="modal__footer">
 		<button type="submit" class="add-deal-alert-form__submit"><span>Create Alert</span></button>
+	</div>
+</form>		</script>
+<script type="text/html" id="js-template-modal-edit-deal-alert">
+			<form method="post" class="modal modal--footer add-deal-alert-modal add-deal-alert-modal--edit add-deal-alert-form">
+	<div class="modal__header">
+		<h4 class="modal__title">Edit Online Deal Alert</h4>
+		<span class="modal__close">Cancel</span>
+	</div>
+	<div class="modal__body">
+		<div class="modal__body-inner-scroller">
+			<div class="add-deal-alert-form__controls"></div>
+		</div>
+	</div>
+	<div class="modal__footer">
+		<button type="submit" class="add-deal-alert-form__submit"><span>Save Changes</span></button>
 	</div>
 </form>		</script>
 <script type="text/html" id="js-template-modal-set-target-price">
@@ -1116,7 +1161,7 @@ var brickseek_theme = {"user_logged_in":"","user_level":"0","user_id":"","config
 		<span class="modal__close">Cancel</span>
 	</div>
 	<div class="modal__body">
-		<p>You must be <a href="/login/?redirect_to=https://brickseek.com/products/?search=4988064309405">logged in</a> to like a deal.</p>
+		<p>You must be <a href="/login?redirect_to=https://brickseek.com/products/?search=0885909052059">logged in</a> to like a deal.</p>
 	</div>
 </div>		</script>
 <script type="text/html" id="js-template-modal-account-add-tags">
@@ -1172,8 +1217,8 @@ var brickseek_theme = {"user_logged_in":"","user_level":"0","user_id":"","config
 		<span class="modal__close">Cancel</span>
 	</div>
 	<div class="modal__body">
-		<p>You are about to change your profiles zip code, if you continue then your current settings for &quot;My Stores&quot; will be reset to the default setting based on your newly entered zip code. This action cannot be undone. Are you sure you wish to continue?</p>
-		<p><span class="js-link js-link--delete modal__trigger-confirm">Yes, save all changes and reset my stores selection</span></p>
+		<p>You are about to change your accounts zip code, if you continue then your current settings for &quot;My Stores&quot; will be reset to the default setting based on your newly entered zip code. This action cannot be undone. Are you sure you wish to continue?</p>
+		<p><span class="js-link js-link--delete modal__trigger-confirm">Yes, save changes and reset my stores selection</span></p>
 	</div>
 </div>		</script>
 <script type="text/html" id="js-template-modal-account-confirm-restore-defaults">
@@ -1330,5 +1375,5 @@ var brickseek_theme = {"user_logged_in":"","user_level":"0","user_id":"","config
 		<p>You have reached your redemption quota for this offer, it can not be redeemed again at this time.</p>
 	</div>
 </div>		</script>
-<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","licenseKey":"3283ea3d17","applicationID":"282536246","transactionName":"NV0EYBMDWUBQU0QIWwwXJ1cVC1hdHlleBVEa","queueTime":0,"applicationTime":729,"atts":"GRoHFlsZSk4=","errorBeacon":"bam.nr-data.net","agent":""}</script></body>
+<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","licenseKey":"3283ea3d17","applicationID":"282536246","transactionName":"NV0EYBMDWUBQU0QIWwwXJ1cVC1hdHlleBVEa","queueTime":0,"applicationTime":824,"atts":"GRoHFlsZSk4=","errorBeacon":"bam.nr-data.net","agent":""}</script></body>
 </html>
