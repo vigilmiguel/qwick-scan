@@ -24,7 +24,7 @@
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."</string>
-    <string name="register_title">Sign up</string>
+    <string name="register_title">Qwickscan</string>
     <string name="action_register">Sign Up</string>
     <string name="title_activity_maps">Map</string>
     <string name="open_map">Find Locations</string>
@@ -33,6 +33,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="create_account">Create an Account</string>
 
 
 </resources>

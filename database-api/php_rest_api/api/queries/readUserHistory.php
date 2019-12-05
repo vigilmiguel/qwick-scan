@@ -1,10 +1,8 @@
 <?php
     /*
         GET request JSON input format
-        
         {
-            "barcode" : String,
-            "numberOfStores" : Integer
+            "firebaseuid" : String
         }
     */
     ini_set('display_errors', 1);
@@ -21,10 +19,9 @@
     // Get the JSON input data.
     $data = json_decode(file_get_contents("php://input"));
 
-    $barcode = $data->barcode;
-    $numberOfStores = $data->numberOfStores;
+    $firebaseuid = $data->firebaseuid;
     
-    $result = $query->getLowestOnlinePrice($barcode, $numberOfStores);
+    $result = $query->getUserScanHistory($firebaseuid);
     
     $numRows = $result->rowCount();
     
@@ -36,11 +33,11 @@
         {
             extract($row);
             $item = array(
-                'productname' => $productname, // $variables must match the column names retured by the literal query and should be lowercase.
-                'storename' => $storename,
-                'price' => $price,
+                'barcode' => $barcode, 
+                'productname' => $productname,
                 'imageurl' => $imageurl,
-                'address' => $address
+                'numscans' => $numscans,
+                'datetimescanned' => $datetimescanned
             );
             array_push($arr, $item);
         }
@@ -49,7 +46,13 @@
     else
     {
         echo json_encode(
-            array('productname' => null)
+            array(
+                'barcode' => null,
+                'productname' => null,
+                'imageurl' => null,
+                'numscans' => null,
+                'datetimescanned' => null
+                )
         );
     }
     

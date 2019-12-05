@@ -35,4 +35,13 @@ public interface DatabaseAPI {
 
     @POST("queue/enqueue.php")
     Call<Void> enqueueDB(@Body ProductEnqueue product);
+
+    @POST("scans/create.php")
+    Call<Void> createScan(@Body UserScan userScan);
+
+    @POST("queries/readUserHistory.php")
+    Call<List<Product>> getUserHistory(@Body User user);
+
+    @POST("queries/deleteUserProductFromHistory.php")
+    Call<Void> deleteUserProduct(@Body UserProduct userProduct);
 }
