@@ -146,5 +146,29 @@
 
             return $stmt;
         }
+
+        public function deleteUserProduct($firebaseuid, $barcode)
+        {
+            $query = "  DELETE
+                            FROM scans
+                        WHERE userid = ( SELECT userid FROM users WHERE firebaseuid = :firebaseuid )
+                            AND productid = (SELECT productid FROM products WHERE barcode = :barcode);";
+
+            $stmt = $this->conn->prepare($query);
+
+            // Clean the data.
+            $firebaseuid = htmlspecialchars(strip_tags($firebaseuid));
+            $barcode = htmlspecialchars(strip_tags($barcode));
+
+            $stmt->bindParam(':firebaseuid', $firebaseuid);
+            $stmt->bindParam(':barcode', $barcode);
+
+            if($stmt->execute())
+                return true;
+            else
+                return false;
+
+        
+        }
     }
 ?>

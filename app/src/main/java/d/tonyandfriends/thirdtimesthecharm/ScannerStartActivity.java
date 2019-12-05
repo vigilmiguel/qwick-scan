@@ -22,6 +22,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
@@ -130,6 +131,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     String productName = "";
     String productImage = "";
     String productBarcode = "";
+    String historyBarcode = null;
 
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
@@ -167,6 +169,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             databaseUserScanHistory = FirebaseDatabase.getInstance()
                     .getReference(dbHistoryPath);
         }
+
+
 
         // Refers to the productsScanned table. This will store all products scanned
         // by all users.
@@ -210,7 +214,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         shareButton = (Button)findViewById(R.id.share_button);
         reviewButton = findViewById(R.id.review_button);
 
-
+        Progress.setVisibility(TextView.VISIBLE);
         //menuButton.setVisibility(Button.INVISIBLE);
         //scanButton.setVisibility(Button.INVISIBLE);
         pBar.setVisibility(ProgressBar.VISIBLE);
@@ -218,6 +222,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         mapButton.setVisibility(Button.INVISIBLE);
         shareButton.setVisibility(Button.INVISIBLE);
         reviewButton.setVisibility(Button.INVISIBLE);
+
 
         for(int i = 0; i < storeTextViews.size() && i < priceButtons.size(); i++) {
             storeTextViews.get(i).setVisibility(TextView.INVISIBLE);
@@ -232,9 +237,31 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         P2.setVisibility(P2.INVISIBLE);
         P3.setVisibility(P3.INVISIBLE);
         */
-        Progress.setVisibility(Progress.VISIBLE);
-        Intent intent = new Intent(this, BarcodeCaptureActivity.class);
-        startActivityForResult(intent, RC_BARCODE_CAPTURE);
+
+
+
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.nav_view);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_menu:
+                        startActivity(new Intent(ScannerStartActivity.this, MenuActivity.class));
+                        return true;
+                    case R.id.navigation_profile:
+                        startActivity(new Intent(ScannerStartActivity.this, ProfileActivity.class));
+                        return true;
+                    case R.id.navigation_history:
+                        startActivity(new Intent(ScannerStartActivity.this, HistoryActivity.class));
+                        return true;
+                }
+                return false;
+            }
+
+        });
 
 
         retrofit = new Retrofit.Builder()
@@ -303,6 +330,33 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         // We need the user's info in order to store their scan history.
         // All we really need is their userid in the DB.
         getUserInfo();
+
+        //Bundle bundle = getIntent().getExtras();
+        historyBarcode = getIntent().getStringExtra("barcode");
+
+        // If we didn't get a barcode from the history activity....
+        if(historyBarcode == null)
+        {
+            // Activate the camera for barcode capture.
+            Intent intent = new Intent(this, BarcodeCaptureActivity.class);
+            startActivityForResult(intent, RC_BARCODE_CAPTURE);
+        }
+        else // IF we did...
+        {
+            productBarcode = historyBarcode;
+
+            Log.i("Product Info", "Barcode Value: " + productBarcode);
+
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    findBarcodeInDatabase();
+                }
+            }, 1000);
+
+
+        }
 
     }
 
@@ -406,10 +460,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
             productName = pname;
 
-            Product product = new Product(productBarcode, productName, purl, currentTime, 1);
+            //Product product = new Product(productBarcode, productName, purl, currentTime, 1);
 
             // Store it in the database
-            storeInDatabase(product);
+            //storeInDatabase(product);
 
             //menuButton.setVisibility(Button.VISIBLE);
 
@@ -418,119 +472,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
 
 
-            BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.nav_view);
 
-            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-                    switch (menuItem.getItemId()) {
-                        case R.id.navigation_menu:
-                            startActivity(new Intent(ScannerStartActivity.this, MenuActivity.class));
-                            return true;
-                        case R.id.navigation_profile:
-                            startActivity(new Intent(ScannerStartActivity.this, ProfileActivity.class));
-                            return true;
-                        case R.id.navigation_history:
-                            startActivity(new Intent(ScannerStartActivity.this, HistoryActivity.class));
-                            return true;
-                    }
-                    return false;            }
-
-            /*
-            menuButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    finish();
-                    startActivity(new Intent(ScannerStartActivity.this, MenuActivity.class));
-                }
-            */
-
-            });
-
-
-            mapButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(ScannerStartActivity.this, MapsActivity.class));
-                }
-            });
-
-            shareButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent(ScannerStartActivity.this, shareActivity.class);
-
-                    // Create a bundle to store the info we want to send to shareActivity.
-                    Bundle bundle = new Bundle();
-
-                    // Store the name, stores and prices for the product in the bundle.
-                    bundle.putString("productName", productName);
-                    bundle.putStringArrayList("stores", store);
-                    bundle.putStringArrayList("prices", price);
-
-
-
-
-                    // Add it to the intent.
-                    intent.putExtras(bundle);
-
-
-                    // Fire her up!!
-                    startActivity(intent);
-                }
-            });
-
-            reviewButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(ScannerStartActivity.this, ReviewActivity.class);
-
-                    Bundle bundle = new Bundle();
-
-                    // Assuming the array lists have the respective names: urls, names, starRatings
-                    ArrayList<String> urls = result.reviewSitesURl;
-                    ArrayList<String> names = result.reviewSitesName;
-                    ArrayList<String> starRatings = result.starRating;
-
-                    String size = Integer.toString(urls.size());
-                    Log.i("cheekESTER", size);
-
-
-                    size = Integer.toString(names.size());
-                    Log.i("cheekESTER", size);
-
-
-                    size = Integer.toString(starRatings.size());
-                    Log.i("cheekESTER", size);
-
-                    /*
-                    names.add("Best Buy");
-                    starRatings.add("4.5");
-                    urls.add("https://popgoestheweek.com/wp-content/uploads/2019/03/Momo-Vincent-Marcus-1.jpg");
-
-                    names.add("E-Bay");
-                    starRatings.add("3.1");
-                    urls.add("https://www.ebay.com/");
-
-                    names.add("Macy's");
-                    starRatings.add("4.9");
-                    urls.add("https://www.macys.com/");
-
-                    names.add("Macy");
-                    starRatings.add("4.9");
-                    urls.add("https://popgoestheweek.com/wp-content/uploads/2019/03/Momo-Vincent-Marcus-1.jpg");
-                    */
-
-                    bundle.putStringArrayList("urls", urls);
-                    bundle.putStringArrayList("names", names);
-                    bundle.putStringArrayList("starRatings", starRatings);
-
-
-                    intent.putExtras(bundle);
-
-
-                    startActivity(intent);
-                }
-            });
         }
 
 
@@ -557,11 +499,11 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         }
         */
         //new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/products/readBarcode.php?barcode="+"0787364460199");
-        new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/products/readBarcode.php?barcode="+productName);
+        //new ContactAPI().execute("http://18.216.191.20/php_rest_api/api/products/readBarcode.php?barcode="+productName);
     }
 
 
-
+    /*
     public void storeInDatabase(Product newProduct)
     {
 
@@ -576,8 +518,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
 
     }
+     */
 
     // If the product is already in the given table, it will just update the date and count.
+    /*
     public void insertProductIntoTable(final DatabaseReference reference,
                                        final Product scannedProduct) {
 
@@ -591,12 +535,12 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         queryResult.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
-            /*
+            //
                 This is called either when initialized(which is now) or when the data is changed.
                 Because its under a listener for a single value event, it will only be called now
                 and not at a later time when the data changes again. (The shit will hit the fan
                 if it does! xD)
-             */
+             //
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if(reference == databaseProductsScanned)
@@ -614,10 +558,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                     // Store the first(only) product snapshot.
                     DataSnapshot data = dataList.iterator().next();
 
-                    /*
+                    //
                     Toast.makeText(ScannerStartActivity.this,
                             "This is already in the database!", Toast.LENGTH_SHORT).show();
-                    */
+                    //
 
                     // Extract the data of the existing product.
                     Product existingProduct = data.getValue(Product.class);
@@ -639,10 +583,10 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
                 // If the scanned product is not in this table...
                 else {
 
-                    /*
+                    //
                     Toast.makeText(ScannerStartActivity.this,
                             "Never seen this one before!", Toast.LENGTH_SHORT).show();
-                    */
+                    //
 
                     if(scannedProduct.getBarcode() != null) {
 
@@ -666,6 +610,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
 
     }
+     */
 
     /**
      * Called when an activity you launched exits, giving you the requestCode
@@ -822,9 +767,15 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         
         // Up until this point, we have the barcode we have scanned.
         
-        Log.i("barcode value:", "" + productBarcode);
+        Log.i("Product Info", "Barcode Value: " + productBarcode);
 
-        findBarcodeInDatabase();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                findBarcodeInDatabase();
+            }
+        }, 1000);
 
 
     }
@@ -836,7 +787,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
 
         // Check to see if the barcode is in the database.
-        Product product = new Product(productBarcode, null, null, null, 0);
+        Product product = new Product(productBarcode);
 
         try
         {
@@ -1129,7 +1080,104 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             mapButton.setVisibility(Button.VISIBLE);
             shareButton.setVisibility(Button.VISIBLE);
             reviewButton.setVisibility(Button.VISIBLE);
+
+
+
+
+            mapButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(ScannerStartActivity.this, MapsActivity.class));
+                }
+            });
+
+            shareButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(ScannerStartActivity.this, shareActivity.class);
+
+                    // Create a bundle to store the info we want to send to shareActivity.
+                    Bundle bundle = new Bundle();
+
+                    /*
+                    // Store the name, stores and prices for the product in the bundle.
+                    bundle.putString("productName", productName);
+                    bundle.putStringArrayList("stores", store);
+                    bundle.putStringArrayList("prices", price);
+
+
+
+
+                    // Add it to the intent.
+                    intent.putExtras(bundle);
+
+
+                    // Fire her up!!
+                    startActivity(intent);
+
+                     */
+                }
+            });
+
+            reviewButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ScannerStartActivity.this, ReviewActivity.class);
+
+                    Bundle bundle = new Bundle();
+
+                    /*
+                    // Assuming the array lists have the respective names: urls, names, starRatings
+                    ArrayList<String> urls = result.reviewSitesURl;
+                    ArrayList<String> names = result.reviewSitesName;
+                    ArrayList<String> starRatings = result.starRating;
+
+                    String size = Integer.toString(urls.size());
+                    Log.i("cheekESTER", size);
+
+
+                    size = Integer.toString(names.size());
+                    Log.i("cheekESTER", size);
+
+
+                    size = Integer.toString(starRatings.size());
+                    Log.i("cheekESTER", size);
+
+                    /*
+                    names.add("Best Buy");
+                    starRatings.add("4.5");
+                    urls.add("https://popgoestheweek.com/wp-content/uploads/2019/03/Momo-Vincent-Marcus-1.jpg");
+
+                    names.add("E-Bay");
+                    starRatings.add("3.1");
+                    urls.add("https://www.ebay.com/");
+
+                    names.add("Macy's");
+                    starRatings.add("4.9");
+                    urls.add("https://www.macys.com/");
+
+                    names.add("Macy");
+                    starRatings.add("4.9");
+                    urls.add("https://popgoestheweek.com/wp-content/uploads/2019/03/Momo-Vincent-Marcus-1.jpg");
+                    /
+
+                    bundle.putStringArrayList("urls", urls);
+                    bundle.putStringArrayList("names", names);
+                    bundle.putStringArrayList("starRatings", starRatings);
+
+
+                    intent.putExtras(bundle);
+
+
+                    startActivity(intent);
+                    */
+                }
+            });
         }
+    }
+
+    public void showNavBar()
+    {
+
     }
 
 

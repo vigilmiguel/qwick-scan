@@ -1,7 +1,6 @@
 <?php
     /*
         GET request JSON input format
-        
         {
             "firebaseuid" : String
         }
