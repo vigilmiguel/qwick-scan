@@ -31,6 +31,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class HistoryActivity extends AppCompatActivity {
 
 
@@ -40,6 +46,9 @@ public class HistoryActivity extends AppCompatActivity {
     ValueEventListener databaseListener;
     ImageButton imageButton;
     ListView scanHistoryList;
+
+    Retrofit retrofit;
+    DatabaseAPI databaseAPI;
 
     List<Product> userProductHistory = new ArrayList<>();
     List<String> returnedVals = new ArrayList<>();
@@ -129,10 +138,17 @@ public class HistoryActivity extends AppCompatActivity {
             }
         });*/
 
-        // Set item click to bring up item delete dialog
-        scanHistoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://18.216.191.20/php_rest_api/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        databaseAPI = retrofit.create(DatabaseAPI.class);
+
+        scanHistoryList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
                 select = position; //Here we track the position using a class variable
                 if (position > 0) {
                     new AlertDialog.Builder(HistoryActivity.this)
@@ -144,15 +160,64 @@ public class HistoryActivity extends AppCompatActivity {
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 // more shit of yours i didnt change, just instead of position we use select.
                                 public void onClick(DialogInterface dialog, int whichButton) {
+
+                                    deleteProductFromHistory(userProductHistory.get(select - 1).getBarcode());
+
+                                    getUserScanHistory();
+
+                                    /*
                                     databaseUserScanHistory.child(userProductHistory.get(select - 1).getBarcode()).removeValue();
                                     Log.d("myCrash2?", "or here?");
                                     Toast.makeText(HistoryActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
                                     userProductHistory.clear();
                                     scanHistoryList.setAdapter(null);
+                                     */
                                 }
                             })
                             .setNegativeButton(android.R.string.no, null).show();
                 }
+
+                // Means that a long click won't also count as a single click.
+                return true;
+            }
+        });
+
+        // Set item click to bring up item delete dialog
+        scanHistoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                select = position; //Here we track the position using a class variable
+                if (position > 0) {
+                    new AlertDialog.Builder(HistoryActivity.this)
+
+                            //your shit i didn't change
+                            .setTitle("Rescan")
+                            .setMessage("Do you want to rescan " + userProductHistory.get(select - 1).getName() + "?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                // more shit of yours i didnt change, just instead of position we use select.
+                                public void onClick(DialogInterface dialog, int whichButton) {
+
+                                    Intent intent = new Intent(HistoryActivity.this, ScannerStartActivity.class);
+
+                                    //Bundle bundle = new Bundle();
+
+                                    String barcode = userProductHistory.get(select - 1).getBarcode();
+
+                                    //bundle.putString();
+
+                                    // Carry this barcode variable over to ScannerStartActivity.
+                                    intent.putExtra("barcode", barcode);
+
+                                    startActivity(intent);
+
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null).show();
+                }
+
+
             }
         });
     }
@@ -164,6 +229,8 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        getUserScanHistory();
+
         /*
         We don't want this to keep calling onDataChange after we've left the page.
         So, only fetch the data once. Therefore, we use addListenerForSingleValueEvent.
@@ -171,7 +238,7 @@ public class HistoryActivity extends AppCompatActivity {
         OR, we can use addValueEventListener and remove the listener when the user leaves
         this page. This may be useful if we want live data to be updated as it changes.
         We can use this when deleting data so it automatically updates.
-         */
+
 
         databaseListener = databaseUserScanHistory.addValueEventListener(new ValueEventListener() {
             @Override
@@ -195,10 +262,11 @@ public class HistoryActivity extends AppCompatActivity {
 
                 }
 
-                /*
-                Displays the user's current scan history.
-                For testing if the list actually received the products the user has scanned.
-                */
+
+                //Displays the user's current scan history.
+                //For testing if the list actually received the products the user has scanned.
+
+
 
 
                 returnedVals.clear();
@@ -206,10 +274,10 @@ public class HistoryActivity extends AppCompatActivity {
 
                 for(Product p : userProductHistory) {
                     Log.i("HistoryActivity", p.getName());
-                    returnedVals.add(p.getName() +"\n" + p.getDateRecentlyScanned());
-                    /*ArrayAdapter<String> adapter =
-                            new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_dropdown_item_1line, returnedVals);
-                    adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);*/
+                    returnedVals.add(p.getName() +"\n" + p.getDateRecentlyScanned() + "\nxfghcjvb");
+                    //ArrayAdapter<String> adapter =
+                    //        new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_dropdown_item_1line, returnedVals);
+                    //adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_selectable_list_item, returnedVals);
                     // Do i need to set adapter here?
                     Log.d("myCrash?", "Is it here?");
@@ -222,13 +290,119 @@ public class HistoryActivity extends AppCompatActivity {
 
             }
         });
+        */
+    }
+
+    public void getUserScanHistory()
+    {
+
+        try
+        {
+            User user = new User(firebaseUser.getUid(), firebaseUser.getEmail());
+
+            Call<List<Product>> call = databaseAPI.getUserHistory(user);
+
+            Log.i("ScanHistory", "TRY CATCH DEEX NUTZ");
+
+            call.enqueue(new Callback<List<Product>>() {
+                @Override
+                public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+
+                    if(response.isSuccessful())
+                    {
+                        if(response.body() != null)
+                        {
+                            Log.i("ScanHistory", "Response and body success.");
+                            userProductHistory = response.body();
+
+                            returnedVals.clear();
+                            returnedVals.add("");
+
+                            for(Product p : userProductHistory) {
+
+                                Log.i("HistoryActivity", p.getName());
+                                returnedVals.add(p.getName() +"\nMost Recent Scan: " + p.getDateTimeScanned() +
+                                        "\nTimes Scanned: " + p.getNumScans());
+
+                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_selectable_list_item, returnedVals);
+
+                                scanHistoryList.setAdapter(adapter);
+                            }
+                        }
+                        else
+                        {
+                            Log.i("ScanHistory", "result is empty.");
+                        }
+                    }
+                    else
+                    {
+                        Log.i("ScanHistory", "response unsuccessful.");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Product>> call, Throwable t) {
+                    Log.i("ScanHistory", "query failed.");
+
+                    t.printStackTrace();
+                }
+            });
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteProductFromHistory(String barcode)
+    {
+
+        try
+        {
+            UserProduct userProduct = new UserProduct(barcode, firebaseUser.getUid());
+
+            Call<Void> call = databaseAPI.deleteUserProduct(userProduct);
+
+            Log.i("ScanHistory", "Delete history");
+
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+
+                    if(response.isSuccessful())
+                    {
+
+                        Log.i("ScanHistory", "Delete success.");
+
+
+                    }
+                    else
+                    {
+                        Log.i("ScanHistory", "response unsuccessful.");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.i("ScanHistory", "query failed.");
+
+                    t.printStackTrace();
+                }
+            });
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
 
-        databaseUserScanHistory.removeEventListener(databaseListener);
+        //databaseUserScanHistory.removeEventListener(databaseListener);
     }
 
 }

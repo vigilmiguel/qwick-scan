@@ -1,4 +1,14 @@
 <?php
+
+    /*
+        JSON Input:
+        {
+            "productid" : Integer,
+            "barcode" : String,
+            "productname" : String,
+            "imageurl" : String
+        }
+    */
     ini_set('display_errors', 1);
 
     header('Access-Control-Allow-Origin: *');

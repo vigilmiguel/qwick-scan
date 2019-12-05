@@ -133,27 +133,6 @@
 
     <TextView
         android:id="@+id/S1"
-        android:layout_width="226dp"
-        android:layout_height="61dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="left"
-        android:text="TestingDummyInfo.org"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:typeface="sans"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.579" />
-
-    <TextView
-        android:id="@+id/S2"
         android:layout_width="225dp"
         android:layout_height="61dp"
         android:layout_marginTop="8dp"
@@ -161,7 +140,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:gravity="left"
-        android:text="TestingDummyInfo.com"
+        android:text="TestingDummyInfo.com1"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -174,6 +153,29 @@
         app:layout_constraintVertical_bias="0.438" />
 
     <TextView
+        android:id="@+id/S2"
+        android:layout_width="226dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="left"
+        android:text="TestingDummyInfo.org2"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:typeface="sans"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.579" />
+
+
+
+    <TextView
         android:id="@+id/S3"
         android:layout_width="226dp"
         android:layout_height="61dp"
@@ -182,7 +184,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:gravity="left"
-        android:text="TestingDummyInfo.net"
+        android:text="TestingDummyInfo.net3"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -194,7 +196,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.726" />
 
-    <TextView
+    <Button
         android:id="@+id/P1"
         android:layout_width="122dp"
         android:layout_height="39dp"
@@ -204,30 +206,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:text="$0.99"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:typeface="sans"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.556" />
-
-    <TextView
-        android:id="@+id/P2"
-        android:layout_width="122dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="$0.99"
-        android:textColor="#FFFFFF"
+        android:background="@drawable/button"
+        android:text="$0.991"
+        android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
         android:typeface="sans"
@@ -238,8 +219,31 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.424" />
 
+    <Button
+        android:id="@+id/P2"
+        android:layout_width="122dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button"
+        android:text="$0.992"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:typeface="sans"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.556" />
 
-    <TextView
+
+    <Button
         android:id="@+id/P3"
         android:layout_width="122dp"
         android:layout_height="39dp"
@@ -249,8 +253,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:text="$0.99"
-        android:textColor="#FFFFFF"
+        android:background="@drawable/button"
+        android:text="$0.993"
+        android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
         android:typeface="sans"

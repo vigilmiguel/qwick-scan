@@ -1,4 +1,12 @@
 <?php
+
+    /*
+        JSON Input:
+        {
+            "firebaseuid" : String
+        }
+    */
+
     ini_set('display_errors', 1);
 
     header('Access-Control-Allow-Origin: *');
@@ -12,7 +20,9 @@
     
     $user = new User($db);
 
-    $user->firebaseuid = isset($_GET['firebaseuid']) ? $_GET['firebaseuid'] : die();
+    $data = json_decode(file_get_contents("php://input"));
+
+    $user->firebaseuid = $data->firebaseuid;
 
     $user->readSingle();
 

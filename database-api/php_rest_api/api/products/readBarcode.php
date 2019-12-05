@@ -1,4 +1,11 @@
 <?php
+
+    /*
+        JSON Input:
+        {
+            "barcode" : String
+        }
+    */
     ini_set('display_errors', 1);
 
     header('Access-Control-Allow-Origin: *');
@@ -12,7 +19,10 @@
     
     $product = new Products($db);
 
-    $product->barcode = isset($_GET['barcode']) ? $_GET['barcode'] : die();
+    // Get the JSON input data.
+    $data = json_decode(file_get_contents("php://input"));
+
+    $product->barcode = $data->barcode;
 
     $product->readSingleByBarcode();
 

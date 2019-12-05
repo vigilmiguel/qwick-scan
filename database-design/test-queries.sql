@@ -7,14 +7,40 @@ DELETE FROM users WHERE userid <> 1 AND userid <> 2;
 
 DELETE FROM web_prices;
 
-
 SELECT * FROM users;
+SELECT * FROM scans;
 SELECT * FROM products;
 SELECT * FROM stores;
 SELECT * FROM store_locations;
 SELECT * FROM location_prices;
 SELECT * FROM url_addresses;
 SELECT * FROM web_prices;
+
+-- Get the user's scanned barcodes with the number of scans and the most recent date scanned.
+SELECT t1.barcode, t1.numscans, t2.datetimescanned, t1.productname, t1.imageurl
+  FROM( SELECT barcode, productname, imageurl, COUNT(barcode) AS numscans
+          FROM users u  INNER JOIN scans s ON u.userid = s.userid
+                        INNER JOIN products p ON p.productid = s.productid
+          WHERE u.firebaseuid = 'hknnXVPmtuNvaSflPYNZ6Fm5ELp2'
+        GROUP BY barcode, productname, imageurl) t1
+        
+  INNER JOIN
+
+      ( SELECT p.barcode, p.productname, s.datetimescanned
+          FROM users u  INNER JOIN scans s ON u.userid = s.userid
+                        INNER JOIN products p ON p.productid = s.productid
+        WHERE u.firebaseuid = 'hknnXVPmtuNvaSflPYNZ6Fm5ELp2' 
+            AND NOT EXISTS( SELECT *
+                              FROM users u1 INNER JOIN scans s1 ON u1.userid = s1.userid
+                                            INNER JOIN products p1 ON p1.productid = s1.productid
+                            WHERE s1.datetimescanned > s.datetimescanned AND p1.barcode = p.barcode)) t2
+  ON t1.barcode = t2.barcode
+ORDER BY t2.datetimescanned DESC;
+
+DELETE
+    FROM scans
+WHERE userid = ( SELECT userid FROM users WHERE firebaseuid = 'hknnXVPmtuNvaSflPYNZ6Fm5ELp2' )
+    AND productid = (SELECT productid FROM products WHERE barcode = '853002007399');                
 
 SELECT *
   FROM products
@@ -66,11 +92,11 @@ SELECT productname, barcode, storename, price, ST_X(point::geometry) AS "longitu
 WHERE barcode = '2';
 
 -- Get all stores and web addresses that sell this product.
-SELECT productname, barcode, storename, price, address
+SELECT *--productname, barcode, storename, price, address
   FROM stores s INNER JOIN url_addresses ua ON s.storeid = ua.storeid
                 INNER JOIN web_prices wp ON wp.addressid = ua.addressid
                 INNER JOIN products p ON p.productid = wp.productid
-WHERE barcode = '10';
+WHERE barcode = '022000015532';
 
 
 INSERT INTO location_prices
@@ -99,7 +125,8 @@ CREATE TABLE barcode_queue(
   CONSTRAINT barcode_queue_pk PRIMARY KEY(queueid)
 );
 
-SELECT * FROM barcode_queue;
+SELECT * FROM barcode_queue
+ORDER BY queueid DESC;
 
 INSERT INTO barcode_queue (barcode, longitude, latitude, dateTime) VALUES ('100', 12.31, 122.3, CURRENT_TIMESTAMP);
 
@@ -116,4 +143,10 @@ DELETE FROM barcode_queue WHERE queueid = ( SELECT queueid
                                             WHERE NOT EXISTS( SELECT * 
                                                                 FROM barcode_queue bq1
                                                               WHERE bq1.queueid < bq.queueid ));
+                                                              
+
+SELECT * 
+  FROM products p INNER JOIN web_prices wp ON p.productid = wp.productid
+                  INNER JOIN url_addresses ua ON wp.addressid = ua.addressid
+                  INNER JOIN stores s ON ua.storeid = s.storeid;
 

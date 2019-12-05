@@ -1,4 +1,13 @@
 <?php
+
+    /*
+        JSON Input:
+        {
+            "userid" : Integer,
+            "productid" : Integer
+        }
+    */
+
     ini_set('display_errors', 1);
 
     header('Access-Control-Allow-Origin: *');

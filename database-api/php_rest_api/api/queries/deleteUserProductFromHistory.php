@@ -4,7 +4,7 @@
         JSON Input:
         {
             "firebaseuid" : String,
-            "username" : String
+            "barcode" : String
         }
     */
 
@@ -17,29 +17,32 @@
             'Authorization, X-Requested-With');
 
     include_once '../../config/Database.php';
-    include_once '../../models/User.php';
+    include_once '../../models/Query.php';
 
     $database = new Database();
     $db = $database->connect();
     
-    $user = new User($db);
+    $query = new Query($db);
 
     $data = json_decode(file_get_contents("php://input"));
 
-    $user->firebaseuid = $data->firebaseuid;
-    $user->username = $data->username;
+    $firebaseuid = $data->firebaseuid;
+    $barcode = $data->barcode;
+    
 
-    if($user->create())
+    
+    if($query->deleteUserProduct($firebaseuid, $barcode))
     {
         echo json_encode(
-            array('message' => 'User Created')
+            array('message' => 'Product Deleted')
         );
     }
     else
     {
         echo json_encode(
-            array('message' => 'ERROR: User Not Created')
+            array('message' => 'ERROR: Product Not Deleted')
         );
     }
+    
 
 ?>
