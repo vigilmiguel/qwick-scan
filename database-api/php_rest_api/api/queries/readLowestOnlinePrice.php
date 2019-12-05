@@ -31,7 +31,7 @@
     if($numRows > 0)
     {
         $arr = array();
-        //$arr['data'] = array();
+        
         while($row = $result->fetch(PDO::FETCH_ASSOC))
         {
             extract($row);

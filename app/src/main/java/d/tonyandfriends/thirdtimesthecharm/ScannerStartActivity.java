@@ -2,7 +2,9 @@ package d.tonyandfriends.thirdtimesthecharm;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import java.io.BufferedReader;
@@ -137,7 +139,11 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     Retrofit retrofit;
     DatabaseAPI databaseAPI;
 
-    double longitude, latitude;
+
+    Location location;
+    LocationManager locationManager;
+    Double longitude, latitude;
+
 
     User userInfo;
     Product productInfo;
@@ -238,10 +244,65 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         databaseAPI = retrofit.create(DatabaseAPI.class);
 
 
+        // Check if location is enabled.
+        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED)
+        {
+            // Get the user's gps coordinates.
+            Criteria criteria = new Criteria();
+
+            locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+            String locationProvider = locationManager.getBestProvider(criteria, true);
+
+            Log.i("Product Info", "location enabled.");
+
+            locationManager.requestLocationUpdates(locationProvider, 1000, 0,
+                    new LocationListener() {
+                        @Override
+                        public void onLocationChanged(Location location) {
+                            locationManager.removeUpdates(this);
+
+                            Log.i("Product Info", "location changed.");
+
+                            longitude = location.getLongitude();
+                            latitude = location.getLatitude();
+                        }
+
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                        }
+
+                        @Override
+                        public void onProviderEnabled(String provider) {
+
+                        }
+
+                        @Override
+                        public void onProviderDisabled(String provider) {
+
+                        }
+                    });
+
+        }
+        else // Request permission from the user.
+        {
+
+            Log.i("Product Info", "location disabled.");
+
+            ActivityCompat.requestPermissions(this, new String[] {
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION },
+                    0);
+
+        }
+
         // We need the user's info in order to store their scan history.
         // All we really need is their userid in the DB.
         getUserInfo();
-
 
     }
 
@@ -763,38 +824,9 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
         
         Log.i("barcode value:", "" + productBarcode);
 
-
-        // Check if we have ACCESS_FINE/COARSE_LOCATION permissions.
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
-                        PackageManager.PERMISSION_GRANTED) {
-
-            // Get the user's gps coordinates.
-            try {
-                LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                longitude = location.getLongitude();
-                latitude = location.getLatitude();
+        findBarcodeInDatabase();
 
 
-
-                findBarcodeInDatabase();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-
-        }
-        else // IF we don't request permission.
-        {
-            ActivityCompat.requestPermissions(this, new String[] {
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION },
-                    0);
-        }
     }
 
 
@@ -900,6 +932,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
     public void enqueueToDB()
     {
+        Log.i("Product Info", "Long: " + longitude + " Lat: " + latitude);
         ProductEnqueue product = new ProductEnqueue(productBarcode, longitude, latitude);
 
         try

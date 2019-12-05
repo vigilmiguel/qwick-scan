@@ -91,7 +91,7 @@ SELECT *--productname, barcode, storename, price, address
   FROM stores s INNER JOIN url_addresses ua ON s.storeid = ua.storeid
                 INNER JOIN web_prices wp ON wp.addressid = ua.addressid
                 INNER JOIN products p ON p.productid = wp.productid
-WHERE barcode = '814855028825';
+WHERE barcode = '022000015532';
 
 
 INSERT INTO location_prices
