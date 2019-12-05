@@ -53,6 +53,7 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        imageButton = findViewById(R.id.imageButton4);
 //        imageButton.setBackgroundDrawable(null);
 //        imageButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -179,10 +180,19 @@ public class HistoryActivity extends AppCompatActivity {
                 userProductHistory.clear();
 
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
+                    try
+                    {
+                        Product product = data.getValue(Product.class);
 
-                    Product product = data.getValue(Product.class);
+                        userProductHistory.add(product);
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
 
-                    userProductHistory.add(product);
+
+
                 }
 
                 /*
