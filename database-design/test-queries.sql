@@ -35,7 +35,12 @@ SELECT t1.barcode, t1.numscans, t2.datetimescanned, t1.productname, t1.imageurl
                                             INNER JOIN products p1 ON p1.productid = s1.productid
                             WHERE s1.datetimescanned > s.datetimescanned AND p1.barcode = p.barcode)) t2
   ON t1.barcode = t2.barcode
-ORDER BY t2.datetimescanned DESC;                
+ORDER BY t2.datetimescanned DESC;
+
+DELETE
+    FROM scans
+WHERE userid = ( SELECT userid FROM users WHERE firebaseuid = 'hknnXVPmtuNvaSflPYNZ6Fm5ELp2' )
+    AND productid = (SELECT productid FROM products WHERE barcode = '853002007399');                
 
 SELECT *
   FROM products
