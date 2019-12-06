@@ -1080,7 +1080,9 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             }
 
             storeTextViews.get(i).setText(result.get(i).getStoreName());
-            priceButtons.get(i).setText(String.valueOf(result.get(i).getPrice()));
+            String set_text = "$" + String.valueOf(result.get(i).getPrice());
+            //priceButtons.get(i).setText(String.valueOf(result.get(i).getPrice()));
+            priceButtons.get(i).setText(set_text);
             priceButtons.get(i).setTag(result.get(i).getUrlAddress());
 
             storeTextViews.get(i).setVisibility(TextView.VISIBLE);
