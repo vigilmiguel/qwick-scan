@@ -884,6 +884,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     public void enqueueToDB()
     {
         Log.i("Product Info", "Long: " + longitude + " Lat: " + latitude);
+        
         ProductEnqueue product = new ProductEnqueue(productBarcode, longitude, latitude);
 
         try
