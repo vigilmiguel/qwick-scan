@@ -884,7 +884,15 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     public void enqueueToDB()
     {
         Log.i("Product Info", "Long: " + longitude + " Lat: " + latitude);
-        
+
+        if(longitude == null || latitude == null)
+        {
+            longitude = -118.193741;
+            latitude = 33.770050;
+        }
+
+        Log.i("Product Info", "Long: " + longitude + " Lat: " + latitude);
+
         ProductEnqueue product = new ProductEnqueue(productBarcode, longitude, latitude);
 
         try
@@ -1181,7 +1189,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
 
     }
 
-
+    /*
     public class ContactAPI extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -1241,6 +1249,8 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
             //statusMessage.setText(arr[0]);
         }
     }
+
+     */
 
 
     @Override
