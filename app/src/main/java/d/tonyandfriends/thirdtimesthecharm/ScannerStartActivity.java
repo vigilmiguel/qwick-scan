@@ -884,6 +884,14 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     public void enqueueToDB()
     {
         Log.i("Product Info", "Long: " + longitude + " Lat: " + latitude);
+
+        if(longitude == null || latitude == null)
+        {
+            Log.i("Product Info", "Defaulting coords to Long Beach, CA");
+            longitude = -118.193741;
+            latitude = 33.770050;
+        }
+
         ProductEnqueue product = new ProductEnqueue(productBarcode, longitude, latitude);
 
         try
@@ -972,6 +980,7 @@ public class ScannerStartActivity extends Activity implements DataTransporter, S
     public void findLowestPrices()
     {
         ProductWebPrices input = new ProductWebPrices(productBarcode, 3);
+        Log.i("Product Info", "" + productBarcode);
 
         try
         {

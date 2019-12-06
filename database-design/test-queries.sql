@@ -14,7 +14,7 @@ SELECT * FROM stores;
 SELECT * FROM store_locations;
 SELECT * FROM location_prices;
 SELECT * FROM url_addresses;
-SELECT * FROM web_prices;
+SELECT * FROM web_prices;--1171
 
 -- Get the user's scanned barcodes with the number of scans and the most recent date scanned.
 SELECT t1.barcode, t1.numscans, t2.datetimescanned, t1.productname, t1.imageurl
@@ -79,7 +79,7 @@ SELECT productname, storename, price, imageurl, address
   FROM products p INNER JOIN web_prices wp ON p.productid = wp.productid
                   INNER JOIN url_addresses ua ON ua.addressid = wp.addressid
                   INNER JOIN stores s ON s.storeid = ua.storeid
-WHERE barcode = '10'
+WHERE barcode = '818239626454'
 ORDER BY price
 LIMIT 20;
 
