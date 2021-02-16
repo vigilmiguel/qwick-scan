@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -17,9 +18,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-     testOptions {
-    unitTests.returnDefaultValues = true
-  }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -42,6 +43,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-vision:17.0.2'
 
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'com.android.support:support-vector-drawable:28.0.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
 
     //Test things
@@ -56,6 +58,11 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.3.1'
     implementation 'com.github.Hitomis:CircleMenu:v1.1.0'
     implementation 'com.google.code.gson:gson:2.8.2'
+
+    // API Dependencies
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+
 
 }
 

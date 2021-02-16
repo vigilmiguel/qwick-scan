@@ -27,8 +27,8 @@
 
             $user_item = array(
                 'userid' => $userid, // $variables must match the column names retured by the literal query and should be lowercase.
-                'firebaseUID' => $firebaseuid,
-                'userName' => $username
+                'firebaseuid' => $firebaseuid,
+                'username' => $username
             );
 
             array_push($users_arr['data'], $user_item);

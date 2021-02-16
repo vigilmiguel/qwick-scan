@@ -3,8 +3,8 @@
         private $conn;
 
         public $userid;
-        public $firebaseUID;
-        public $userName;
+        public $firebaseuid;
+        public $username;
 
         public function __construct($db)
         {
@@ -37,29 +37,29 @@
 
             $stmt = $this->conn->prepare($query);
 
-            $stmt->bindParam(1, $this->firebaseUID);
+            $stmt->bindParam(1, $this->firebaseuid);
 
             $stmt->execute();
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             
             $this->userid = $row['userid'];
-            $this->firebaseUID = $row['firebaseuid'];
-            $this->userName = $row['username'];
+            $this->firebaseuid = $row['firebaseuid'];
+            $this->username = $row['username'];
         }
 
         public function create()
         {
-            $query = "  INSERT INTO users   (firebaseUID, userName)
-                            VALUES          (:firebaseUID, :userName)";
+            $query = "  INSERT INTO users   (firebaseuid, username)
+                            VALUES          (:firebaseuid, :username)";
 
             $stmt = $this->conn->prepare($query);
 
             // Clean the data.
-            $this->firebaseUID = htmlspecialchars(strip_tags($this->firebaseUID));
-            $this->userName = htmlspecialchars(strip_tags($this->userName));
+            $this->firebaseuid = htmlspecialchars(strip_tags($this->firebaseuid));
+            $this->username = htmlspecialchars(strip_tags($this->username));
 
-            $stmt->bindParam(':firebaseUID', $this->firebaseUID);
-            $stmt->bindParam(':userName', $this->userName);
+            $stmt->bindParam(':firebaseuid', $this->firebaseuid);
+            $stmt->bindParam(':username', $this->username);
 
             if($stmt->execute())
                 return true;
@@ -74,20 +74,20 @@
 
             $query = "UPDATE users
                 SET
-                  firebaseUID = :firebaseUID,
-                  userName = :userName
+                  firebaseuid = :firebaseuid,
+                  username = :username
                   WHERE
                     userid = :userid";
 
             $stmt = $this->conn->prepare($query);
 
             // Clean the data.
-            $this->firebaseUID = htmlspecialchars(strip_tags($this->firebaseUID));
-            $this->userName = htmlspecialchars(strip_tags($this->userName));
+            $this->firebaseuid = htmlspecialchars(strip_tags($this->firebaseuid));
+            $this->username = htmlspecialchars(strip_tags($this->username));
             $this->userid = htmlspecialchars(strip_tags($this->userid));
 
-            $stmt->bindParam(':firebaseUID', $this->firebaseUID);
-            $stmt->bindParam(':userName', $this->userName);
+            $stmt->bindParam(':firebaseuid', $this->firebaseuid);
+            $stmt->bindParam(':username', $this->username);
             $stmt->bindParam(':userid', $this->userid);
 
             if($stmt->execute())

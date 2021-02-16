@@ -1,4 +1,13 @@
 <?php
+
+    /*
+        JSON Input:
+        {
+            "firebaseuid" : String,
+            "username" : String
+        }
+    */
+
     ini_set('display_errors', 1);
 
     header('Access-Control-Allow-Origin: *');
@@ -17,8 +26,8 @@
 
     $data = json_decode(file_get_contents("php://input"));
 
-    $user->firebaseUID = $data->firebaseUID;
-    $user->userName = $data->userName;
+    $user->firebaseuid = $data->firebaseuid;
+    $user->username = $data->username;
 
     if($user->create())
     {

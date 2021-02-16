@@ -31,9 +31,9 @@
         android:layout_marginBottom="8dp"
         android:gravity="center"
         android:text="Local Stores"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="36sp"
-        android:textStyle="bold"
+        android:textStyle="bold|italic"
         app:fontFamily="@font/montserrat" />
 
 

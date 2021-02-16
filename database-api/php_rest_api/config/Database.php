@@ -15,7 +15,7 @@
             {
                 $this->conn = new PDO('pgsql:host=' . $this->host . ';dbname=' . $this->db_name, $this->username, $this->password);
 
-                echo 'Connection successful!' . "\n\n";
+                //echo 'Connection successful!' . "\n\n";
 
                 $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }

@@ -1,4 +1,12 @@
 <?php
+
+    /*
+        JSON Input
+        {
+            "productname" : String
+        }
+    */
+
     ini_set('display_errors', 1);
 
     header('Access-Control-Allow-Origin: *');
@@ -12,16 +20,20 @@
     
     $product = new Products($db);
 
-    $product->productname = isset($_GET['productname']) ? $_GET['productname'] : die();
+    // Get the JSON input data.
+    $data = json_decode(file_get_contents("php://input"));
 
-    $product->readSingle();
+    $product->productname = $data->productname;
+
+    $product->readSingleByProductName();
 
     $product = array(
                 'productname' => $product->productname, // $variables must match the column names retured by the literal query and should be lowercase.
                 'barcode' => $product->barcode,
-                'productid' => $product->productid
+                'productid' => $product->productid,
                 'imageurl' => $product->imageurl
             );
 
     print_r(json_encode($product));
     
+?>
